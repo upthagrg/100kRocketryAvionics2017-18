@@ -1,0 +1,96 @@
+\documentclass[onecolumn, draftclsnofoot,10pt, compsoc]{IEEEtran}
+\usepackage{graphicx}
+\usepackage{url}
+\usepackage{setspace}
+
+\usepackage{geometry}
+\geometry{textheight=9.5in, textwidth=7in}
+
+% 1. Fill in these details
+\def \CapstoneTeamName{		100k Challenge CS}
+\def \CapstoneTeamNumber{		42}
+\def \GroupMemberOne{			Glenn Upthagrove}
+\def \GroupMemberTwo{		 	Sam Hudson}
+\def \GroupMemberThree{			Michael elliot}
+\def \CapstoneProjectName{		100K Spaceport America Demonstration Rocket Project }
+\def \CapstoneSponsorCompany{	School of MIME}
+\def \CapstoneSponsorPerson{		Nancy Squires}
+
+% 2. Uncomment the appropriate line below so that the document type works
+\def \DocType{		Problem Statement
+				%Requirements Document
+				%Technology Review
+				%Design Document
+				%Progress Report
+				}
+			
+\newcommand{\NameSigPair}[1]{\par
+\makebox[2.75in][r]{#1} \hfil 	\makebox[3.25in]{\makebox[2.25in]{\hrulefill} \hfill		\makebox[.75in]{\hrulefill}}
+\par\vspace{-12pt} \textit{\tiny\noindent
+\makebox[2.75in]{} \hfil		\makebox[3.25in]{\makebox[2.25in][r]{Signature} \hfill	\makebox[.75in][r]{Date}}}}
+% 3. If the document is not to be signed, uncomment the RENEWcommand below
+%\renewcommand{\NameSigPair}[1]{#1}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\begin{document}
+\begin{titlepage}
+    \pagenumbering{gobble}
+    \begin{singlespace}
+    	\includegraphics[height=4cm]{coe_v_spot1}
+        \hfill 
+        % 4. If you have a logo, use this includegraphics command to put it on the coversheet.
+        %\includegraphics[height=4cm]{CompanyLogo}   
+        \par\vspace{.2in}
+        \centering
+        \scshape{
+            \huge CS Capstone \DocType \par
+            {\large\today}\par
+            \vspace{.5in}
+            \textbf{\Huge\CapstoneProjectName}\par
+            \vfill
+            {\large Prepared for}\par
+            \Huge \CapstoneSponsorCompany\par
+            \vspace{5pt}
+            {\Large\NameSigPair{\CapstoneSponsorPerson}\par}
+            {\large Prepared by }\par
+            Group\CapstoneTeamNumber\par
+            % 5. comment out the line below this one if you do not wish to name your team
+            %\CapstoneTeamName\par 
+            \vspace{5pt}
+            {\Large
+                \NameSigPair{\GroupMemberOne}\par
+                \NameSigPair{\GroupMemberTwo}\par
+                \NameSigPair{\GroupMemberThree}\par
+            }
+            \vspace{20pt}
+        }
+        \begin{abstract}
+        % 6. Fill in your abstract    
+	In this problem statement we shall define the basic requirements of the 100K Spaceport America Demonstration Rocket Project. These include the creation of a transmission protocol capable of transmitting enough data uncorrupted to sufficiently track the rocket, a graphical user interface to view the data, and the actual recovery of the rocket. There shall also be a discussion of the proposed solution to this problem. This solution is the creation of a protocol, similar to the User Datagram Protocol, which will detect errors and throw away the corrupted packets, but not correct the errors. The final piece shall be description of performance metrics that will define the success of the project. These performance metrics primarily focus on the collection of the rocket and measurable update speeds for the interface at the ground control. \par
+        \end{abstract}     
+    \end{singlespace}
+\end{titlepage}
+\newpage
+\pagenumbering{arabic}
+\tableofcontents
+% 7. uncomment this (if applicable). Consider adding a page break.
+%\listoffigures
+%\listoftables
+\clearpage
+
+% 8. now you write!
+\section{Definition of Problem}
+The Computer Science sub-team of the 100k Rocket Challenge shall be responsible for creating software capable of collecting, transmitting, and receiving telemetry and avionics data from the rocket while in flight. This will require the detecting and handling of dropped or corrupted packets. The protocol will also need to bear in mind the limited hardware profile onboard the rocket. A graphical user interface (GUI) will also be needed to display the transmitted data. The end goal being the successful recovery of the rocket.\par
+
+\section{Proposed Solution}
+The proposed solution is the creation of a transmission protocol for transmitting the data from the rocket back to the ground station. This protocol shall be based off of the User Datagram Protocol (UDP), used in modern media streaming applications online. A protocol based off of UDP would be an appropriate solution to this problem, since UDP is fast and lightweight. The lightweight nature of this protocol would be beneficial, most importantly when considering the relative lower specifications of a micro controller, such as the telemega, that will most likely be used as the main board in the final rocket. We expect to be transmitting packets several times a second, more than enough data to track and collect the rocket. Since several packets will be transmitted and not all of them absolutely necessary, we will not attempt to correct any errors, but instead focus on detecting errors, and dropping a packet if it is corrupted. This will keep the processing on the rocket’s side to a minimum, as well as keep the packet size small, and thus increase our chance of complete and uncorrupted communication.  \par
+Our telemetry data will be loss tolerant, as it is not going together to create a final document, but instead each transmission will be one complete data, thus attempting to correct errors would make the packet longer, increasing the chance of failure, add unneeded computational stress to the limited hardware of the rocket, and require two sided communication and the addition of a queuing system, which would be also likely to drop the packets internally if the communication quality was low, thus making the added features counterproductive. \par
+The data will be organized into packets of equal length, long enough to hold either all of the data, or more likely, the longest output from the sensors. The exact size will be decided upon when the hardware is finalized. Most likely each sensor will get to transmit one at a time in a round robin style, to minimize packet sizes. Each packet will carry a parity bit to allow for fairly quick detection of errors. A filter will also then examine the data for mathematical outliers and throw those away as well. \par 
+All of the retrieved data will be stored at the ground station for later review as well as the tracking of the rocket while it is in flight. This data will be displayed at a reduced rate such that it is possible for the rocket to be tracked. This would mean formatting the data in such a way that it is human readable, and all of this will be handled by fairly simple algorithms on the ground station side, and not done on the rocket, as this would cause undue stress on the reduced hardware profile. The data will then be used to update the GUI. \par
+
+\section{performance Metrics}
+The most important and also most basic performance metric shall be, assuming proper construction by the other sub-groups, the retrieval of the rocket. If the rocket survives flight, then the retrieval of the rocket shall be considered a success for the basic goal of this project. \par 
+Another metric worth noting is the transmission is good enough, that barring complete signal loss, the table can still be updated at least 10 times/second, with an update to the GUI happening 1 times/second, thus making the GUI human readable and smooth.\par
+ The protocol must be simple enough that the hardware on the rocket can still collect, package, and transmit the data at least 60 times/second, thus allowing for up to 5/6 packets lost, while not degrading the readability of the GUI. \par
+
+\end{document}
