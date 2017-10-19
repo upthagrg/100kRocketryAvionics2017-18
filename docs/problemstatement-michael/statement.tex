@@ -1,0 +1,132 @@
+\documentclass[onecolumn, draftclsnofoot,10pt, compsoc]{IEEEtran}
+\usepackage{graphicx}
+\usepackage{url}
+\usepackage{setspace}
+
+\usepackage{geometry}
+\geometry{textheight=9.5in, textwidth=7in}
+
+\def \CapstoneTeamName{		OSU HART}
+\def \CapstoneTeamNumber{		42}
+\def \GroupMemberOne{			Michael Elliott}
+\def \GroupMemberTwo{			Glenn Upthagrove}
+\def \GroupMemberThree{			Sam Hudson}
+\def \CapstoneProjectName{		100K Spaceport America Demonstration Rocket Project}
+\def \CapstoneSponsorCompany{	Mechanical Engineering, Oregon State University}
+\def \CapstoneSponsorPerson{		Nancy Squires}
+
+% 2. Uncomment the appropriate line below so that the document type works
+\def \DocType{  Problem Statement
+				%Requirements Document
+				%Technology Review
+				%Design Document
+				%Progress Report
+				}
+			
+\newcommand{\NameSigPair}[1]{\par
+\makebox[2.75in][r]{#1} \hfil 	\makebox[3.25in]{\makebox[2.25in]{\hrulefill} \hfill		\makebox[.75in]{\hrulefill}}
+\par\vspace{-12pt} \textit{\tiny\noindent
+\makebox[2.75in]{} \hfil		\makebox[3.25in]{\makebox[2.25in][r]{Signature} \hfill	\makebox[.75in][r]{Date}}}}
+% 3. If the document is not to be signed, uncomment the RENEWcommand below
+%\renewcommand{\NameSigPair}[1]{#1}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\begin{document}
+\begin{titlepage}
+    \pagenumbering{gobble}
+    \begin{singlespace}
+    	\includegraphics[height=4cm]{coe_v_spot1}
+        \hfill 
+        % 4. If you have a logo, use this includegraphics command to put it on the coversheet.
+        %\includegraphics[height=4cm]{CompanyLogo}   
+        \par\vspace{.2in}
+        \centering
+        \scshape{
+            \huge CS Capstone \DocType \par
+            {\large\today}\par
+            \vspace{.5in}
+            \textbf{\Huge\CapstoneProjectName}\par
+            \vfill
+            {\large Prepared for}\par
+            \Huge \CapstoneSponsorCompany\par
+            \vspace{5pt}
+            {\Large\NameSigPair{\CapstoneSponsorPerson}\par}
+            {\large Prepared by }\par
+            Group\CapstoneTeamNumber\par
+            % 5. comment out the line below this one if you do not wish to name your team
+            \CapstoneTeamName\par 
+            \vspace{5pt}
+            {\Large
+                \NameSigPair{\GroupMemberOne}\par
+                \NameSigPair{\GroupMemberTwo}\par
+                \NameSigPair{\GroupMemberThree}\par
+            }
+            \vspace{20pt}
+        }
+        \begin{abstract}
+          In this project we will design and build recovery and telemetry systems for a rocket that will reach a target altitude of 100,000 feet.
+          We will create telemetry interfaces for tramsmitting and receiving data and avionics for the recovery of the rocket.
+          This problem statement document will cover the details of the challenge, the outline of the proposed solution, and metrics to judge the success of the project.
+          The main challenge will be to design a means of collecting, interpreting, and transmitting data on the rocket, in addition to receiving, interpreting, and displaying data on the ground.
+          Additionally, we will be working with embedded hardware, the constraints of which we will have to work within.
+          Our project will be successful if we can collect, transmit, and properly utilize the flight data, both in flight and to recover the rocket.
+        \end{abstract}     
+    \end{singlespace}
+\end{titlepage}
+%\newpage
+\pagenumbering{arabic}
+% 7. uncomment this (if applicable). Consider adding a page break.
+%\tableofcontents
+%\listoffigures
+%\listoftables
+\clearpage
+
+\section{Problem Definition}
+In sending a rocket 100,000 feet in the air, there are a few challenges that must be met.
+The first challenge is collecting accurate data.
+At speeds above Mach 1 and in thinner atmosphere, the data from the sensors will not be as accurate.
+We will have to find a way to collect and utilize the data we receive from the sensors even though it may be inaccurate.
+We will also have to ensure that the altitude reading is both accurate and available on the ground.
+This leads to our next big challenge: transmission of data.
+We will have to create our own protocol to transmit and receive data while travelling at high speeds in thin atmosphere, possibly with RF interference.
+We will have to ensure that the data received is uncorrupted and that it is received in the correct order.
+This is very important for the processing ond utilization of the data.
+On the ground, we will need to interpret the data received from the rocket.
+We need to be able to verify the rocket's height in order to acheive our goal.
+We will also need to be able to find the rocket after it lands, which means using the data provided to us to locate it.
+So long as these three main challenges are met, we will be able to complete our project.
+
+\section{Proposed Solution}
+The first challenge we will have to overcome is how to collect accurate data from the sensors.
+Since the sensors will be reporting inaccurate data at high speeds and altitudes, we need a way to remove the noise from the readings.
+Our proposed solution is to use a Kalman filter to filter out the noise.
+A Kalman filter would allow us to predict sensor readings and adjust the predictions based on the actual readings.
+It would also allow us to cross reference readings from all of the sensors and combine them into an internal representational model of the rocket.
+This would provide us with more accurate readings, and a more accurate measure of success.
+Additionally, we plan to attempt to lock GPS at apogee, which would give us a supremely accurate altitude reading.
+With the more accurate data we will also be able to predict the landing location of the rocket, which will help us with recovery.
+This is all dependent on the proper transmission of the data, which is why we plan on creating a UDP-like protocol to send the data to the ground.
+In thinner atmosphere and at speeds over Mach 1, especially with potential interference from the body of the rocket itself, there is potential for high packet loss.
+Because of this, a protocol which acknowledges the receipt of packets may not be viable.
+Additionally, keeping track of the receipt of packets wastes precious processing power on the embedded system on the rocket.
+This is why a protocol that assumes packets will be lost and can compensate for the missing packets is necessary.
+Since we can check the data integrity on the receiving end and drop corrupt packets or interpolate missing ones, we don't have to worry about a few corrupt or missing packets.
+Despite this ability, we still want to minimize packet loss while also minimizing processor use, so redundant transmission and reception devices would be preferred.
+Once we have the data on the ground, we need to use it to track the rocket.
+Tracking the rocket will involve modelling its trajectory on the ground using the data received.
+This way we will be able to predict the landing location of the rocket.
+Finally, we will try to capture and transmit GPS data after landing to aid in the location of the rocket.
+
+\section{Performance Metrics}
+The conditions for success for this project are that the rocket correctly reads and transmits data from the sensors, and that the rocket can be recovered.
+We will be able to judge the performance of our Kalman filter based on how close the calculated altitude is to the one given by GPS.
+This is of course dependent on being able to lock GPS at apogee.
+We will be able to judge the performance of our data transmission on a couple of measures, the first being whether we can get live updating velocity and altitude data.
+If we can get live updates from the rocket as it reaches landmarks in its flight, our protocol works as intended.
+The second of these measures is whether the ground station has to do too many corrections or interpolations.
+A few are expected, but if we have more than 50\% packet loss or corruption, we can say that our protocol is ineffective.
+Our ground station's performance can be judged based on whether we are able to find the rocket as well as how accurate our predicted landing location is.
+The accuracy of the predicted landing location is of course dependent on the performance of our Kalman filter and our communication protocol.
+Therefore, we can also use the accuracy of the predicted landing location to judge their performance as well.
+
+\end{document}
