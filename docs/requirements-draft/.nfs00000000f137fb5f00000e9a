@@ -2,6 +2,7 @@
 \usepackage{graphicx}
 \usepackage{url}
 \usepackage{setspace}
+
 \usepackage{geometry}
 \geometry{textheight=9.5in, textwidth=7in}
 
@@ -95,7 +96,6 @@ visualization that can present this data to the user. This implies:
     \item The rocket can be tracked and recovers.
     \item The highest altitude can be recorded.
     \item The user will be able to view the data at a rate that is readable.
- \end{enumerate}
 \subsection{Definitions and Acronyms}
 Blackout: A long period where no data is recovered. \par
 Corruption: When data in transmission changes value due to interference. \par
@@ -132,7 +132,6 @@ be stored, and used to update the visualization shown to the user.
     \item The data shall be collected and stored for later use.
     \item The data shall be displayed to the user in near real time.
     \item The data can be used later to create a 3D trace of the flight path.
- \end{enumerate}
 \subsection{User Characteristics}
 The GS shall be used only by people associated with this
 challenge, and thus have some level of technical knowledge. The visualization and 3D trace
@@ -145,7 +144,7 @@ packet loss and blackout could occur.
 also cause packet loss.
     \item The rocket has limited processing power.
     \item The ground station will also not be very powerful.
- \end{enumerate}
+
 \subsection{Assumptions and Dependencies}
 We assume the rocket shall be using a Telemega chip. We also assume that the GS will be
 based off of a Raspberry Pi, running a distortion of Linux.
