@@ -1,15 +1,33 @@
-default: pdf
+LATEX	= latex -shell-escape
+DVIPS	= dvips
 
-pdf: ps
-	ps2pdf requirements.ps
+SRC	:= $(shell egrep -l '^[^%]*\\begin\{document\}' *.tex)
+TRG	= $(SRC:%.tex=%.dvi)
+PSF	= $(SRC:%.tex=%.ps)
+PDF	= $(SRC:%.tex=%.pdf)
 
-ps:	dvi
-	dvips -t letter requirements.dvi
+pdf: $(PDF)
 
-dvi:
-	latex requirements
-	latex requirements
-	latex requirements
+ps: $(PSF)
+
+$(TRG): %.dvi: %.tex
+
+	$(LATEX) $<
+	$(LATEX) $<
+	$(LATEX) $<
+
+
+$(PSF):%.ps: %.dvi
+	$(DVIPS) -R -P outline -t letter $< -o $@
+
+$(PDF): %.pdf: %.ps
+	ps2pdf $<
+
+all: pdf
+
+default: all
 
 clean:
-	rm -f *.pdf *.ps *.dvi *.out *.log *.aux *.bbl *.blg *.pyg *.toc
+	rm -f *.pdf *.ps *.dvi *.log *.aux *.toc
+
+.PHONY: all clean ps pdf default
