@@ -30,4 +30,4 @@ default: all
 clean:
 	rm -f *.pdf *.ps *.dvi *.log *.aux *.toc
 
-.PHONY: all clean ps pdf default
+.PHONY: all clean ps default
