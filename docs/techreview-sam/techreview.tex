@@ -8,9 +8,8 @@
 
 \def \CapstoneTeamName{		100k Challenge CS}
 \def \CapstoneTeamNumber{		42}
-\def \GroupMemberOne{			Glenn Upthagrove}
-\def \GroupMemberTwo{		 	Sam Hudson}
-\def \GroupMemberThree{			Michael Elliott}
+\def \GroupMemberOne{		 	Sam Hudson}
+
 \def \CapstoneProjectName{		100K Spaceport America Demonstration Rocket Project}
 \def \CapstoneSponsorCompany{	School of Mechanical Engineering, Oregon State University}
 \def \CapstoneSponsorPerson{		Nancy Squires}
@@ -58,8 +57,6 @@
             \vspace{5pt}
             {\Large
                 \NameSigPair{\GroupMemberOne}\par
-                \NameSigPair{\GroupMemberTwo}\par
-                \NameSigPair{\GroupMemberThree}\par
             }
             \vspace{20pt}
         }
@@ -78,48 +75,92 @@
 \clearpage
 
 \section{Visualization}
-\subsection{Chart JS}
-Chart JS is an open source JavaScript charting tool. Chart JS is highly responsive and offers 8 robust chart types with many different customizations. Chart JS utilizes the Canvas element in HTML5 meaning it’s cross compatible and has a great deal of performance.  
-\subsection{Plotly JS}
-Plotly JS is an open source JavaScript charting tool that supports over 20 different types of charts. Plotly JS is built on Javascript D3 which is a powerful monolithic data visualization framework that integrates with a client’s graphics card for robust rendering. 
-\subsection{Flotcharts}
-Flotcharts is a JavaScript plotting library for jQuery with portability and simplicity in mind.
-Flotcharts aim is provide interactive features that are supported by many different browser types including Internet Explorer 6+. 
+\subsection{Introduction}
+During the deployment, in-flight and descent stages we will be tracking the rocket through radio telemetry. This data will be sent from a transmitter attached to the rocket down to the ground station. When the data is received by the ground station the data will then need to be organized and displayed to all parties following the launch. We will be designing a web application that imports telemetry data and renders useful information graphically such as trajectory, altitude and velocity. There are many frontend libraries for representing data graphically. Listed below are three contenders for providing this functionality. 
+\subsection{D3.js - Data Driven Documents}
+D3 is a robust open source JavaScript library for rendering visualizations and data interaction. D3 supports a wide range of different visualizations that are not available with standard charting frameworks. For instance, D3 supports 3D object generation, this will be useful when superimposing a rocket vector on a globe for visual tracking. D3 has the capacity to render visualizations with vast amounts of data making this tool scalable. We will be gathering large amounts of data during the tracking process and a tool that can support in this capacity is essential. Another great benefit of D3 is the level of interactivity supported with visualizations. Visualizations are rendered as scalable vector graphics meaning each component of the visualizations is manipulable at the discretion of the developer. Although D3 is feature rich tool for rendering visualizations and data interaction the implementation from a programmatic standpoint is complex versus other visualization libraries. Using D3 will enhance the interactivity  of the web application at the cost of taking longer to implement. 
+\subsection{Chart.js}
+Chart JS is an open source, minimalistic JavaScript chart library. Chart JS provides 8 chart types for visualizing data these include line, bar, radar, pie, polar, bubble, scattered and area. Chart JS was designed with simplicity in mind with clear documentation and an easy to use programming interface. Although Chart JS is easy to use it only offers basic visualizations and does not scale when introduced to mass amounts of data. Another limiting factor of Chart JS is interactivity. Chart JS does not support any data interaction. Chart JS takes advantage of the canvas element in HTML5 to render visualizations meaning that a single html element is rendered therefore data points cannot be modified. Defining a simplistic visualization in Chart JS requires less code than most visualization frameworks. Using D3 will enhance the functionality of the web application at the cost of taking longer to implement. 
+\subsection{C3.js}
+C3 is an open source, minimalistic JavaScript chart library that is based on the D3 library. C3 uses same approach for rendering as D3 but with a focus on charting. Meaning C3 supports data interactions as charts are rendered as scalable vector graphics where data points are manipulable. C3 requires less code to define charts and supports features such as tooltips, legends, gridlines and customizable tick labels. As C3 is specifically designed for chart render features such as 3D object rendering are not supported. Using C3 will simplify the implementation process and scale well with large datasets but does not provide the extra visualization that will be useful when rendering 3D objects. 
 \subsection{Conclusion}
-In conclusion I would say that Chart JS would be the best contender for what we require. This is  a simplistic yet modern charting framework. I feel Plotly JS has a lot of great features but it’s more features than we require for this project. Chart JS just the right amount of features and is compatible with many different browsers. Flotcharts is a good tool for running on websites that require compatibility with older browsers. The best option for this project is the Chart JS visualization framework.
+The most encompassing tool for rendering charts and visualizations is D3. D3 will enhance the interactivity of the our web application and improve the representation of our data. Although, as mentioned, the downside of using D3 is the complexity of the interface the benefit of better visualizations vetoes other visualization library use. Other libraries such as C3 and Chart JS will simplify the implementation process but does not provide the extra visualization that will be useful when rendering 3D objects to show the rockets positioning in respect to the surface. 
 
-\section{Frontend Web Frameworks}
+\section{Front-end Web Frameworks}
+\subsection{Introduction}
+The most effective way to speed up the development process of the frontend is to use a framework. The framework will provide a basic structure making construction more convenient. Listed below are three different frontend frameworks and their respective advantages and limitations. 
 \subsection{Materialize}
-Materialize is a responsive frontend framework built by Google. Materialize offers a consistent design experience with many different exciting features such as cards, chips and popouts. The design is very appealing and the framework makes it easy to append and change existing style classifications. 
+Materialize is an open source front-end framework built by Google. Materialize provides features such as inline animation definitions, flow text, chips and cards. Similar to the other popular front-end framework bootstrap, materialize supports a grid system, icon sets and responsive elements. From an aesthetic standpoint Materialize is more modern in appearance and provides a richer set of animations enhancing the overall user experience. Materialize is a new front-end technology and still requires some greater refinement in its grid system. The grid system is limited in the number of intervals it supports. Using Materialize will improve the frontend development process and provide a greater experience for users of the web application because of integrated animated feedback when using components and a modern look and feel. 
 \subsection{Bootstrap}
-Bootstrap is one of the more popular frontend frameworks built. It supports cool features such as input groups and modals. Although, I feel as this framework is so robust it’s harder to append and change style classifications. However, there’s a great deal of refinement and support as it’s a widely used product. 
+Bootstrap is an open source front-end framework built by Twitter and has been greatly contributed to since then. Bootstrap is well supported and has responsive features ideal for users who access web applications via a mobile browser. Bootstrap is more robust than Materialize and has been around for a longer time. Bootstrap has an extensive list of components which makes element construction simpler. Bootstrap is extensive in terms of lines of code can become difficult to contribute to and modify. Using bootstrap will improve accessibility of our web application because of the responsiveness in mobile environments but provides a lot more than what is needed which could hinder application performance and development speed. In addition Bootstrap can be difficult to contribute to as JavaScript is forced to Jquery and styles convolutedly defined. 
 \subsection{Semantic-UI}
-Semantic UI is another awesome open source frontend framework. One great feature that Semantic UI offers is packaged Gulp build tools so projects can preserve their own theme changes. Semantic UI integrates well with the server-side framework Node JS and is highly portable. 
+Semantic UI is an open source front-end framework. Semantic UI provides a set of customizable UI components that have support many different unique themes such as Chubby, GitHub, and Material. Themes in Semantic UI make styling much simpler and can speed up the development process. Although Semantic UI has a large amount of customizable features and provides a better interface for style integrations, similarly to Bootstrap, Semantic UI is extensive in terms of lines of code can become difficult to contribute to and modify. Using Semantic UI will make customizability a lot simpler but this benefit does not outweigh the bulk of additional features that will not be used and hinder the performance of the application.
 \subsection{Conclusion}
-In conclusion I feel that Materialize is the best option for this project. Materialize is a great lightweight frontend framework that is highly portable and integratable. Although Bootstrap and Semantic UI offer a great deal of features I feel that materialize offers features that make for a better looking interface.
+The best front-end framework for designing the interface for the rocket reporting web application is Materialize. Although Materialize is a new front-end framework and could do with additional development on the responsive grid system it is has more aesthetically pleasing components and nice features such as integrated animated feedback. Materialize is lightweight and also an easier framework to add custom style integrations.
 \section{Server-side Web Frameworks}
-\subsection{Flask}
-Flask is a microframework for Python that includes useful templating frameworks and a built in web server. One good part of flask is that it’s a microframework meaning that it’s lightweight and simplistic in nature. Flask has a nice concise way of handling routing.
-\subsection{Ruby on Rails}
-Ruby on Rails is powerful web framework for Ruby. It’s standalone in terms of a web server includes many awesome features. These include advanced routing, extensions on MVC and a ton of plugins. I wouldn’t say Ruby on Rails is lightweight but it’s powerful.
-\subsection{Express JS}
-Express is a flexible web framework designed integrate seamlessly with the javascript runtime environment node js. Express provides a good for lightweight applications and has a thin layer of web application abstracting away a lot of complexities in presentation and business logic.
-\subsection{Conclusion}
-Flask is best backend framework for the job. Flask is lightweight and has a basic web server and debugger. Flask makes routing and templating extremely simple. One great aspect of Flask is that it’s a microframework so it’s lightweight and doesn’t have a lot of features that would tie it down and reduce performance. For this project Flask is best Server-side framework.
+\subsection{Introduction}
+In order to bridge communication between the server and web client an interface has to be designed to handle routing, database interaction and web page rendering. During the rocket launch telemetry data will be gathered, converted to JSON and stored in a database. A server side interface will be responsible for interacting with such data and serving to the web client for presentation. A server-side web framework would speed up the design process and provide features as mentioned out of the box. Listed below are three different server-side frameworks and their respective advantages and limitations. 
 
-\section{References}
-\begin{enumerate}
-\item http://www.chartjs.org/
-\item https://plot.ly/javascript/
-\item http://www.flotcharts.org/
-\item http://getbootstrap.com/
-\item https://semantic-ui.com/
-\item http://materializecss.com/
-\item https://expressjs.com/
-\item http://flask.pocoo.org/
-\item http://rubyonrails.org/ 
- \end{enumerate}
+\subsection{Flask-PyMongo}
+Flask is a microframework for Python that includes a dynamic templating framework called jinja2 which makes rendering content for presentation much simpler. Routing in Flask is also very straightforward and syntactically clear. Another benefit of Flask is that it is a microframework meaning there’s less overhead for the project making the codebase easier to maintain. Flask-PyMongo is Flask and MongoDB combined for ORM(Object Relational Mapping) support this allows for the configuration of relational models. This is an important feature because the web application will be required to interact with a database storing JSON objects and an easier way to model data objects will speed up the development process significantly. Though Flask is simplistic in nature and easy to use it lacks in support and documentation and requires the importation of many other modules to provide greater functionality. Using Flask will simplify the implementation process and provide a simplistic interface between the client and server. Although Flask requires the additional modules such as PyMongo to support ORM.
+\subsection{Django}
+Django is an all encompassing Python web framework. Django provides a lot of features such as routing, ORM, authentication and template rendering. This makes it much easier to bootstrap the development process. Django is well supported and has a larger contribution base. Although Django is a powerful web framework with a lot of features it is less suited towards this application where the requirements are more simplistic. Using Django as a server-side framework would help speed up the development process but provides unnecessary features which are outside the bounds of this project.  
+\subsection{Express JS}
+Express is a flexible web framework designed integrate seamlessly with the javascript runtime environment node js. Express provides a good for lightweight applications and has a thin layer of web application abstracting away a lot of complexities in presentation and business logic. As Express JS is written in JavaScript this will create a consistent language between the backend and frontend. Express supports ORM through the importation of Sequelize, like flask this a module that has to be imported in order to add additional functionality. Using Express JS would create consistency between the backend and frontend in addition Express JS is a lightweight framework that provides the bare minimum to get the job done, although it still requires the importation of additional modules and a slight learning curve.
+\subsection{Conclusion}
+Flask is best backend framework for the job. Flask makes routing and templating extremely simple. Although additional modules such as MongoDB will have to be imported to create ORM functionality, for this specific project Flask is best Server-side framework. Using Flask will simplify the implementation process and provide a simplistic interface between the client and server.
+
+
+\begin{thebibliography}{9}
+\bibitem{1} 
+S. F. Rahman, “The 15 Best JavaScript Charting Libraries,” SitePoint, 12-Sep-2017. [Online]. Available: https://www.sitepoint.com/15-best-javascript-charting-libraries/. [Accessed: 21-Nov-2017].
+
+\bibitem{2}
+“D3.js or Chartjs? Which to use when,” Navyug, 09-Nov-2017. [Online]. Available: http://navyuginfo.com/d3-js-chartjs-use/. [Accessed: 21-Nov-2017].
+
+\bibitem{3}
+d3, “d3/d3,” GitHub. [Online]. Available: https://github.com/d3/d3/wiki. [Accessed: 21-Nov-2017].
+
+\bibitem{4}
+Chartjs, “Chart.js,” Chart.js · GitBook. [Online]. Available: http://www.chartjs.org/docs/latest/. [Accessed: 21-Nov-2017].
+
+\bibitem{5}
+Chartjs. “Chart.js.” Chart.js · GitBook, www.chartjs.org/docs/latest/.
+
+\bibitem{6}
+“c3 VS Chart.js,” c3 vs Chart.js | LibHunt. [Online]. Available: https://js.libhunt.com/project/c3/vs/chart-js. [Accessed: 21-Nov-2017].
+
+\bibitem{7}
+c3js.org, “C3.js | D3-based reusable chart library,” C3.js | D3-based reusable chart library. [Online]. Available: http://c3js.org/. [Accessed: 21-Nov-2017].
+
+\bibitem{8}
+“C3.js Brings Charting Power Without the Learning Curve,” InfoQ. [Online]. Available: https://www.infoq.com/news/2014/09/c3js-d3-charting. [Accessed: 21-Nov-2017].
+
+\bibitem{9}
+“Materialize vs. Bootstrap? Which is Best Front-End Framework?,” Stunning Mesh, 22-Jun-2017. [Online]. Available: http://www.stunningmesh.com/2016/11/materialize-vs-bootstrap-best-front-end-framework/. [Accessed: 21-Nov-2017].
+
+\bibitem{10}
+“Materialize,” Documentation - Materialize. [Online]. Available: http://materializecss.com/. [Accessed: 21-Nov-2017].
+
+\bibitem{11}
+W. by H. Chouhan, “6 Reasons to Choose the Bootstrap CSS Framework,” OSTraining. [Online]. Available: https://www.ostraining.com/blog/coding/bootstrap/. [Accessed: 21-Nov-2017].
+
+\bibitem{12}
+“Bootstrap vs Semantic UI vs Materialize 2017 Comparison,” StackShare. [Online]. Available: https://stackshare.io/stackups/bootstrap-vs-materialize-vs-semantic-ui. [Accessed: 21-Nov-2017].
+
+\bibitem{13}
+G. Dwyer, “Flask vs. Django: Why Flask Might Be Better,” Codementor. [Online]. Available: https://www.codementor.io/garethdwyer/flask-vs-django-why-flask-might-be-better-4xs7mdf8v. [Accessed: 21-Nov-2017].
+\bibitem{14}
+“Express Web Framework (Node.js/JavaScript),” Mozilla Developer Network. [Online]. Available: https://developer.mozilla.org/en-US/docs/Learn/Server-side/Express\_Nodejs. [Accessed: 21-Nov-2017].
+
+
+
+\end{thebibliography}
+
+
+
 
 
 
 \end{document}
+
