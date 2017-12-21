@@ -17,11 +17,11 @@
 #include <math.h>
 
 void gen_data(float freq, float salt, float svel, float slat, float slon){
-	char str1[10] = "velocity:";
-	char str2[10] = "latitude:";
-	char str3[11] = "longitude:";
-	char str4[10] = "altitude:";
-	char str5[6] = "time:+";
+	char str1[9] = "velocity";
+	char str2[9] = "latitude";
+	char str3[10] = "longitude";
+	char str4[9] = "altitude";
+	char str5[5] = "time";
 	char buff[256];
 	float vel=svel; //initial velocity, no acceleration other than gravity, no jerk
 	float lat=slat;
@@ -31,7 +31,7 @@ void gen_data(float freq, float salt, float svel, float slat, float slon){
 	int dec;
 	do{
 		memset(buff, '\0', 256);
-		sprintf(buff,"%s%f, %s%f, %s%f, %s%f, %s%f", str1,vel,str2,lat,str3,lon,str4,alt,str5,time); //make JSON string
+		sprintf(buff,"'{\"%s\":\"%f\", \"%s\":\"%f\", \"%s\":\"%f\", \"%s\":\"%f\", \"%s\":\"+%f\" }'", str1,vel,str2,lat,str3,lon,str4,alt,str5,time); //make JSON string
 		printf("%s\n", buff); //print JSON string
 		time += (1.0/freq); //update time
 		alt = ((-4.9*powf(time, 2)) + (svel*time) + salt); //update alt
