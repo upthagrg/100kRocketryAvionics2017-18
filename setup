@@ -12,4 +12,6 @@ sudo apt install libglu1-mesa-dev freeglut3-dev
 echo "copying libglut.so to /usr/lib64"
 mkdir /usr/lib64
 sudo cp ./libglut.so /usr/lib64/
+sudo chmod o=rwx /usr/lib64/libglut.so
+sudo chmod u=rwx /usr/lib64/libglut.so
 echo "Done"
