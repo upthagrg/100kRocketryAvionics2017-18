@@ -1,0 +1,12 @@
+#!/bin/bash
+echo "installing apt-file"
+sudo apt-get install file
+echo "updating apt-file"
+sudo sudo apt-file update
+echo "installing libmesa-dev"
+apt-get install libmesa-dev 
+echo "installing mesa-common-dev"
+sudo apt install mesa-common-dev
+echo "installing freeglut"
+sudo apt install libglu1-mesa-dev freeglut3-dev
+echo "Done"
