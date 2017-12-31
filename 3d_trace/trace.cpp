@@ -15,6 +15,8 @@
 #include <GL/glu.h>
 #include "glut.h"
 
+#include "convert.hpp"
+
 
 //	This is a 3D trace for the flightpath of the rocket of the Oreon State University 
 //	chapter of AIAA high altitude rocketry challenge. Thus uses OpenGL through C++.  
@@ -37,6 +39,38 @@
 
 //NOTE: Much of this code comes from Dr. Mike Bailey of Oregon State University, but it is 
 //being used with his express permission. 
+
+// texture pieces 
+
+int     ReadInt( FILE * );
+short   ReadShort( FILE * );
+
+
+struct bmfh
+{
+        short bfType;
+        int bfSize;
+        short bfReserved1;
+        short bfReserved2;
+        int bfOffBits;
+} FileHeader;
+
+struct bmih
+{
+        int biSize;
+        int biWidth;
+        int biHeight;
+        short biPlanes;
+        short biBitCount;
+        int biCompression;
+        int biSizeImage;
+        int biXPelsPerMeter;
+        int biYPelsPerMeter;
+        int biClrUsed;
+        int biClrImportant;
+} InfoHeader;
+
+const int birgb = { 0 };
 
 
 // title of these windows:
@@ -177,6 +211,8 @@ int		DepthCueOn;				// != 0 means to use intensity depth cueing
 int		DepthBufferOn;			// != 0 means to use the z-buffer
 int		DepthFightingOn;		// != 0 means to use the z-buffer
 GLuint	BoxList;				// object display list
+GLuint  SphereList;				// object display list
+GLuint  GroundList;				// object display list
 int		MainWindow;				// window id for main graphics window
 float	Scale;					// scaling factor
 int		WhichColor;				// index into Colors[ ]
@@ -212,6 +248,143 @@ void	Visibility( int );
 
 void	Axes( float );
 void	HsvRgb( float[3], float [3] );
+
+// teture functions 
+
+unsigned char *
+BmpToTexture( char *filename, int *width, int *height ) // width and height in pixels 
+{
+
+        int s, t, e;            // counters
+        int numextra;           // # extra bytes each line in the file is padded with
+        FILE *fp;
+        unsigned char *texture;
+        int nums, numt;
+        unsigned char *tp;
+
+
+        fp = fopen( filename, "rb" );
+        if( fp == NULL )
+        {
+                fprintf( stderr, "Cannot open Bmp file '%s'\n", filename );
+                return NULL;
+        }
+
+        FileHeader.bfType = ReadShort( fp );
+
+
+        // if bfType is not 0x4d42, the file is not a bmp:
+
+        if( FileHeader.bfType != 0x4d42 )
+        {
+                fprintf( stderr, "Wrong type of file: 0x%0x\n", FileHeader.bfType );
+                fclose( fp );
+                return NULL;
+        }
+
+
+        FileHeader.bfSize = ReadInt( fp );
+        FileHeader.bfReserved1 = ReadShort( fp );
+        FileHeader.bfReserved2 = ReadShort( fp );
+        FileHeader.bfOffBits = ReadInt( fp );
+
+
+        InfoHeader.biSize = ReadInt( fp );
+        InfoHeader.biWidth = ReadInt( fp );
+        InfoHeader.biHeight = ReadInt( fp );
+
+        nums = InfoHeader.biWidth;
+        numt = InfoHeader.biHeight;
+
+        InfoHeader.biPlanes = ReadShort( fp );
+        InfoHeader.biBitCount = ReadShort( fp );
+        InfoHeader.biCompression = ReadInt( fp );
+        InfoHeader.biSizeImage = ReadInt( fp );
+        InfoHeader.biXPelsPerMeter = ReadInt( fp );
+        InfoHeader.biYPelsPerMeter = ReadInt( fp );
+        InfoHeader.biClrUsed = ReadInt( fp );
+        InfoHeader.biClrImportant = ReadInt( fp );
+
+
+        // fprintf( stderr, "Image size found: %d x %d\n", ImageWidth, ImageHeight );
+
+
+        texture = new unsigned char[ 3 * nums * numt ];
+        if( texture == NULL )
+        {
+                fprintf( stderr, "Cannot allocate the texture array!\b" );
+                return NULL;
+        }
+
+
+        // extra padding bytes:
+
+        numextra =  4*(( (3*InfoHeader.biWidth)+3)/4) - 3*InfoHeader.biWidth;
+
+
+        // we do not support compression:
+
+        if( InfoHeader.biCompression != birgb )
+        {
+                fprintf( stderr, "Wrong type of image compression: %d\n", InfoHeader.biCompression );
+                fclose( fp );
+                return NULL;
+        }
+
+
+
+        rewind( fp );
+        fseek( fp, 14+40, SEEK_SET );
+
+        if( InfoHeader.biBitCount == 24 )
+        {
+                for( t = 0, tp = texture; t < numt; t++ )
+                {
+                        for( s = 0; s < nums; s++, tp += 3 )
+                        {
+                                *(tp+2) = fgetc( fp );          // b
+                                *(tp+1) = fgetc( fp );          // g
+                                *(tp+0) = fgetc( fp );          // r
+                        }
+
+                        for( e = 0; e < numextra; e++ )
+                        {
+                                fgetc( fp );
+                        }
+                }
+        }
+
+        fclose( fp );
+
+        *width = nums;
+        *height = numt;
+        return texture;
+
+}
+
+int
+ReadInt( FILE *fp )
+{
+        unsigned char b3, b2, b1, b0;
+        b0 = fgetc( fp );
+        b1 = fgetc( fp );
+        b2 = fgetc( fp );
+        b3 = fgetc( fp );
+        return ( b3 << 24 )  |  ( b2 << 16 )  |  ( b1 << 8 )  |  b0;
+}
+
+
+short
+ReadShort( FILE *fp )
+{
+        unsigned char b1, b0;
+        b0 = fgetc( fp );
+        b1 = fgetc( fp );
+        return ( b1 << 8 )  |  b0;
+}
+
+
+
 
 // main program:
 
@@ -389,15 +562,23 @@ Display( )
 	glEnable( GL_NORMALIZE );
 
 
-	// draw the current object:
+	// draw the current objects:
 
-	glCallList( BoxList );
+	glColor3f(0.3,0.3,0.5);
+	glCallList(SphereList);
+
+	glCallList(GroundList);
+
+	glPushMatrix();
+	glTranslatef(-45., 0., -45.);
+	glCallList( PathList );
+	glPopMatrix();
 
 	if( DepthFightingOn != 0 )
 	{
 		glPushMatrix( );
 			glRotatef( 90.,   0., 1., 0. );
-			glCallList( BoxList );
+			glCallList( PathList );
 		glPopMatrix( );
 	}
 
@@ -405,8 +586,8 @@ Display( )
 	// draw some gratuitous text that just rotates on top of the scene:
 
 	glDisable( GL_DEPTH_TEST );
-	glColor3f( 0., 1., 1. );
-	DoRasterString( 0., 1., 0., "Text That Moves" );
+//	glColor3f( 0., 1., 1. );
+//	DoRasterString( 0., 1., 0., "Text That Moves" );
 
 
 	// draw some gratuitous text that is fixed on the screen:
@@ -425,8 +606,8 @@ Display( )
 	gluOrtho2D( 0., 100.,     0., 100. );
 	glMatrixMode( GL_MODELVIEW );
 	glLoadIdentity( );
-	glColor3f( 1., 1., 1. );
-	DoRasterString( 5., 5., 0., "Text That Doesn't" );
+//	glColor3f( 1., 1., 1. );
+//	DoRasterString( 5., 5., 0., "Text That Doesn't" );
 
 
 	// swap the double-buffered framebuffers:
@@ -741,7 +922,24 @@ InitLists( )
 	float dz = BOXSIZE / 2.f;
 	glutSetWindow( MainWindow );
 
-	// create the object:
+	// create the objects:
+
+	glColor3f(0.,0.,0.5);
+	SphereList = glGenLists(1);
+	glNewList(SphereList, GL_COMPILE);
+		glutSolidSphere(10.0, 100, 100);
+	glEndList();
+
+	GroundList = glGenLists(1);
+	glNewList(GroundList, GL_COMPILE);
+		glBegin(GL_QUADS);
+			glColor3f(0.0,0.3,0.0);
+			glVertex3f(-15.0,0.0,15.0);
+			glVertex3f(15.0,0.0,15.0);
+			glVertex3f(15.0,0.0,-15.0);
+			glVertex3f(-15.0,0.0,-15.0);
+		glEnd();
+	glEndList();
 
 	BoxList = glGenLists( 1 );
 	glNewList( BoxList, GL_COMPILE );
@@ -804,6 +1002,8 @@ InitLists( )
 			Axes( 1.5 );
 		glLineWidth( 1. );
 	glEndList( );
+
+	make_trace_list("log.txt");
 }
 
 
