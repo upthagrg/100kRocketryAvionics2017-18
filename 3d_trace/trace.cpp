@@ -219,6 +219,8 @@ int		WhichColor;				// index into Colors[ ]
 int		WhichProjection;		// ORTHO or PERSP
 int		Xmouse, Ymouse;			// mouse values
 float	Xrot, Yrot;				// rotation angles in degrees
+unsigned char *skytex1;				// first sky texture
+GLuint skytex;					// current sky texture
 
 
 // function prototypes:
@@ -236,6 +238,7 @@ void	DoProjectMenu( int );
 void	DoRasterString( float, float, float, char * );
 void	DoStrokeString( float, float, float, float, char * );
 float	ElapsedSeconds( );
+void	InitTextures();
 void	InitGraphics( );
 void	InitLists( );
 void	InitMenus( );
@@ -358,6 +361,7 @@ BmpToTexture( char *filename, int *width, int *height ) // width and height in p
 
         *width = nums;
         *height = numt;
+	cout << "loaded texture from " << filename << endl;
         return texture;
 
 }
@@ -402,11 +406,14 @@ main( int argc, char *argv[ ] )
 
 	InitGraphics( );
 
+	
+	// create textures
+
+	InitTextures();
 
 	// create the display structures that will not change:
 
 	InitLists( );
-
 
 	// init all the global variables used by Display( ):
 	// this will also post a redisplay
@@ -515,7 +522,7 @@ Display( )
 
 	// set the eye position, look-at position, and up-vector:
 
-	gluLookAt( 0., 0., 3.,     0., 0., 0.,     0., 1., 0. );
+	gluLookAt( 0., 2., 3.,     0., 0., 0.,     0., 1., 0. );
 
 
 	// rotate the scene:
@@ -565,7 +572,13 @@ Display( )
 	// draw the current objects:
 
 	glColor3f(0.3,0.3,0.5);
+
+	glEnable( GL_TEXTURE_2D );
+//	glBindTexture( GL_TEXTURE_2D, skytex ); //bind skytexture
+
 	glCallList(SphereList);
+
+	glDisable (GL_TEXTURE_2D);
 
 	glCallList(GroundList);
 
@@ -927,7 +940,8 @@ InitLists( )
 	glColor3f(0.,0.,0.5);
 	SphereList = glGenLists(1);
 	glNewList(SphereList, GL_COMPILE);
-		glutSolidSphere(10.0, 100, 100);
+		glBindTexture( GL_TEXTURE_2D, skytex ); //bind skytexture
+		glutSolidSphere(1.0, 100, 100);
 	glEndList();
 
 	GroundList = glGenLists(1);
@@ -1377,4 +1391,26 @@ HsvRgb( float hsv[3], float rgb[3] )
 	rgb[0] = r;
 	rgb[1] = g;
 	rgb[2] = b;
+}
+void InitTextures(){
+	int width, height;
+//	width = 4000; 
+//	height = 2246;
+	
+	//begin first sky texture
+	skytex1 = BmpToTexture( "./resources/textures/worldtex.bmp", &width, &height );
+
+	glPixelStorei( GL_UNPACK_ALIGNMENT, 1 );
+	glGenTextures( 1, &skytex ); // assign binding “handles”
+	
+	glBindTexture( GL_TEXTURE_2D, skytex ); // make tex0 texture current
+	// and set its parameters
+	glTexParameteri( GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_CLAMP );
+	glTexParameteri( GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_CLAMP ); //extends last pixel past s or t of 1
+	glTexParameteri( GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR );
+	glTexParameteri( GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR); //blended texels
+	glTexEnvf( GL_TEXTURE_ENV, GL_TEXTURE_ENV_MODE, GL_REPLACE ); //replace surface (no material illumination) 
+	//glTexImage2D( GL_TEXTURE_2D, 0, 3, 256, 128, 0, GL_RGB, GL_UNSIGNED_BYTE, TextureArray0 );
+	glTexImage2D( GL_TEXTURE_2D, 0, 3, 256, 128, 0, GL_RGB, GL_UNSIGNED_BYTE, skytex1 );
+	//end first sky texture
 }
