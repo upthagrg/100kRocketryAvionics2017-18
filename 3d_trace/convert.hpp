@@ -1,7 +1,7 @@
 /****************************************************************
-*Title: convert.h
+*Title: convert.hpp
 *Author: Glenn Upthagrove
-*Date: 12/26/2017
+*Date: 12/30/2017
 *description: A header file that givees the utilities to the 
 *3D trace to convert JSON data into vertecies for OpenGL. 
 ****************************************************************/

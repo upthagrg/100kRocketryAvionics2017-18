@@ -1,3 +1,10 @@
+/*******************************************************
+*Title: trace.cpp
+*Author: Glenn Upthagrove
+*Date: 12/30/17
+*Description: A 3D Trace for the flight path of the 
+*rocket for the high altitude rocketry challenge. 
+*******************************************************/
 #include <stdio.h>
 #include <stdlib.h>
 #include <ctype.h>
