@@ -1,8 +1,11 @@
 default:
-	gcc logger.c -std=c99 -lm -o logger
+	gcc ./generate/datagen.c -std=c99 -lm -o ./gen
+	gcc logger.c  -std=c99 -lm -o logger -Wno-format-security
 wgcc:
 	gcc logger.c -std=c99 -lm -o logger
 wclang:
 	clang logger.c -std=c99 -lm -o logger
+test:
+	gcc logtest1.c  -std=c99 -lm -o test1	
 clean: 
-	rm ./logger
+	rm ./logger ./test1 ./log.txt ./gen
