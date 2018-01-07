@@ -14,16 +14,16 @@ using namespace std;
 
 GLuint PathList;
 
-struct point{
+struct fpoint{
 	float x;
 	float y;
 	float z;
 };
 
 void  make_trace_list(char* filename){
-	vector<struct point> vec;
+	vector<struct fpoint> vec;
 	int i;
-	struct point temp;
+	struct fpoint temp;
 	char buff[256];
 	char numbuff[256];
 	ifstream in;
@@ -78,6 +78,7 @@ void  make_trace_list(char* filename){
 		//time
 		memset(buff, '\0', 256);
 		in >> buff;
+		//add struct
 		vec.push_back(temp);
 	}
 	in.close();

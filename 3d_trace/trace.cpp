@@ -22,8 +22,8 @@
 #include <GL/glu.h>
 #include "glut.h"
 
-#include "convert.hpp"
-
+#include <convert.hpp>
+#include <tplane.hpp>
 
 //	This is a 3D trace for the flightpath of the rocket of the Oreon State University 
 //	chapter of AIAA high altitude rocketry challenge. Thus uses OpenGL through C++.  
@@ -77,13 +77,25 @@ struct bmih
         int biClrImportant;
 } InfoHeader;
 
+//sphere stuff
+bool	Distort;		// global -- true means to distort the texture
+
+struct point {
+	float x, y, z;		// coordinates
+	float nx, ny, nz;	// surface normal
+	float s, t;		// texture coords
+};
+
+int		NumLngs, NumLats;
+struct point *	Pts;
+
 const int birgb = { 0 };
 
 
 // title of these windows:
 
 const char *WINDOWTITLE = { "3D Trace" };
-const char *GLUITITLE   = { "User Interface Window" };
+const char *GLUITITLE   = { "UI Window" };
 
 
 // what the glui package defines as true and false:
@@ -96,6 +108,14 @@ const int GLUIFALSE = { false };
 
 #define ESCAPE		0x1b
 
+//define sky radius
+
+#define RADIUS		5.0
+
+//gound params
+
+#define PLANESIZE	16.0
+#define PLANERES	512
 
 // initial window size:
 
@@ -228,6 +248,7 @@ int		Xmouse, Ymouse;			// mouse values
 float	Xrot, Yrot;				// rotation angles in degrees
 unsigned char *skytex1;				// first sky texture
 GLuint skytex;					// current sky texture
+int width, height;				// texture details
 
 
 // function prototypes:
@@ -258,6 +279,11 @@ void	Visibility( int );
 
 void	Axes( float );
 void	HsvRgb( float[3], float [3] );
+
+struct point * PtsPointer( int lat, int lng );
+void DrawPoint( struct point *p );
+void MjbSphere( float radius, int slices, int stacks );
+
 
 // teture functions 
 
@@ -369,6 +395,8 @@ BmpToTexture( char *filename, int *width, int *height ) // width and height in p
         *width = nums;
         *height = numt;
 	cout << "loaded texture from " << filename << endl;
+	cout << "width: " << nums << endl;
+	cout << "height: " << numt << endl;
         return texture;
 
 }
@@ -529,7 +557,7 @@ Display( )
 
 	// set the eye position, look-at position, and up-vector:
 
-	gluLookAt( 0., 2., 3.,     0., 0., 0.,     0., 1., 0. );
+	gluLookAt( 0., 2., 3.,     0., 2.5, 0.,     0., 1., 0. );
 
 
 	// rotate the scene:
@@ -578,16 +606,28 @@ Display( )
 
 	// draw the current objects:
 
-	glColor3f(0.3,0.3,0.5);
+//	glColor3f(0.3,0.3,0.5);
+//	glColor3f(1.,0.,0.);
 
 	glEnable( GL_TEXTURE_2D );
-//	glBindTexture( GL_TEXTURE_2D, skytex ); //bind skytexture
+	glBindTexture( GL_TEXTURE_2D, skytex ); //bind skytexture
 
-	glCallList(SphereList);
+	///draw sky
+	glPushMatrix();
+//		glScalef(2.0, 2.0, 2.0);
+		glRotatef(90.0, 0., 1., 0.);
+		glRotatef(180.0, 1., 0., 0.);
+		glCallList(SphereList);
+	glPopMatrix();
 
 	glDisable (GL_TEXTURE_2D);
 
-	glCallList(GroundList);
+	//glCallList(GroundList);
+	glColor3f(0., 0.5, 0.);
+	glPushMatrix();
+		glTranslatef(-(PLANESIZE/2.), 0., (PLANESIZE/2.));
+		glCallList(BoardList);
+	glPopMatrix();
 
 	glPushMatrix();
 	glTranslatef(-45., 0., -45.);
@@ -944,11 +984,12 @@ InitLists( )
 
 	// create the objects:
 
-	glColor3f(0.,0.,0.5);
+//	glColor3f(0.,0.,0.5);
 	SphereList = glGenLists(1);
 	glNewList(SphereList, GL_COMPILE);
-		glBindTexture( GL_TEXTURE_2D, skytex ); //bind skytexture
-		glutSolidSphere(1.0, 100, 100);
+		//glBindTexture( GL_TEXTURE_2D, skytex ); //bind skytexture
+		//glutSolidSphere(RADIUS, 100, 100);
+		MjbSphere(RADIUS, 100, 100);
 	glEndList();
 
 	GroundList = glGenLists(1);
@@ -1025,6 +1066,7 @@ InitLists( )
 	glEndList( );
 
 	make_trace_list("log.txt");
+	tplane(PLANERES, PLANESIZE);
 }
 
 
@@ -1400,24 +1442,174 @@ HsvRgb( float hsv[3], float rgb[3] )
 	rgb[2] = b;
 }
 void InitTextures(){
-	int width, height;
-//	width = 4000; 
-//	height = 2246;
-	
+	// skutex is the texture object, skytex1 is the picture	
 	//begin first sky texture
-	skytex1 = BmpToTexture( "./resources/textures/worldtex.bmp", &width, &height );
+	cout << "creating textures..." << endl;
 
 	glPixelStorei( GL_UNPACK_ALIGNMENT, 1 );
 	glGenTextures( 1, &skytex ); // assign binding “handles”
+	glBindTexture( GL_TEXTURE_2D, skytex ); // make skytex texture current
 	
-	glBindTexture( GL_TEXTURE_2D, skytex ); // make tex0 texture current
 	// and set its parameters
-	glTexParameteri( GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_CLAMP );
-	glTexParameteri( GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_CLAMP ); //extends last pixel past s or t of 1
+	skytex1 = BmpToTexture( "./resources/textures/skytex1.bmp", &width, &height );
+	glTexParameteri( GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_REPEAT );
+	glTexParameteri( GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_REPEAT ); //extends last pixel past s or t of 1
 	glTexParameteri( GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR );
 	glTexParameteri( GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR); //blended texels
 	glTexEnvf( GL_TEXTURE_ENV, GL_TEXTURE_ENV_MODE, GL_REPLACE ); //replace surface (no material illumination) 
 	//glTexImage2D( GL_TEXTURE_2D, 0, 3, 256, 128, 0, GL_RGB, GL_UNSIGNED_BYTE, TextureArray0 );
-	glTexImage2D( GL_TEXTURE_2D, 0, 3, 256, 128, 0, GL_RGB, GL_UNSIGNED_BYTE, skytex1 );
+	glTexImage2D( GL_TEXTURE_2D, 0, 3, width, height, 0, GL_RGB, GL_UNSIGNED_BYTE, skytex1 );
 	//end first sky texture
+}
+
+
+struct point *
+PtsPointer( int lat, int lng )
+{
+	if( lat < 0 )	lat += (NumLats-1);
+	if( lng < 0 )	lng += (NumLngs-1);
+	if( lat > NumLats-1 )	lat -= (NumLats-1);
+	if( lng > NumLngs-1 )	lng -= (NumLngs-1);
+	return &Pts[ NumLngs*lat + lng ];
+}
+
+
+
+void
+DrawPoint( struct point *p )
+{
+	glNormal3f( p->nx, p->ny, p->nz );
+	glTexCoord2f( p->s, p->t );
+	glVertex3f( p->x, p->y, p->z );
+}
+
+void
+MjbSphere( float radius, int slices, int stacks )
+{
+	struct point top, bot;		// top, bottom points
+	struct point *p;
+
+	// set the globals:
+
+	NumLngs = slices;
+	NumLats = stacks;
+
+	if( NumLngs < 3 )
+		NumLngs = 3;
+
+	if( NumLats < 3 )
+		NumLats = 3;
+
+
+	// allocate the point data structure:
+
+	Pts = new struct point[ NumLngs * NumLats ];
+
+
+	// fill the Pts structure:
+
+	for( int ilat = 0; ilat < NumLats; ilat++ )
+	{
+		float lat = -M_PI/2.  +  M_PI * (float)ilat / (float)(NumLats-1);
+		float xz = cos( lat );
+		float y = sin( lat );
+		for( int ilng = 0; ilng < NumLngs; ilng++ )
+		{
+			float lng = -M_PI  +  2. * M_PI * (float)ilng / (float)(NumLngs-1);
+			float x =  xz * cos( lng );
+			float z = -xz * sin( lng );
+			p = PtsPointer( ilat, ilng );
+			p->x  = radius * x;
+			p->y  = radius * y;
+			p->z  = radius * z;
+			p->nx = x;
+			p->ny = y;
+			p->nz = z;
+			if( Distort )
+			{
+				//p->s = ?????
+				p->s = ( lng + M_PI    ) / ( 2.*M_PI );
+				//p->t = ?????
+				p->t = ( lat + M_PI/2. ) / M_PI;
+			}
+			else
+			{
+				p->s = ( lng + M_PI    ) / ( 2.*M_PI );
+				p->t = ( lat + M_PI/2. ) / M_PI;
+			}
+		}
+	}
+
+	top.x =  0.;		top.y  = radius;	top.z = 0.;
+	top.nx = 0.;		top.ny = 1.;		top.nz = 0.;
+	top.s  = 0.;		top.t  = 1.;
+
+	bot.x =  0.;		bot.y  = -radius;	bot.z = 0.;
+	bot.nx = 0.;		bot.ny = -1.;		bot.nz = 0.;
+	bot.s  = 0.;		bot.t  =  0.;
+
+
+	// connect the north pole to the latitude NumLats-2:
+
+	glBegin( GL_QUADS );
+	for( int ilng = 0; ilng < NumLngs-1; ilng++ )
+	{
+		p = PtsPointer( NumLats-1, ilng );
+		DrawPoint( p );
+
+		p = PtsPointer( NumLats-2, ilng );
+		DrawPoint( p );
+
+		p = PtsPointer( NumLats-2, ilng+1 );
+		DrawPoint( p );
+
+		p = PtsPointer( NumLats-1, ilng+1 );
+		DrawPoint( p );
+	}
+	glEnd( );
+
+	// connect the south pole to the latitude 1:
+
+	glBegin( GL_QUADS );
+	for( int ilng = 0; ilng < NumLngs-1; ilng++ )
+	{
+		p = PtsPointer( 0, ilng );
+		DrawPoint( p );
+
+		p = PtsPointer( 0, ilng+1 );
+		DrawPoint( p );
+
+		p = PtsPointer( 1, ilng+1 );
+		DrawPoint( p );
+
+		p = PtsPointer( 1, ilng );
+		DrawPoint( p );
+	}
+	glEnd( );
+
+
+	// connect the other 4-sided polygons:
+
+	glBegin( GL_QUADS );
+	for( int ilat = 2; ilat < NumLats-1; ilat++ )
+	{
+		for( int ilng = 0; ilng < NumLngs-1; ilng++ )
+		{
+			p = PtsPointer( ilat-1, ilng );
+			DrawPoint( p );
+
+			p = PtsPointer( ilat-1, ilng+1 );
+			DrawPoint( p );
+
+			p = PtsPointer( ilat, ilng+1 );
+			DrawPoint( p );
+
+			p = PtsPointer( ilat, ilng );
+			DrawPoint( p );
+		}
+	}
+	glEnd( );
+
+	delete [ ] Pts;
+	Pts = NULL;
 }
