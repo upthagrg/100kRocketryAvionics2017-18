@@ -1,8 +1,8 @@
 /*******************************************************************************************
-*Title: logger.c
+*Title: logger_test_framework.c
 *Author: Glenn Upthagrove
 *Date: 01/01/2018
-*Description: A grogram that logs incoming telemetry data to a file. 
+*Description: Copy this file to a new test, and place a unit test were labeled. 
 *******************************************************************************************/
 #define _XOPEN_SOURCE 500 //makes usleep work
 #include <stdio.h>
@@ -28,10 +28,7 @@ int main(int argc, char** argv){
         lon = slon;
         alt = salt;
         freq = 1;
-	buffsize = 10;
 
-	printf("logger launched\n");
-	fflush(stdout);
         srand(time(NULL));
         str = (char*)malloc(sizeof(char)*256);
 
@@ -54,23 +51,20 @@ int main(int argc, char** argv){
                 else if(strcmp(argv[i], "-out") == 0){ //get output file name
                         fname = argv[i+1];
                 }
-                else if(strcmp(argv[i], "-buff") == 0){ //get output file name
-                        buffsize = atoi(argv[i+1]);
-                }
                 else if(strcmp(argv[i], "-debug") == 0){ //get output file name
                         debug = 1;
-			printf("logger debug: on\n");
-			fflush(stdout);
                 }
                 if(fname == NULL){
                         fname = "./log.txt";
                 }
         }
-	//open log file
-        logfile = fopen(fname, "w+");
-	//log to log file
-        logfun(logfile);
-	//close log file
+        //place unit test here
+
+        //logfile = fopen(fname, "w+");
+        //logfun(logfile);
+	
+
+
         fclose(logfile);
 
         return 0;
