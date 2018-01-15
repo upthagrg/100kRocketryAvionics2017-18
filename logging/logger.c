@@ -30,7 +30,7 @@ int main(int argc, char** argv){
         freq = 1;
 	buffsize = 10;
 
-	printf("logger launched\n");
+//	printf("logger launched\n");
 	fflush(stdout);
         srand(time(NULL));
         str = (char*)malloc(sizeof(char)*256);

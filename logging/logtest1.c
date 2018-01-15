@@ -12,62 +12,56 @@
 #include <string.h>
 #include <time.h>
 #include <math.h>
-#include "./logger.h"
+#include <sys/stat.h>
+#include <sys/types.h>
+#include <fcntl.h>
+
+int compare(){
+	char* buffer;
+	char* buffer2;
+	int text_file, bytes;
+	struct stat bucket;
+	char* name;
+	char* name2;
+	name = "testlog.txt";
+	name2 = "log.txt";
+	//printf("opening file\n");
+	text_file = open(name, O_RDONLY);
+	stat(name, &bucket);
+	buffer = malloc((sizeof(char))*(bucket.st_size));
+	memset(buffer, '\0', bucket.st_size); // Clear out the buffer array
+        bytes = read(text_file, buffer, bucket.st_size);	
+        if(bytes<=0){
+                printf("ERROR READING FILE\n");
+		exit(6);
+        }
+	close(text_file);
+	text_file = open(name2, O_RDONLY);
+	stat(name2, &bucket);
+	buffer2 = malloc((sizeof(char))*(bucket.st_size));
+	memset(buffer2, '\0', bucket.st_size); // Clear out the buffer array
+        bytes = read(text_file, buffer2, bucket.st_size);	
+        if(bytes<=0){
+                printf("ERROR READING FILE\n");
+		exit(6);
+        }
+	close(text_file);
+	if(strcmp(buffer, buffer2) != 0){
+	//	printf("not equal freeing data\n");
+		free(buffer);
+		free(buffer2);
+		return 1;
+	}
+	else{
+	//	printf("equal freeing data\n");
+		free(buffer);
+		free(buffer2);
+		return 0;
+	}
+}
 
 int main(int argc, char** argv){
-        int i=0;
-        FILE* logfile;
-        salt = 0.0;
-        svel = 100.0;
-        slat = 45.0;
-        slon = 45.0;
-        fname = NULL;
-        debug = 0;
-        Time1 = 0.0;
-        vel = svel;
-        lat = slat;
-        lon = slon;
-        alt = salt;
-        freq = 1;
 
-        srand(time(NULL));
-        str = (char*)malloc(sizeof(char)*256);
-
-        for(i; i<argc; i++){
-                if(strcmp(argv[i], "-vel") == 0){ //get starting velocity
-                        svel = atof(argv[i+1]);
-                }
-                else if(strcmp(argv[i], "-alt") == 0){ //get starting altitude
-                        salt = atof(argv[i+1]);
-                }
-                else if(strcmp(argv[i], "-lat") == 0){ //get starting latitude
-                        slat = atof(argv[i+1]);
-                }
-                else if(strcmp(argv[i], "-lon") == 0){ //get starting longitude
-                        slon = atof(argv[i+1]);
-                }
-                else if(strcmp(argv[i], "-rate") == 0){ //get update rate in Hz
-                        freq = atof(argv[i+1]);
-                }
-                else if(strcmp(argv[i], "-out") == 0){ //get output file name
-                        fname = argv[i+1];
-                }
-                else if(strcmp(argv[i], "-debug") == 0){ //get output file name
-                        debug = 1;
-                }
-                if(fname == NULL){
-                        fname = "./log.txt";
-                }
-        }
-        //place unit test here
-
-        logfile = fopen(fname, "w+");
-        logfun2(logfile);
-	
-
-
-        fclose(logfile);
-
-        return 0;
+        return compare();
 }
 
