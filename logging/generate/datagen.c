@@ -16,17 +16,21 @@
 #include <time.h>
 #include <math.h>
 #include <sys/types.h>
+#include <fcntl.h>
+#include <sys/wait.h>
+
 
 int files[2];
 int debug;
-
-void gen_data(float freq, float salt, float svel, float slat, float slon){
+char* name;
+void gen_data(float freq, float salt, float svel, float slat, float slon, int file){
 	char str1[9] = "velocity";
 	char str2[9] = "latitude";
 	char str3[10] = "longitude";
 	char str4[9] = "altitude";
 	char str5[5] = "time";
 	char buff[256];
+	char buff3[256];
 	char* buff2;
 	float vel=svel; //initial velocity, no acceleration other than gravity, no jerk
 	float lat=slat;
@@ -36,6 +40,7 @@ void gen_data(float freq, float salt, float svel, float slat, float slon){
 	int dec;
 	int wret=-5;
 	int total=0;
+	//printf("file: %d\n", file);
 	if(debug){
 		printf("starting data generation\n");
 		fflush(stdout);
@@ -44,6 +49,7 @@ void gen_data(float freq, float salt, float svel, float slat, float slon){
 		total = 0;
 		memset(buff, '\0', 256);
 		sprintf(buff,"'{\"%s\":\"%f\", \"%s\":\"%f\", \"%s\":\"%f\", \"%s\":\"%f\", \"%s\":\"+%f\"}'&&", str1,vel,str2,lat,str3,lon,str4,alt,str5,time); //make JSON string
+		sprintf(buff3,"'{\"%s\":\"%f\", \"%s\":\"%f\", \"%s\":\"%f\", \"%s\":\"%f\", \"%s\":\"+%f\"}'", str1,vel,str2,lat,str3,lon,str4,alt,str5,time); //make JSON string
 		//fprintf(files[1], buff); //print JSON string
 		//fprintf(files[1], "\n"); //print newline
 		buff2 = buff;
@@ -55,6 +61,9 @@ void gen_data(float freq, float salt, float svel, float slat, float slon){
 				fflush(stdout);
 			}
 			wret = write(files[1], buff2, (strlen(buff2)));
+			if(file != -5){
+				printf("%s\n", buff3);
+			}
 			if(debug){
 				printf("data_gen finished writing\n");
 				fflush(stdout);
@@ -123,18 +132,26 @@ int main(int argc, char** argv){
 	char* buffsize = NULL;;
 //	char** args;
 	int ret;
+	int file;
+	int child_exit = -5;
 	debug = 0;
+	name = NULL;
 //	args = (char**)malloc(sizeof(char*)*1);
 //	args[0] = (char*)malloc(sizeof(char)*7);
 //	memset(args[0], '\0', 7);
 //	strcpy(args[0], "-debug");
 	srand(time(NULL));
+	file = -5;
 	for(i; i<argc; i++){
 		if(strcmp(argv[i], "-vel") == 0){ //get starting velocity
 			svel = atof(argv[i+1]);
 		}
 		else if(strcmp(argv[i], "-alt") == 0){ //get starting altitude
 			salt = atof(argv[i+1]);
+		}
+		else if(strcmp(argv[i], "-to") == 0){ //get starting altitude
+			//printf("to set\n");
+			file = 1;
 		}
 		else if(strcmp(argv[i], "-lat") == 0){ //get starting latitude
 			slat = atof(argv[i+1]);
@@ -204,7 +221,9 @@ int main(int argc, char** argv){
 			printf("staring gen_data in generator process\n");
 			fflush(stdout);
 		}
-		gen_data(freq, salt, svel, slat, slon);
+		gen_data(freq, salt, svel, slat, slon, file);
+		waitpid(childid, &child_exit, 0);
 	}
 	return 0;
+
 }
