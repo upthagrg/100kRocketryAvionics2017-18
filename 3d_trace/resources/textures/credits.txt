@@ -1,2 +1,3 @@
 skytex1: https://texturify.com/stock-photo/sky-background-10778.html 
+skytex3: http://www.bzfusion.net/skymaps/sky_povray.jpg 
 
