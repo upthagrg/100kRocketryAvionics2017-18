@@ -12,6 +12,8 @@
 #include <vector>
 using namespace std;
 
+int slat;
+int slon;
 GLuint PathList;
 
 struct fpoint{
@@ -40,6 +42,7 @@ void  make_trace_list(char* filename){
 		memset(buff, '\0', 256);
 		memset(numbuff, '\0', 256);
 		in >> buff;
+		//cout << "lat:" <<buff << endl;
 		strcpy(numbuff, buff+12);
 		i=0;
 		for(i;i<256;i++){
@@ -53,6 +56,7 @@ void  make_trace_list(char* filename){
 		memset(buff, '\0', 256);
 		memset(numbuff, '\0', 256);
 		in >> buff;
+		//cout << "lon:" <<buff << endl;
 		strcpy(numbuff, buff+13);
 		i=0;
 		for(i;i<256;i++){
@@ -66,6 +70,7 @@ void  make_trace_list(char* filename){
 		memset(buff, '\0', 256);
 		memset(numbuff, '\0', 256);
 		in >> buff;
+		//cout << "alt:" <<buff << endl;
 		strcpy(numbuff, buff+12);
 		i=0;
 		for(i;i<256;i++){
@@ -74,7 +79,8 @@ void  make_trace_list(char* filename){
 			}
 		}
 		numbuff[i] = '\0';
-		temp.y=atof(numbuff);
+		temp.y=(atof(numbuff)/5280); //conver to miles
+		//temp.y=(atof(numbuff)); 
 		//time
 		memset(buff, '\0', 256);
 		in >> buff;
@@ -83,16 +89,18 @@ void  make_trace_list(char* filename){
 	}
 	in.close();
 	vec.pop_back();
+	slat = vec[0].z;
+	slon = vec[0].x;
         PathList = glGenLists( 1 );
         glNewList( PathList, GL_COMPILE );
-	        glLineWidth( 1. );
+	        glLineWidth( 5. );
 	        glBegin( GL_LINE_STRIP );
 	        glColor3f( 1., 0., 0. ); //red
 	//      glNormal3f( 0., 0.,  1. );
 	//      glVertex3f( -dx, -dy,  dz );
 		i=0;
 		for(i; i<vec.size(); i++){
-			//cout << "x: " << vec[i].x << " y: " << vec[i].y << " z: " << vec[i].z << endl;
+			cout << "x: " << vec[i].x << " y: " << vec[i].y << " z: " << vec[i].z << endl;
 			glVertex3f(vec[i].x, vec[i].y, vec[i].z);
 		}
 		glEnd();
