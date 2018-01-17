@@ -16,6 +16,8 @@
 #include <time.h>
 #include <math.h>
 
+int wind;
+
 void gen_data(float freq, float salt, float svel, float slat, float slon){
 	char str1[9] = "velocity";
 	char str2[9] = "latitude";
@@ -42,12 +44,24 @@ void gen_data(float freq, float salt, float svel, float slat, float slon){
 		else{
 			lat -= 0.001;
 		}
+		if(wind == 3){
+			lat += 0.05;
+		}
+		else if(wind == 4){
+			lat -= 0.05;
+		}
 		dec = rand()%2;
 		if(dec){ //update lon
 			lon += 0.001;
 		}
 		else{
 			lon -= 0.001;
+		}
+		if(wind == 1){
+			lon -= 0.05;
+		}
+		else if(wind == 2){
+			lon += 0.05;
 		}
 		vel = ((-9.8*time) + (svel)); //update vel
 		usleep(1000000/freq);
@@ -62,6 +76,7 @@ int main(int argc, char** argv){
 	float slat = 45.0;
 	float slon = 45.0;
 	int i=0;
+	wind = 0;
 	srand(time(NULL));
 	for(i; i<argc; i++){
 		if(strcmp(argv[i], "-vel") == 0){ //get starting velocity
@@ -78,6 +93,20 @@ int main(int argc, char** argv){
 		}
 		else if(strcmp(argv[i], "-rate") == 0){ //get update rate in Hz
 			freq = atof(argv[i+1]);
+		}
+		else if(strcmp(argv[i], "-wind") == 0){ //get update rate in Hz
+			if(strcmp(argv[i+1], "east")==0){
+				wind = 1;
+			}
+			else if(strcmp(argv[i+1], "west")==0){
+				wind = 2;
+			}
+			else if(strcmp(argv[i+1], "north")==0){
+				wind = 3;
+			}
+			else if(strcmp(argv[i+1], "south")==0){
+				wind = 4;
+			}
 		}
 	}
 	gen_data(freq, salt, svel, slat, slon);
