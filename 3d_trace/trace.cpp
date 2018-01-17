@@ -110,11 +110,11 @@ const int GLUIFALSE = { false };
 
 //define sky radius
 
-#define RADIUS		5.0
+#define RADIUS		50.0
 
 //gound params
 
-#define PLANESIZE	16.0
+#define PLANESIZE	100.0
 #define PLANERES	512
 
 // initial window size:
@@ -615,8 +615,8 @@ Display( )
 	///draw sky
 	glPushMatrix();
 //		glScalef(2.0, 2.0, 2.0);
-		glRotatef(90.0, 0., 1., 0.);
-		glRotatef(180.0, 1., 0., 0.);
+//		glRotatef(90.0, 0., 1., 0.);
+//		glRotatef(180.0, 1., 0., 0.);
 		glCallList(SphereList);
 	glPopMatrix();
 
@@ -630,14 +630,14 @@ Display( )
 	glPopMatrix();
 
 	glPushMatrix();
-	glTranslatef(-45., 0., -45.);
-	glCallList( PathList );
+		glTranslatef(-slon, 0., -slat);
+		glCallList( PathList );
 	glPopMatrix();
 
 	if( DepthFightingOn != 0 )
 	{
 		glPushMatrix( );
-			glRotatef( 90.,   0., 1., 0. );
+			//glRotatef( 90.,   0., 1., 0. );
 			glCallList( PathList );
 		glPopMatrix( );
 	}
@@ -646,8 +646,9 @@ Display( )
 	// draw some gratuitous text that just rotates on top of the scene:
 
 	glDisable( GL_DEPTH_TEST );
-//	glColor3f( 0., 1., 1. );
+	glColor3f( 0., 1., 1. );
 //	DoRasterString( 0., 1., 0., "Text That Moves" );
+	DoRasterString( 1., 0.1, 0., "1 MI" );
 
 
 	// draw some gratuitous text that is fixed on the screen:
@@ -668,7 +669,8 @@ Display( )
 	glLoadIdentity( );
 //	glColor3f( 1., 1., 1. );
 //	DoRasterString( 5., 5., 0., "Text That Doesn't" );
-
+//	DoRasterString( 1., 0., 0., "1 MI" );
+	
 
 	// swap the double-buffered framebuffers:
 
@@ -1061,7 +1063,7 @@ InitLists( )
 	AxesList = glGenLists( 1 );
 	glNewList( AxesList, GL_COMPILE );
 		glLineWidth( AXES_WIDTH );
-			Axes( 1.5 );
+			Axes( 1. );
 		glLineWidth( 1. );
 	glEndList( );
 
@@ -1451,7 +1453,7 @@ void InitTextures(){
 	glBindTexture( GL_TEXTURE_2D, skytex ); // make skytex texture current
 	
 	// and set its parameters
-	skytex1 = BmpToTexture( "./resources/textures/skytex1.bmp", &width, &height );
+	skytex1 = BmpToTexture( "./resources/textures/skytex3.bmp", &width, &height );
 	glTexParameteri( GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_REPEAT );
 	glTexParameteri( GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_REPEAT ); //extends last pixel past s or t of 1
 	glTexParameteri( GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR );
