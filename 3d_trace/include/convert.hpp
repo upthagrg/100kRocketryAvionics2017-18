@@ -10,10 +10,15 @@
 #include <fstream>
 #include <iostream>
 #include <vector>
+#include <cmath>
 using namespace std;
 
-int slat;
-int slon;
+float slat;
+float slon;
+float apx;
+float apz;
+float apalt=0;
+
 GLuint PathList;
 
 struct fpoint{
@@ -25,6 +30,9 @@ struct fpoint{
 void  make_trace_list(char* filename){
 	vector<struct fpoint> vec;
 	int i;
+	int inited = 0;
+	int ref = 0;
+	//float lat;
 	struct fpoint temp;
 	char buff[256];
 	char numbuff[256];
@@ -51,7 +59,11 @@ void  make_trace_list(char* filename){
 			}
 		}
 		numbuff[i] = '\0';
-		temp.z=atof(numbuff);
+		if(inited == 0){
+			slat = atof(numbuff);
+		}
+		temp.z=((slat - atof(numbuff)) * 69.0); //HERE
+		//lat=atof(numbuff); //HERE
 		//longitude
 		memset(buff, '\0', 256);
 		memset(numbuff, '\0', 256);
@@ -65,7 +77,11 @@ void  make_trace_list(char* filename){
 			}
 		}
 		numbuff[i] = '\0';
-		temp.x=atof(numbuff);
+		if(inited == 0){
+			slon = atof(numbuff);
+			inited = 1;
+		}
+		temp.x=((slon - atof(numbuff)) * (cos(slat) * 69.172)); //HERE
 		//altitude
 		memset(buff, '\0', 256);
 		memset(numbuff, '\0', 256);
@@ -89,8 +105,8 @@ void  make_trace_list(char* filename){
 	}
 	in.close();
 	vec.pop_back();
-	slat = vec[0].z;
-	slon = vec[0].x;
+//	slat = vec[0].z;
+//	slon = vec[0].x;
         PathList = glGenLists( 1 );
         glNewList( PathList, GL_COMPILE );
 	        glLineWidth( 5. );
@@ -102,7 +118,14 @@ void  make_trace_list(char* filename){
 		for(i; i<vec.size(); i++){
 			cout << "x: " << vec[i].x << " y: " << vec[i].y << " z: " << vec[i].z << endl;
 			glVertex3f(vec[i].x, vec[i].y, vec[i].z);
+			if(vec[i].y > apalt){
+				apalt = vec[i].y;
+				ref = i;
+			}
 		}
+		apx = vec[ref].x;
+		apz = vec[ref].z;
+		cout << "apx: " << apx << " apz: " << apz << endl;
 		glEnd();
 	glEndList();
 }
