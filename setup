@@ -1,4 +1,5 @@
 #!/bin/bash
+# add docker install 
 echo "installing apt-file"
 sudo apt-get install file
 echo "updating apt-file"
