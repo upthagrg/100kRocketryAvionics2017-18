@@ -557,7 +557,7 @@ Display( )
 
 	// set the eye position, look-at position, and up-vector:
 
-	gluLookAt( 0., 2., 3.,     0., 2.5, 0.,     0., 1., 0. );
+	gluLookAt( 0., 10., 15.,     0., 10., 0.,     0., 1., 0. );
 
 
 	// rotate the scene:
@@ -630,7 +630,7 @@ Display( )
 	glPopMatrix();
 
 	glPushMatrix();
-		glTranslatef(-slon, 0., -slat);
+		//glTranslatef(-apx, 0., -apz);
 		glCallList( PathList );
 	glPopMatrix();
 
