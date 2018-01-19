@@ -2,16 +2,25 @@
 # add docker install 
 # sudo -i
 echo "installing apt-file"
+echo
 sudo apt-get install file
 echo "updating apt-file"
+echo
 sudo sudo apt-file update
+echo "installing mesa-utils" 
+echo
+sudo apt-get install mesa-utils
 echo "installing libmesa-dev"
+echo
 sudo apt-get install libmesa-dev 
 echo "installing mesa-common-dev"
+echo
 sudo apt install mesa-common-dev
 echo "installing freeglut"
+echo
 sudo apt install libglu1-mesa-dev freeglut3-dev
 echo "copying libglut.so to /usr/lib64"
+echo
 mkdir /usr/lib64
 sudo cp ./libglut.so /usr/lib64/
 sudo chmod o=rwx /usr/lib64/libglut.so
