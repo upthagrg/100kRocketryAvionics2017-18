@@ -1,7 +1,7 @@
 /*******************************************************
 *Title: trace.cpp
 *Author: Glenn Upthagrove
-*Date: 12/30/17
+*Date: 01/18/18
 *Description: A 3D Trace for the flight path of the 
 *rocket for the high altitude rocketry challenge. 
 *******************************************************/
@@ -563,7 +563,9 @@ Display( )
 	// rotate the scene:
 
 	glRotatef( (GLfloat)Yrot, 0., 1., 0. );
+	//if((Xrot > -30) && (Xrot < 150)){
 	glRotatef( (GLfloat)Xrot, 1., 0., 0. );
+	//}
 
 
 	// uniformly scale the scene:
@@ -1168,7 +1170,17 @@ MouseMotion( int x, int y )
 
 	if( ( ActiveButton & LEFT ) != 0 )
 	{
-		Xrot += ( ANGFACT*dy );
+		if((Xrot<140) && (Xrot>-30)){
+			Xrot += ( ANGFACT*dy );
+		}
+		else{
+			if(Xrot >= 140){
+				Xrot -= 1.;
+			}
+			else{
+				Xrot += 1.;
+			}
+		}
 		Yrot += ( ANGFACT*dx );
 	}
 
