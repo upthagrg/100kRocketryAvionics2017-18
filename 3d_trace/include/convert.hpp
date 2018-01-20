@@ -1,7 +1,7 @@
 /****************************************************************
 *Title: convert.hpp
 *Author: Glenn Upthagrove
-*Date: 12/30/2017
+*Date: 01/20/2017
 *description: A header file that givees the utilities to the 
 *3D trace to convert JSON data into vertecies for OpenGL. 
 ****************************************************************/
@@ -18,6 +18,7 @@ float slon;
 float apx;
 float apz;
 float apalt=0;
+bool cdebug;
 
 GLuint PathList;
 
@@ -116,7 +117,9 @@ void  make_trace_list(char* filename){
 	//      glVertex3f( -dx, -dy,  dz );
 		i=0;
 		for(i; i<vec.size(); i++){
-			cout << "x: " << vec[i].x << " y: " << vec[i].y << " z: " << vec[i].z << endl;
+			if(cdebug){
+				cout << "x: " << vec[i].x << " y: " << vec[i].y << " z: " << vec[i].z << endl;
+			}
 			glVertex3f(vec[i].x, vec[i].y, vec[i].z);
 			if(vec[i].y > apalt){
 				apalt = vec[i].y;
@@ -125,7 +128,9 @@ void  make_trace_list(char* filename){
 		}
 		apx = vec[ref].x;
 		apz = vec[ref].z;
-		cout << "apx: " << apx << " apz: " << apz << endl;
+		if(cdebug){
+			cout << "apx: " << apx << " apz: " << apz << endl;
+		}
 		glEnd();
 	glEndList();
 }

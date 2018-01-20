@@ -1,13 +1,14 @@
 /*******************************************************
 *Title: trace.cpp
 *Author: Glenn Upthagrove
-*Date: 01/18/18
+*Date: 01/20/18
 *Description: A 3D Trace for the flight path of the 
 *rocket for the high altitude rocketry challenge. 
 *******************************************************/
 #include <stdio.h>
 #include <stdlib.h>
 #include <ctype.h>
+#include <string.h> //for strcmp
 
 #define _USE_MATH_DEFINES
 #include <math.h>
@@ -430,6 +431,13 @@ ReadShort( FILE *fp )
 int
 main( int argc, char *argv[ ] )
 {
+	cdebug = false; //initialize conversion debug 
+	for(int i=0; i<argc; i++){
+                if(strcmp(argv[i], "-debug") == 0){ //debug on?
+                        cdebug = true;
+                }
+
+	}
 	// turn on the glut package:
 	// (do this before checking argc and argv since it might
 	// pull some command line arguments out)
@@ -1170,11 +1178,11 @@ MouseMotion( int x, int y )
 
 	if( ( ActiveButton & LEFT ) != 0 )
 	{
-		if((Xrot<140) && (Xrot>-30)){
+		if((Xrot<135) && (Xrot>-25)){
 			Xrot += ( ANGFACT*dy );
 		}
 		else{
-			if(Xrot >= 140){
+			if(Xrot >= 135){
 				Xrot -= 1.;
 			}
 			else{
