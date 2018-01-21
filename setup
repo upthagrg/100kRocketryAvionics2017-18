@@ -25,6 +25,12 @@ mkdir /usr/lib64
 sudo cp ./libglut.so /usr/lib64/
 sudo chmod o=rwx /usr/lib64/libglut.so
 sudo chmod u=rwx /usr/lib64/libglut.so
+echo "installing python"
+echo
+sudo apt-get install python
+echo "installing pip"
+echo 
+sudo apt-get install python-pip
 echo "installing requezts module for python"
 echo
 sudo pip install requests
