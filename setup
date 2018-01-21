@@ -30,8 +30,10 @@ echo
 sudo apt-get install python
 echo "installing pip"
 echo 
-sudo apt-get install python-pip
-echo "installing requezts module for python"
+sudo apt-get install python-pip python-dev build-essential
+sudo pip install --upgrade pip 
+sudo pip install --upgrade virtualenv 
+echo "installing requests module for python"
 echo
 sudo pip install requests
 echo "updating"
