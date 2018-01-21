@@ -45,10 +45,10 @@ void gen_data(float freq, float salt, float svel, float slat, float slon){
 			lat -= 0.001;
 		}
 		if(wind == 3){
-			lat += 0.05;
+			lat += 0.005;
 		}
 		else if(wind == 4){
-			lat -= 0.05;
+			lat -= 0.005;
 		}
 		dec = rand()%2;
 		if(dec){ //update lon
@@ -58,10 +58,10 @@ void gen_data(float freq, float salt, float svel, float slat, float slon){
 			lon -= 0.001;
 		}
 		if(wind == 1){
-			lon -= 0.05;
+			lon -= 0.005;
 		}
 		else if(wind == 2){
-			lon += 0.05;
+			lon += 0.005;
 		}
 		vel = ((-9.8*time) + (svel)); //update vel
 		usleep(1000000/freq);
