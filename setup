@@ -34,4 +34,10 @@ sudo apt-get install python-pip
 echo "installing requezts module for python"
 echo
 sudo pip install requests
+echo "updating"
+echo
+sudo apt-get update
+echo "upgrading"
+echo
+sudo apt-get upgrade
 echo "Done"
