@@ -1,0 +1,3 @@
+data1 part2 part3
+data2 part2 part3
+data3 part2 part3 **&&
