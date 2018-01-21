@@ -245,6 +245,28 @@ int main(int argc, char** argv){
 		waitpid(childid, &child_exit, 0);
 		//close(fifo);
 	}
+	
+
+	childid = fork();
+	
+	switch(childid){
+	
+	case -1: //error
+		printf("ERROR SPAWNING CHILD\n");
+		fflush(stdout);
+		exit(2);
+	case 0: //child
+		printf("data_gen removing fifo\n");
+		fflush(stdout);
+               	ret = execlp("rm", "rm", fifoname, NULL); //remove fifo
+		if(ret == -1){
+			printf("ERROR LAUNCHING RM\n");
+			fflush(stdout);
+			exit(3);
+		}
+        default: //parent
+		waitpid(childid, &child_exit, 0); //wait on child
+	}
 	return 0;
 
 }
