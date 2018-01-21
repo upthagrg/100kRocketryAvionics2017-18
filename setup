@@ -6,7 +6,7 @@ echo
 sudo apt-get install file
 echo "updating apt-file"
 echo
-sudo sudo apt-file update
+sudo apt-file update
 echo "installing mesa-utils" 
 echo
 sudo apt-get install mesa-utils
