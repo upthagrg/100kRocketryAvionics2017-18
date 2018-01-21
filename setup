@@ -1,45 +1,59 @@
 #!/bin/bash
 # add docker install 
 # sudo -i
+echo
 echo "installing apt-file"
 echo
 sudo apt-get install file
+echo
 echo "updating apt-file"
 echo
 sudo apt-file update
+echo
 echo "installing mesa-utils" 
 echo
 sudo apt-get install mesa-utils
+echo
 echo "installing libmesa-dev"
 echo
 sudo apt-get install libmesa-dev 
+echo
 echo "installing mesa-common-dev"
 echo
 sudo apt install mesa-common-dev
+echo
 echo "installing freeglut"
 echo
 sudo apt install libglu1-mesa-dev freeglut3-dev
+echo
 echo "copying libglut.so to /usr/lib64"
 echo
 mkdir /usr/lib64
 sudo cp ./libglut.so /usr/lib64/
 sudo chmod o=rwx /usr/lib64/libglut.so
 sudo chmod u=rwx /usr/lib64/libglut.so
+echo
 echo "installing python"
 echo
 sudo apt-get install python
+echo
 echo "installing pip"
 echo 
 sudo apt-get install python-pip python-dev build-essential
 sudo pip install --upgrade pip 
 sudo pip install --upgrade virtualenv 
+echo
 echo "installing requests module for python"
 echo
 sudo pip install requests
+echo
 echo "updating"
 echo
 sudo apt-get update
+echo
 echo "upgrading"
 echo
 sudo apt-get upgrade
+echo
 echo "Done"
+echo
