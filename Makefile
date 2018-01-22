@@ -12,6 +12,7 @@ test:
 	rm -f ./testlog.txt
 	./gen -to > testlog.txt
 	./test1
+test2:
 	g++ -o ./3d_trace/trace_test1  ./3d_trace/trace_test1.cpp  -lGL  -lGLU  ./libglut.so  -lm -I./3d_trace/include -Wno-write-strings
 	./3d_trace/trace_test1
 clean: 
