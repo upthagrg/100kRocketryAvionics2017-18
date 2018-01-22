@@ -39,9 +39,9 @@ sudo apt-get install python
 echo
 echo "installing pip"
 echo 
-sudo apt-get install python-pip python-dev build-essential
-sudo pip install --upgrade pip 
-sudo pip install --upgrade virtualenv 
+sudo -h apt-get install python-pip python-dev build-essential
+sudo -h pip install --upgrade pip 
+sudo -h pip install --upgrade virtualenv 
 echo
 echo "installing requests module for python"
 echo
