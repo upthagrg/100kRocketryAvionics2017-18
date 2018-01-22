@@ -250,7 +250,8 @@ float	Xrot, Yrot;				// rotation angles in degrees
 unsigned char *skytex1;				// first sky texture
 GLuint skytex;					// current sky texture
 int width, height;				// texture details
-
+char apogeebuff[512];
+bool center;
 
 // function prototypes:
 
@@ -432,9 +433,13 @@ int
 main( int argc, char *argv[ ] )
 {
 	cdebug = false; //initialize conversion debug 
+	center = false; //initialize center bool
 	for(int i=0; i<argc; i++){
                 if(strcmp(argv[i], "-debug") == 0){ //debug on?
                         cdebug = true;
+                }
+                else if(strcmp(argv[i], "-center") == 0){ //debug on?
+                        center = true;
                 }
 
 	}
@@ -457,6 +462,8 @@ main( int argc, char *argv[ ] )
 	// create the display structures that will not change:
 
 	InitLists( );
+
+	sprintf(apogeebuff, "%s%s ft.", "Apogee: ", apaltbuff);
 
 	// init all the global variables used by Display( ):
 	// this will also post a redisplay
@@ -632,17 +639,26 @@ Display( )
 
 	glDisable (GL_TEXTURE_2D);
 
-	//glCallList(GroundList);
+	//draw ground
 	glColor3f(0., 0.5, 0.);
 	glPushMatrix();
 		glTranslatef(-(PLANESIZE/2.), 0., (PLANESIZE/2.));
 		glCallList(BoardList);
 	glPopMatrix();
 
+	//draw path
 	glPushMatrix();
-		//glTranslatef(-apx, 0., -apz);
+		if(center){ // if centered requested
+			glTranslatef(-apx, 0., -apz);
+		}
 		glCallList( PathList );
 	glPopMatrix();
+	if(center){ // if centered requested
+		DoRasterString( 0., apy+1.0, 0., apogeebuff );
+	}
+	else{
+		DoRasterString( apx, apy+1.0, apz, apogeebuff );
+	}
 
 	if( DepthFightingOn != 0 )
 	{
@@ -1077,7 +1093,7 @@ InitLists( )
 		glLineWidth( 1. );
 	glEndList( );
 
-	make_trace_list("log.txt");
+	make_trace_list("./log.txt");
 	tplane(PLANERES, PLANESIZE);
 }
 
