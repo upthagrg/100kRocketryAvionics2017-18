@@ -11,6 +11,7 @@
 #include <iostream>
 #include <vector>
 #include <cmath>
+#include "./fpoint.h"
 using namespace std;
 
 float slat;
@@ -21,14 +22,14 @@ float apalt=0;
 bool cdebug;
 
 GLuint PathList;
-
+/*
 struct fpoint{
 	float x;
 	float y;
 	float z;
 };
-
-void  make_trace_list(char* filename){
+*/
+vector<struct fpoint>  make_trace_list(char* filename){
 	vector<struct fpoint> vec;
 	int i;
 	int inited = 0;
@@ -39,7 +40,10 @@ void  make_trace_list(char* filename){
 	char numbuff[256];
 	ifstream in;
 	in.open(filename);
-
+	if(!in.is_open()){
+		cout << "ERROR OPENING: " << filename << endl;
+		exit(7);
+	}
 	while(1){
 		if(in.eof()){
 			break;
@@ -133,6 +137,10 @@ void  make_trace_list(char* filename){
 		}
 		glEnd();
 	glEndList();
+	if((vec[0].x != 0.) || (vec[0].y !=0.) || (vec[0].z != 0.)){
+		exit(1);
+	}
+	return vec;
 }
 /*
 int main(){
