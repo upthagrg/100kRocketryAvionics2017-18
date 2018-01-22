@@ -1,6 +1,6 @@
 #!/bin/bash
-# add docker install 
-# sudo -i
+
+#file
 echo
 echo "installing apt-file"
 echo
@@ -9,14 +9,34 @@ echo
 echo "updating apt-file"
 echo
 sudo apt-file update
+#docker
+echo
+echo "installing docker" 
+echo
+sudo apt-get install docker.io
+#C/C++
+echo
+echo "installing gcc" 
+echo
+sudo apt-get install gcc
+echo
+echo "installing g++" 
+echo
+sudo apt-get install g++
+#Make/CMake
+echo
+echo "installing make" 
+echo
+sudo apt-get install make
+echo
+echo "installing cmake" 
+echo
+sudo apt-get install g++ cmake
+#OpenGL
 echo
 echo "installing mesa-utils" 
 echo
 sudo apt-get install mesa-utils
-echo
-echo "installing libmesa-dev"
-echo
-sudo apt-get install libmesa-dev 
 echo
 echo "installing mesa-common-dev"
 echo
@@ -28,27 +48,29 @@ sudo apt install libglu1-mesa-dev freeglut3-dev
 echo
 echo "copying libglut.so to /usr/lib64"
 echo
-mkdir /usr/lib64
+sudo mkdir /usr/lib64
 sudo cp ./libglut.so /usr/lib64/
 sudo chmod o=rwx /usr/lib64/libglut.so
 sudo chmod u=rwx /usr/lib64/libglut.so
+#Python, PIP, modules
 echo
 echo "installing python"
 echo
 sudo apt-get install python
 echo
-echo "installing pip"
+echo "installing pip" 
 echo 
-sudo -h apt-get install python-pip python-dev build-essential
-sudo -h pip install --upgrade pip 
-sudo -h pip install --upgrade virtualenv 
+sudo  apt-get install python-pip python-dev build-essential #error
+sudo  pip install --upgrade pip 
+sudo  pip install --upgrade virtualenv 
 echo
 echo "installing requests module for python"
 echo
-sudo pip install requests
+sudo pip install requests #error
 echo
 echo "updating"
 echo
+#update and upgrade
 sudo apt-get update
 echo
 echo "upgrading"
