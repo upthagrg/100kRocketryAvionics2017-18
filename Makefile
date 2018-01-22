@@ -13,6 +13,7 @@ test:
 	./gen -to > testlog.txt
 	./test1
 	g++ -o ./3d_trace/trace_test1  ./3d_trace/trace_test1.cpp  -lGL  -lGLU  /usr/lib/x86_64-linux-gnu/libglut.so  -lm -I./3d_trace/include -Wno-write-strings
+	rm ./logger ./test1 ./log.txt ./testlog.txt ./gen ./3d_trace/trace_test1
 test2:
 	g++ -o ./3d_trace/trace_test1  ./3d_trace/trace_test1.cpp  -lGL  -lGLU  ./libglut.so  -lm -I./3d_trace/include -Wno-write-strings
 	./3d_trace/trace_test1
