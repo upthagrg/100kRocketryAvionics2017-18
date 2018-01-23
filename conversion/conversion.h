@@ -11,8 +11,10 @@
 #include <string.h>
 #include <time.h>
 #include <math.h>
+#include "./telemetry.h"
 int debug;
-void convert(char* buff, float vel, float lat, float lon, float alt, float time){
+//void convert(char* buff, float vel, float lat, float lon, float alt, float time){
+void convert(char* buff, struct telem_data* in){
 	char str1[9] = "velocity";
 	char str2[9] = "latitude";
 	char str3[10] = "longitude";
@@ -22,7 +24,7 @@ void convert(char* buff, float vel, float lat, float lon, float alt, float time)
 		buff = (char*)malloc(256);
 	}
 	memset(buff, '\0', 256);
-	sprintf(buff,"'{\"%s\":\"%f\", \"%s\":\"%f\", \"%s\":\"%f\", \"%s\":\"%f\", \"%s\":\"+%f\"}'", str1,vel,str2,lat,str3,lon,str4,alt,str5,time); //make JSON string
+	sprintf(buff,"'{\"%s\":\"%f\", \"%s\":\"%f\", \"%s\":\"%f\", \"%s\":\"%f\", \"%s\":\"+%f\"}'", str1,in->vel,str2,in->lat,str3,in->lon,str4,in->alt,str5,in->time); //make JSON string
 	if(debug){
 		printf("%s\n", buff);
 	}
