@@ -135,6 +135,7 @@ int main(int argc, char** argv){
 	float slat = 45.0;
 	float slon = 45.0;
 	int i=0;
+	int noreq = 0;
 	int piperet=0;
 	char* buffsize = NULL;;
 //	char** args;
@@ -171,6 +172,9 @@ int main(int argc, char** argv){
 		}
 		else if(strcmp(argv[i], "-buff") == 0){ //get read buffer size for logger
 			buffsize = argv[i+1];
+		}
+		else if(strcmp(argv[i], "-noreq") == 0){ //get read buffer size for logger
+			noreq = 1;
 		}
 		else if(strcmp(argv[i], "-debug") == 0){ //get update rate in Hz
 			debug = 1;;
@@ -221,7 +225,12 @@ int main(int argc, char** argv){
                 //dup2(3, files[0]); //duplicate read side to stdin
 		printf("starting handle as child process\n");
 		fflush(stdout);
-               	ret = execlp("python", "python", "./handle.py", NULL);
+		if(noreq){
+	               	ret = execlp("python", "python", "./handle_with_no_requests.py", NULL);
+		}
+		else{
+	               	ret = execlp("python", "python", "./handle.py", NULL);
+		}
 		if(ret == -1){
 			printf("ERROR LAUNCHING LOGGER\n");
 			fflush(stdout);
