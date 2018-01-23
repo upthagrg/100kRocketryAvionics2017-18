@@ -15,6 +15,8 @@
 #include <string.h>
 #include <time.h>
 #include <math.h>
+#include <conversion.h>
+
 
 int wind;
 
