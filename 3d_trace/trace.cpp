@@ -111,12 +111,19 @@ const int GLUIFALSE = { false };
 
 //define sky radius
 
-#define RADIUS		50.0
+#define RADIUS		100.0
 
-//gound params
+//ground params
 
-#define PLANESIZE	100.0
+#define PLANESIZE	200.0
 #define PLANERES	512
+
+
+//define animation param
+
+#define MS_IN_THE_ANIMATION_CYCLE 500000
+float Time = 0.0;
+
 
 // initial window size:
 
@@ -504,6 +511,10 @@ Animate( )
 
 	// force a call to Display( ) next time it is convenient:
 
+	int ms = glutGet( GLUT_ELAPSED_TIME );	// milliseconds
+	ms  %=  MS_IN_THE_ANIMATION_CYCLE;
+	Time = (float)ms  /  (float)MS_IN_THE_ANIMATION_CYCLE;        // [ 0., 1. )	
+
 	glutSetWindow( MainWindow );
 	glutPostRedisplay( );
 }
@@ -634,6 +645,7 @@ Display( )
 //		glScalef(2.0, 2.0, 2.0);
 //		glRotatef(90.0, 0., 1., 0.);
 //		glRotatef(180.0, 1., 0., 0.);
+		glRotatef(360.0*Time, 0., 1., 0.);
 		glCallList(SphereList);
 	glPopMatrix();
 
@@ -979,7 +991,7 @@ InitGraphics( )
 	glutTabletButtonFunc( NULL );
 	glutMenuStateFunc( NULL );
 	glutTimerFunc( -1, NULL, 0 );
-	glutIdleFunc( NULL );
+	glutIdleFunc( Animate );
 
 	// init glew (a window must be open to do this):
 
