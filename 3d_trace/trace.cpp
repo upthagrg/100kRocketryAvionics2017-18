@@ -1237,11 +1237,11 @@ MouseMotion( int x, int y )
 
 	if( ( ActiveButton & LEFT ) != 0 )
 	{
-		if((Xrot<135) && (Xrot>-25)){
+		if((Xrot<90) && (Xrot>-25)){
 			Xrot += ( ANGFACT*dy );
 		}
 		else{
-			if(Xrot >= 135){
+			if(Xrot >= 90){
 				Xrot -= 1.;
 			}
 			else{
