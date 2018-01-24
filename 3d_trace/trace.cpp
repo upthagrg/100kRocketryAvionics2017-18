@@ -1,7 +1,7 @@
 /*******************************************************
 *Title: trace.cpp
 *Author: Glenn Upthagrove
-*Date: 01/20/18
+*Date: 01/24/18
 *Description: A 3D Trace for the flight path of the 
 *rocket for the high altitude rocketry challenge. 
 *******************************************************/
@@ -111,11 +111,11 @@ const int GLUIFALSE = { false };
 
 //define sky radius
 
-#define RADIUS		100.0
+#define RADIUS		200.0
 
 //ground params
 
-#define PLANESIZE	200.0
+#define PLANESIZE	400.0
 #define PLANERES	512
 
 
@@ -259,6 +259,9 @@ GLuint skytex;					// current sky texture
 int width, height;				// texture details
 char apogeebuff[512];
 bool center;
+float xdist = 0.0;
+float zdist = 0.0;
+
 
 // function prototypes:
 
@@ -584,6 +587,10 @@ Display( )
 	// set the eye position, look-at position, and up-vector:
 
 	gluLookAt( 0., 10., 15.,     0., 10., 0.,     0., 1., 0. );
+
+
+	// translate the scene:
+	glTranslatef(xdist, 0., zdist);
 
 
 	// rotate the scene:
@@ -1120,6 +1127,30 @@ Keyboard( unsigned char c, int x, int y )
 
 	switch( c )
 	{
+		case 'a':
+		case 'A':
+			if(xdist < 75.0){
+				xdist += 1.0;
+			}
+			break;
+		case 's':
+		case 'S':
+			if(zdist > -75.0){
+				zdist -= 1.0;
+			}
+			break;
+		case 'w':
+		case 'W':
+			if(zdist < 75.0){
+				zdist += 1.0;
+			}
+			break;
+		case 'd':
+		case 'D':
+			if(xdist > -75.0){ 
+				xdist -= 1.0;
+			}
+			break;
 		case 'o':
 		case 'O':
 			WhichProjection = ORTHO;
