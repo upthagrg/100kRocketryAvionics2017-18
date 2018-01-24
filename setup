@@ -34,6 +34,10 @@ echo
 sudo apt-get install g++ cmake
 #OpenGL
 echo
+echo "updating" 
+echo
+sudo apt-get update
+echo
 echo "installing mesa-utils" 
 echo
 sudo apt-get install mesa-utils
@@ -44,14 +48,32 @@ sudo apt install mesa-common-dev
 echo
 echo "installing freeglut"
 echo
+sudo apt-get install freeglut3 
+sudo apt-get install freeglut3-dev
 sudo apt install libglu1-mesa-dev freeglut3-dev
 echo
 echo "copying libglut.so to /usr/lib64"
 echo
 sudo mkdir /usr/lib64
-sudo cp ./libglut.so /usr/lib64/
+sudo cp ./3d_trace/libglut.so /usr/lib64/
 sudo chmod o=rwx /usr/lib64/libglut.so
 sudo chmod u=rwx /usr/lib64/libglut.so
+echo
+echo "installing binutils-gold"
+echo
+sudo apt-get install binutils-gold 
+echo
+echo "installing libglew"
+echo
+sudo apt-get install libglew-dev
+echo
+echo "installing build-esssential"
+echo
+sudo apt-get install build-essential
+echo
+echo "installing libglew 1.5 dev"
+echo
+sudo apt-get install libglew1.5-dev libglm-dev
 #Python, PIP, modules
 echo
 echo "installing python"
