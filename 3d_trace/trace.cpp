@@ -119,7 +119,7 @@ const int GLUIFALSE = { false };
 #define PLANERES	512
 
 
-//define animation param
+//define animation params
 
 #define MS_IN_THE_ANIMATION_CYCLE 500000
 float Time = 0.0;
