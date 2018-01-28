@@ -1,11 +1,10 @@
 import requests, json
-done = False
-while done == False:
+while 1:
 	with open('./commfifo') as fifo:
 	    data = fifo.read()
         if data == "**&&":
             print "End of transmission"
-            done = True
+            break
         jdata = json.loads(data)
         print jdata
         fifo.close()
