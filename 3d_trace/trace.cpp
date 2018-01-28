@@ -1,7 +1,7 @@
 /*******************************************************
 *Title: trace.cpp
 *Author: Glenn Upthagrove
-*Date: 01/24/18
+*Date: 01/27/18
 *Description: A 3D Trace for the flight path of the 
 *rocket for the high altitude rocketry challenge. 
 *******************************************************/
@@ -254,8 +254,10 @@ int		WhichColor;				// index into Colors[ ]
 int		WhichProjection;		// ORTHO or PERSP
 int		Xmouse, Ymouse;			// mouse values
 float	Xrot, Yrot;				// rotation angles in degrees
-unsigned char *skytex1;				// first sky texture
+unsigned char *skytex1;				// sky texture
+unsigned char *maptex1;				// map texture
 GLuint skytex;					// current sky texture
+GLuint maptex;					// current map texture
 int width, height;				// texture details
 char apogeebuff[512];
 bool center;
@@ -644,7 +646,7 @@ Display( )
 //	glColor3f(0.3,0.3,0.5);
 //	glColor3f(1.,0.,0.);
 
-	glEnable( GL_TEXTURE_2D );
+	glEnable( GL_TEXTURE_2D ); //enable texturing
 	glBindTexture( GL_TEXTURE_2D, skytex ); //bind skytexture
 
 	///draw sky
@@ -657,6 +659,7 @@ Display( )
 	glPopMatrix();
 
 	glDisable (GL_TEXTURE_2D);
+	//glBindTexture( GL_TEXTURE_2D, maptex ); //bind maptexture
 
 	//draw ground
 	glColor3f(0., 0.5, 0.);
@@ -664,6 +667,8 @@ Display( )
 		glTranslatef(-(PLANESIZE/2.), 0., (PLANESIZE/2.));
 		glCallList(BoardList);
 	glPopMatrix();
+
+//	glDisable (GL_TEXTURE_2D); //disable texturing
 
 	//draw path
 	glPushMatrix();
@@ -1534,13 +1539,26 @@ void InitTextures(){
 	// and set its parameters
 	skytex1 = BmpToTexture( "./resources/textures/skytex3.bmp", &width, &height );
 	glTexParameteri( GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_REPEAT );
-	glTexParameteri( GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_REPEAT ); //extends last pixel past s or t of 1
+	glTexParameteri( GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_REPEAT ); //repeat if beyond 1 for s or t 
 	glTexParameteri( GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR );
 	glTexParameteri( GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR); //blended texels
 	glTexEnvf( GL_TEXTURE_ENV, GL_TEXTURE_ENV_MODE, GL_REPLACE ); //replace surface (no material illumination) 
-	//glTexImage2D( GL_TEXTURE_2D, 0, 3, 256, 128, 0, GL_RGB, GL_UNSIGNED_BYTE, TextureArray0 );
 	glTexImage2D( GL_TEXTURE_2D, 0, 3, width, height, 0, GL_RGB, GL_UNSIGNED_BYTE, skytex1 );
-	//end first sky texture
+	//end sky texture
+
+	glPixelStorei( GL_UNPACK_ALIGNMENT, 1 );
+	glGenTextures( 1, &maptex ); // assign binding “handles”
+	glBindTexture( GL_TEXTURE_2D, maptex ); // make maptex texture current
+	
+	// and set its parameters
+	maptex1 = BmpToTexture( "./resources/textures/map.bmp", &width, &height );
+	glTexParameteri( GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_REPEAT );
+	glTexParameteri( GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_REPEAT ); 
+	glTexParameteri( GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR ); //repeat if beyond 1 for s or t
+	glTexParameteri( GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR); //blended texels
+	glTexEnvf( GL_TEXTURE_ENV, GL_TEXTURE_ENV_MODE, GL_REPLACE ); //replace surface (no material illumination) 
+	glTexImage2D( GL_TEXTURE_2D, 0, 3, width, height, 0, GL_RGB, GL_UNSIGNED_BYTE, maptex1 );
+	//end map texture
 }
 
 
