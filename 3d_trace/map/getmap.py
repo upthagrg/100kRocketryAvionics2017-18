@@ -22,7 +22,7 @@ def make_url(lat, lon):
 	url = url + lat
 	url = url + ","
 	url = url + lon
-	url = url + "&zoom=14&size=640x640"
+	url = url + "&zoom=14&size=512x512"
 	return url
 
 #define names and paths for images

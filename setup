@@ -90,6 +90,10 @@ sudo  apt-get install python-pip python-dev build-essential -y
 sudo  pip install --upgrade pip 
 sudo  pip install --upgrade virtualenv 
 echo
+echo "installing Pillow module for python"
+echo
+sudo pip install Pillow
+echo
 echo "installing requests module for python"
 echo
 sudo pip install requests 

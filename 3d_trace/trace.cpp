@@ -658,8 +658,8 @@ Display( )
 		glCallList(SphereList);
 	glPopMatrix();
 
-	glDisable (GL_TEXTURE_2D);
-	//glBindTexture( GL_TEXTURE_2D, maptex ); //bind maptexture
+	//glDisable (GL_TEXTURE_2D);
+	glBindTexture( GL_TEXTURE_2D, maptex ); //bind maptexture
 
 	//draw ground
 	glColor3f(0., 0.5, 0.);
@@ -668,7 +668,7 @@ Display( )
 		glCallList(BoardList);
 	glPopMatrix();
 
-//	glDisable (GL_TEXTURE_2D); //disable texturing
+	glDisable (GL_TEXTURE_2D); //disable texturing
 
 	//draw path
 	glPushMatrix();
@@ -1538,6 +1538,7 @@ void InitTextures(){
 	
 	// and set its parameters
 	skytex1 = BmpToTexture( "./resources/textures/skytex3.bmp", &width, &height );
+	//skytex1 = BmpToTexture( "./resources/textures/map.bmp", &width, &height );
 	glTexParameteri( GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_REPEAT );
 	glTexParameteri( GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_REPEAT ); //repeat if beyond 1 for s or t 
 	glTexParameteri( GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR );
@@ -1554,8 +1555,8 @@ void InitTextures(){
 	maptex1 = BmpToTexture( "./resources/textures/map.bmp", &width, &height );
 	glTexParameteri( GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_REPEAT );
 	glTexParameteri( GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_REPEAT ); 
-	glTexParameteri( GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR ); //repeat if beyond 1 for s or t
-	glTexParameteri( GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR); //blended texels
+	glTexParameteri( GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_NEAREST ); //repeat if beyond 1 for s or t
+	glTexParameteri( GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_NEAREST); //blended texels
 	glTexEnvf( GL_TEXTURE_ENV, GL_TEXTURE_ENV_MODE, GL_REPLACE ); //replace surface (no material illumination) 
 	glTexImage2D( GL_TEXTURE_2D, 0, 3, width, height, 0, GL_RGB, GL_UNSIGNED_BYTE, maptex1 );
 	//end map texture
