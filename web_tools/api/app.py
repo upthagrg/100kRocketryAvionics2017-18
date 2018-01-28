@@ -27,7 +27,7 @@ def get_all_telemetry():
 def post_telemetry():
     _telemetry = request.json
     db.telemetrydb.insert_one(_telemetry)
-    return "Added."
+    return "Successfully added"
 
 
 if __name__ == "__main__":

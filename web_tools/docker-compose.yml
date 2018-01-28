@@ -1,0 +1,20 @@
+app:
+  build: ./app
+  command: python -u app.py
+  ports:
+    - "8080:8080"
+  volumes:
+    - ./app:/app
+  tty: true
+api:
+  build: ./api
+  command: python -u app.py
+  ports:
+    - "5000:5000"
+  volumes:
+    - ./api:/api
+  links:
+    - db
+  tty: true
+db:
+  image: mongo:3.0.2

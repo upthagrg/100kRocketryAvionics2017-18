@@ -1,9 +1,12 @@
 import requests, json
-
+import sys
 done = False
 while done == False:
 	with open('./commfifo') as fifo:
 	    data = fifo.read()
+        if data == "**&&":
+            print "End of transmission"
+            sys.exit()
         jdata = json.loads(data)
         print jdata
         fifo.close()
