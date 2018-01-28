@@ -1,7 +1,7 @@
 /*******************************************************
 *Title: trace.cpp
 *Author: Glenn Upthagrove
-*Date: 01/20/18
+*Date: 01/27/18
 *Description: A 3D Trace for the flight path of the 
 *rocket for the high altitude rocketry challenge. 
 *******************************************************/
@@ -111,12 +111,19 @@ const int GLUIFALSE = { false };
 
 //define sky radius
 
-#define RADIUS		50.0
+#define RADIUS		200.0
 
-//gound params
+//ground params
 
-#define PLANESIZE	100.0
+#define PLANESIZE	400.0
 #define PLANERES	512
+
+
+//define animation params
+
+#define MS_IN_THE_ANIMATION_CYCLE 500000
+float Time = 0.0;
+
 
 // initial window size:
 
@@ -247,9 +254,15 @@ int		WhichColor;				// index into Colors[ ]
 int		WhichProjection;		// ORTHO or PERSP
 int		Xmouse, Ymouse;			// mouse values
 float	Xrot, Yrot;				// rotation angles in degrees
-unsigned char *skytex1;				// first sky texture
+unsigned char *skytex1;				// sky texture
+unsigned char *maptex1;				// map texture
 GLuint skytex;					// current sky texture
+GLuint maptex;					// current map texture
 int width, height;				// texture details
+char apogeebuff[512];
+bool center;
+float xdist = 0.0;
+float zdist = 0.0;
 
 
 // function prototypes:
@@ -432,9 +445,13 @@ int
 main( int argc, char *argv[ ] )
 {
 	cdebug = false; //initialize conversion debug 
+	center = false; //initialize center bool
 	for(int i=0; i<argc; i++){
                 if(strcmp(argv[i], "-debug") == 0){ //debug on?
                         cdebug = true;
+                }
+                else if(strcmp(argv[i], "-center") == 0){ //debug on?
+                        center = true;
                 }
 
 	}
@@ -457,6 +474,8 @@ main( int argc, char *argv[ ] )
 	// create the display structures that will not change:
 
 	InitLists( );
+
+	sprintf(apogeebuff, "%s%s ft.", "Apogee: ", apaltbuff);
 
 	// init all the global variables used by Display( ):
 	// this will also post a redisplay
@@ -496,6 +515,10 @@ Animate( )
 	// for Display( ) to find:
 
 	// force a call to Display( ) next time it is convenient:
+
+	int ms = glutGet( GLUT_ELAPSED_TIME );	// milliseconds
+	ms  %=  MS_IN_THE_ANIMATION_CYCLE;
+	Time = (float)ms  /  (float)MS_IN_THE_ANIMATION_CYCLE;        // [ 0., 1. )	
 
 	glutSetWindow( MainWindow );
 	glutPostRedisplay( );
@@ -568,6 +591,10 @@ Display( )
 	gluLookAt( 0., 10., 15.,     0., 10., 0.,     0., 1., 0. );
 
 
+	// translate the scene:
+	glTranslatef(xdist, 0., zdist);
+
+
 	// rotate the scene:
 
 	glRotatef( (GLfloat)Yrot, 0., 1., 0. );
@@ -619,7 +646,7 @@ Display( )
 //	glColor3f(0.3,0.3,0.5);
 //	glColor3f(1.,0.,0.);
 
-	glEnable( GL_TEXTURE_2D );
+	glEnable( GL_TEXTURE_2D ); //enable texturing
 	glBindTexture( GL_TEXTURE_2D, skytex ); //bind skytexture
 
 	///draw sky
@@ -627,22 +654,35 @@ Display( )
 //		glScalef(2.0, 2.0, 2.0);
 //		glRotatef(90.0, 0., 1., 0.);
 //		glRotatef(180.0, 1., 0., 0.);
+		glRotatef(360.0*Time, 0., 1., 0.);
 		glCallList(SphereList);
 	glPopMatrix();
 
-	glDisable (GL_TEXTURE_2D);
+	//glDisable (GL_TEXTURE_2D);
+	glBindTexture( GL_TEXTURE_2D, maptex ); //bind maptexture
 
-	//glCallList(GroundList);
+	//draw ground
 	glColor3f(0., 0.5, 0.);
 	glPushMatrix();
 		glTranslatef(-(PLANESIZE/2.), 0., (PLANESIZE/2.));
 		glCallList(BoardList);
 	glPopMatrix();
 
+	glDisable (GL_TEXTURE_2D); //disable texturing
+
+	//draw path
 	glPushMatrix();
-		//glTranslatef(-apx, 0., -apz);
+		if(center){ // if centered requested
+			glTranslatef(-apx, 0., -apz);
+		}
 		glCallList( PathList );
 	glPopMatrix();
+	if(center){ // if centered requested
+		DoRasterString( 0., apy+1.0, 0., apogeebuff );
+	}
+	else{
+		DoRasterString( apx, apy+1.0, apz, apogeebuff );
+	}
 
 	if( DepthFightingOn != 0 )
 	{
@@ -963,7 +1003,7 @@ InitGraphics( )
 	glutTabletButtonFunc( NULL );
 	glutMenuStateFunc( NULL );
 	glutTimerFunc( -1, NULL, 0 );
-	glutIdleFunc( NULL );
+	glutIdleFunc( Animate );
 
 	// init glew (a window must be open to do this):
 
@@ -1077,7 +1117,7 @@ InitLists( )
 		glLineWidth( 1. );
 	glEndList( );
 
-	make_trace_list("log.txt");
+	make_trace_list("./log.txt");
 	tplane(PLANERES, PLANESIZE);
 }
 
@@ -1092,6 +1132,30 @@ Keyboard( unsigned char c, int x, int y )
 
 	switch( c )
 	{
+		case 'a':
+		case 'A':
+			if(xdist < 75.0){
+				xdist += 1.0;
+			}
+			break;
+		case 's':
+		case 'S':
+			if(zdist > -75.0){
+				zdist -= 1.0;
+			}
+			break;
+		case 'w':
+		case 'W':
+			if(zdist < 75.0){
+				zdist += 1.0;
+			}
+			break;
+		case 'd':
+		case 'D':
+			if(xdist > -75.0){ 
+				xdist -= 1.0;
+			}
+			break;
 		case 'o':
 		case 'O':
 			WhichProjection = ORTHO;
@@ -1178,11 +1242,11 @@ MouseMotion( int x, int y )
 
 	if( ( ActiveButton & LEFT ) != 0 )
 	{
-		if((Xrot<135) && (Xrot>-25)){
+		if((Xrot<90) && (Xrot>-25)){
 			Xrot += ( ANGFACT*dy );
 		}
 		else{
-			if(Xrot >= 135){
+			if(Xrot >= 90){
 				Xrot -= 1.;
 			}
 			else{
@@ -1474,14 +1538,28 @@ void InitTextures(){
 	
 	// and set its parameters
 	skytex1 = BmpToTexture( "./resources/textures/skytex3.bmp", &width, &height );
+	//skytex1 = BmpToTexture( "./resources/textures/map.bmp", &width, &height );
 	glTexParameteri( GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_REPEAT );
-	glTexParameteri( GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_REPEAT ); //extends last pixel past s or t of 1
+	glTexParameteri( GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_REPEAT ); //repeat if beyond 1 for s or t 
 	glTexParameteri( GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR );
 	glTexParameteri( GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR); //blended texels
 	glTexEnvf( GL_TEXTURE_ENV, GL_TEXTURE_ENV_MODE, GL_REPLACE ); //replace surface (no material illumination) 
-	//glTexImage2D( GL_TEXTURE_2D, 0, 3, 256, 128, 0, GL_RGB, GL_UNSIGNED_BYTE, TextureArray0 );
 	glTexImage2D( GL_TEXTURE_2D, 0, 3, width, height, 0, GL_RGB, GL_UNSIGNED_BYTE, skytex1 );
-	//end first sky texture
+	//end sky texture
+
+	glPixelStorei( GL_UNPACK_ALIGNMENT, 1 );
+	glGenTextures( 1, &maptex ); // assign binding “handles”
+	glBindTexture( GL_TEXTURE_2D, maptex ); // make maptex texture current
+	
+	// and set its parameters
+	maptex1 = BmpToTexture( "./resources/textures/map.bmp", &width, &height );
+	glTexParameteri( GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_REPEAT );
+	glTexParameteri( GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_REPEAT ); 
+	glTexParameteri( GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_NEAREST ); //repeat if beyond 1 for s or t
+	glTexParameteri( GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_NEAREST); //blended texels
+	glTexEnvf( GL_TEXTURE_ENV, GL_TEXTURE_ENV_MODE, GL_REPLACE ); //replace surface (no material illumination) 
+	glTexImage2D( GL_TEXTURE_2D, 0, 3, width, height, 0, GL_RGB, GL_UNSIGNED_BYTE, maptex1 );
+	//end map texture
 }
 
 

@@ -11,24 +11,27 @@
 #include <iostream>
 #include <vector>
 #include <cmath>
+#include "./fpoint.h"
 using namespace std;
 
 float slat;
 float slon;
 float apx;
 float apz;
+float apy;
 float apalt=0;
+char apaltbuff[256]; 
 bool cdebug;
 
 GLuint PathList;
-
+/*
 struct fpoint{
 	float x;
 	float y;
 	float z;
 };
-
-void  make_trace_list(char* filename){
+*/
+vector<struct fpoint>  make_trace_list(char* filename){
 	vector<struct fpoint> vec;
 	int i;
 	int inited = 0;
@@ -38,8 +41,12 @@ void  make_trace_list(char* filename){
 	char buff[256];
 	char numbuff[256];
 	ifstream in;
+	memset(apaltbuff, '\0', 256);
 	in.open(filename);
-
+	if(!in.is_open()){
+		cout << "ERROR OPENING: " << filename << endl;
+		exit(7);
+	}
 	while(1){
 		if(in.eof()){
 			break;
@@ -82,7 +89,12 @@ void  make_trace_list(char* filename){
 			slon = atof(numbuff);
 			inited = 1;
 		}
-		temp.x=((slon - atof(numbuff)) * (cos(slat) * 69.172)); //HERE
+		// delta miles = ((ending longitude - starting longitude) * (cos(starting latitude * (pi/180)) * 69.172))
+		temp.x=((slon - atof(numbuff)) * (cos(slat * (M_PI/180.0)) * 69.172)); //HERE
+//		cout << "slon: " << slon << " lon: " << atof(numbuff) << " slon - lon: " << slon - atof(numbuff) << endl;
+//		cout << "slat: " << slat << " slat*(pi/180): " << slat * (M_PI/180.0) << endl;
+//		cout << "cos(slat*(pi/180)): " << cos(slat*(M_PI/180.0)) << " cos() * 69.172: " << cos(slat*(M_PI/180.0))*69.172 << endl;
+//		cout << "result: " << (slon - atof(numbuff)) * cos(slat*(M_PI/180.0))*69.172 << endl;
 		//altitude
 		memset(buff, '\0', 256);
 		memset(numbuff, '\0', 256);
@@ -96,6 +108,12 @@ void  make_trace_list(char* filename){
 			}
 		}
 		numbuff[i] = '\0';
+		temp.y=(atof(numbuff)); 
+		if(temp.y > apalt){
+			apalt = temp.y;
+			memset(apaltbuff, '\0', 256);
+			strcpy(apaltbuff, numbuff);
+		}
 		temp.y=(atof(numbuff)/5280); //conver to miles
 		//temp.y=(atof(numbuff)); 
 		//time
@@ -108,6 +126,7 @@ void  make_trace_list(char* filename){
 	vec.pop_back();
 //	slat = vec[0].z;
 //	slon = vec[0].x;
+	apalt = 0;
         PathList = glGenLists( 1 );
         glNewList( PathList, GL_COMPILE );
 	        glLineWidth( 5. );
@@ -128,11 +147,16 @@ void  make_trace_list(char* filename){
 		}
 		apx = vec[ref].x;
 		apz = vec[ref].z;
+		apy = vec[ref].y;
 		if(cdebug){
-			cout << "apx: " << apx << " apz: " << apz << endl;
+			cout << "apx: " << apx << " apz: " << apz << " apy: " << apy << endl;
 		}
 		glEnd();
 	glEndList();
+	if((vec[0].x != 0.) || (vec[0].y !=0.) || (vec[0].z != 0.)){
+		exit(1);
+	}
+	return vec;
 }
 /*
 int main(){

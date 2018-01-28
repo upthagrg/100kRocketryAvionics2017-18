@@ -1,31 +1,111 @@
 #!/bin/bash
-# add docker install 
-# sudo -i
+
+#file
+echo
 echo "installing apt-file"
 echo
-sudo apt-get install file
+sudo apt-get install file -y
+echo
 echo "updating apt-file"
 echo
-sudo sudo apt-file update
+sudo apt-file update -y
+#docker
+echo
+echo "installing docker" 
+echo
+sudo apt-get install docker.io -y
+#C/C++
+echo
+echo "installing gcc" 
+echo
+sudo apt-get install gcc -y
+echo
+echo "installing g++" 
+echo
+sudo apt-get install g++ -y
+#Make/CMake
+echo
+echo "installing make" 
+echo
+sudo apt-get install make -y
+echo
+echo "installing cmake" 
+echo
+sudo apt-get install g++ cmake -y
+#OpenGL
+echo
+echo "updating" 
+echo
+sudo apt-get update -y
+echo
+echo "upgrading"
+echo
+sudo apt-get upgrade -y
+echo
 echo "installing mesa-utils" 
 echo
-sudo apt-get install mesa-utils
-echo "installing libmesa-dev"
+sudo apt-get install mesa-utils -y
 echo
-sudo apt-get install libmesa-dev 
 echo "installing mesa-common-dev"
 echo
-sudo apt install mesa-common-dev
+sudo apt install mesa-common-dev -y
+echo
 echo "installing freeglut"
 echo
-sudo apt install libglu1-mesa-dev freeglut3-dev
+sudo apt-get install freeglut3 -y
+sudo apt-get install freeglut3-dev -y
+sudo apt install libglu1-mesa-dev freeglut3-dev -y
+echo
 echo "copying libglut.so to /usr/lib64"
 echo
-mkdir /usr/lib64
-sudo cp ./libglut.so /usr/lib64/
+sudo mkdir /usr/lib64
+sudo cp ./3d_trace/libglut.so /usr/lib64/
 sudo chmod o=rwx /usr/lib64/libglut.so
 sudo chmod u=rwx /usr/lib64/libglut.so
-echo "installing requezts module for python"
 echo
-sudo pip install requests
+echo "installing binutils-gold"
+echo
+sudo apt-get install binutils-gold -y
+echo
+echo "installing libglew"
+echo
+sudo apt-get install libglew-dev -y
+echo
+echo "installing build-esssential"
+echo
+sudo apt-get install build-essential -y
+echo
+echo "installing libglew 1.5 dev"
+echo
+sudo apt-get install libglew1.5-dev libglm-dev -y
+#Python, PIP, modules
+echo
+echo "installing python"
+echo
+sudo apt-get install python -y
+echo
+echo "installing pip" 
+echo 
+sudo  apt-get install python-pip python-dev build-essential -y 
+sudo  pip install --upgrade pip 
+sudo  pip install --upgrade virtualenv 
+echo
+echo "installing Pillow module for python"
+echo
+sudo pip install Pillow
+echo
+echo "installing requests module for python"
+echo
+sudo pip install requests 
+echo
+echo "updating"
+echo
+#update and upgrade
+sudo apt-get update -y
+echo
+echo "upgrading"
+echo
+sudo apt-get upgrade -y
+echo
 echo "Done"
+echo

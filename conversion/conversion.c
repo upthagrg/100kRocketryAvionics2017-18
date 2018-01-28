@@ -21,39 +21,40 @@ void gen_data(float freq, float salt, float svel, float slat, float slon){
 	char str5[5] = "time";
 	char buff[256];
 	char* buff2 = NULL;
-	float vel=svel; //initial velocity, no acceleration other than gravity, no jerk
-	float lat=slat;
-	float lon=slon;
-	float alt=salt;
-	float time=0.0;
+	struct telem_data data;
+	data.vel=svel; //initial velocity, no acceleration other than gravity, no jerk
+	data.lat=slat;
+	data.lon=slon;
+	data.alt=salt;
+	data.time=0.0;
 	int dec;
 	do{
 		memset(buff, '\0', 256);
 		//sprintf(buff,"'{\"%s\":\"%f\", \"%s\":\"%f\", \"%s\":\"%f\", \"%s\":\"%f\", \"%s\":\"+%f\"}'", str1,vel,str2,lat,str3,lon,str4,alt,str5,time); //make JSON string
-		sprintf(buff,"%f %f %f %f %f", vel,lat,lon,alt,time); //make ASCII string
+		sprintf(buff,"%f %f %f %f %f", data.vel,data.lat,data.lon,data.alt,data.time); //make ASCII string
 		if(debug){
 			printf("%s\n", buff); //print JSON string
 		}
-		convert(buff2, vel, lat, lon, alt, time);
-		time += (1.0/freq); //update time
-		alt = ((-4.9*powf(time, 2)) + (svel*time) + salt); //update alt
+		convert(buff2, &data);
+		data.time += (1.0/freq); //update time
+		data.alt = ((-4.9*powf(data.time, 2)) + (svel*data.time) + salt); //update alt
 		dec = rand()%2;
 		if(dec){ //update lat
-			lat += 0.001;
+			data.lat += 0.001;
 		}
 		else{
-			lat -= 0.001;
+			data.lat -= 0.001;
 		}
 		dec = rand()%2;
 		if(dec){ //update lon
-			lon += 0.001;
+			data.lon += 0.001;
 		}
 		else{
-			lon -= 0.001;
+			data.lon -= 0.001;
 		}
-		vel = ((-9.8*time) + (svel)); //update vel
+		data.vel = ((-9.8*data.time) + (svel)); //update vel
 		usleep(1000000/freq);
-	}while(alt>salt);
+	}while(data.alt>salt);
 	//printf("**\n");
 	if(buff2 !=NULL){
 		free(buff2);
