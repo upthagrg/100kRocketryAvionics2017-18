@@ -5,6 +5,7 @@ echo
 echo "installing apt-file"
 echo
 sudo apt-get install file -y
+sudo apt-get install apt-file -y
 echo
 echo "updating apt-file"
 echo
