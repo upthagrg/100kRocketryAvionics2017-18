@@ -14,6 +14,7 @@ echo
 echo "installing docker" 
 echo
 sudo apt-get install docker.io -y
+sudo apt-get install docker-compose -y
 #C/C++
 echo
 echo "installing gcc" 

@@ -26,6 +26,15 @@
 #include <convert.hpp>
 #include <tplane.hpp>
 
+
+// multiprocessing includes 
+#include <sys/types.h>
+#include <sys/stat.h>
+#include <fcntl.h>
+#include <sys/wait.h>
+#include <unistd.h>
+
+
 //	This is a 3D trace for the flightpath of the rocket of the Oreon State University 
 //	chapter of AIAA high altitude rocketry challenge. Thus uses OpenGL through C++.  
 //
@@ -263,10 +272,14 @@ char apogeebuff[512];
 bool center;
 float xdist = 0.0;
 float zdist = 0.0;
+char* defmap = "./resources/textures/defmap.bmp";
+char* ndefmap = "./resources/textures/map.bmp";
+char* usedmap;
 
 
 // function prototypes:
 
+bool	detect_internet_connection();
 void	Animate( );
 void	Display( );
 void	DoAxesMenu( int );
@@ -444,6 +457,18 @@ ReadShort( FILE *fp )
 int
 main( int argc, char *argv[ ] )
 {
+	char buff1[64];
+	char buff2[64];
+	int ret;
+	pid_t childid;
+	int child_exit = -5;
+
+	memset(buff1, '\0', 64);
+	memset(buff2, '\0', 64);
+
+	//detect internet
+	bool connected = detect_internet_connection();
+
 	cdebug = false; //initialize conversion debug 
 	center = false; //initialize center bool
 	for(int i=0; i<argc; i++){
@@ -469,11 +494,45 @@ main( int argc, char *argv[ ] )
 	
 	// create textures
 
-	InitTextures();
+//	InitTextures();
 
 	// create the display structures that will not change:
 
 	InitLists( );
+	//get map
+        if(connected){
+                //cout << "Internet detected" << endl;
+                //get non-default map
+                childid = fork();
+                switch(childid){
+                        case -1: //error
+                                printf("ERROR SPAWNING CHILD\n");
+                                fflush(stdout);
+                                exit(2);
+
+                        case 0: //child
+				sprintf(buff1, "%f", slat);
+				sprintf(buff2, "%f", slon);
+                                ret = execlp("python", "python", "./map/getmap.py", buff1, buff2, NULL);
+                                if(ret == -1){
+                                        printf("ERROR GENERATING MAP\n");
+                                        fflush(stdout);
+                                        exit(1);
+                                }
+                        default: //parent
+                                waitpid(childid, &child_exit, 0); //wait on getmap
+				
+                }
+                usedmap = ndefmap;
+        }
+        else{
+                //cout << "Internet not detected" << endl;
+                usedmap = defmap;
+        }
+
+	// initialize textures
+	InitTextures();
+
 
 	sprintf(apogeebuff, "%s%s ft.", "Apogee: ", apaltbuff);
 
@@ -1552,7 +1611,7 @@ void InitTextures(){
 	glBindTexture( GL_TEXTURE_2D, maptex ); // make maptex texture current
 	
 	// and set its parameters
-	maptex1 = BmpToTexture( "./resources/textures/map.bmp", &width, &height );
+	maptex1 = BmpToTexture( usedmap, &width, &height );
 	glTexParameteri( GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_REPEAT );
 	glTexParameteri( GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_REPEAT ); 
 	glTexParameteri( GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_NEAREST ); //repeat if beyond 1 for s or t
@@ -1712,4 +1771,75 @@ MjbSphere( float radius, int slices, int stacks )
 
 	delete [ ] Pts;
 	Pts = NULL;
+}
+
+/***********************************************
+* Title: detect_internet_connection
+* Description: Detects if there is an internet 
+* connection present.
+***********************************************/
+bool	detect_internet_connection(){
+	int devnul;
+	pid_t   childid;
+	int child_exit = -5;
+	bool con;
+	int ret;
+
+	devnul = open("/dev/null", O_WRONLY);
+
+	childid = fork();
+
+        switch(childid){
+
+        case -1: //error
+                printf("ERROR SPAWNING CHILD\n");
+                fflush(stdout);
+                exit(2);
+
+        case 0: //child
+                //exec into wget
+		dup2(0, devnul); //duplicate /dev/null to stdin
+		dup2(1, devnul); //duplicate /dev/null to stdout
+		dup2(2, devnul); //duplicate /dev/null to stderr
+                ret = execlp("wget", "wget", "www.google.com", NULL);
+                if(ret == -1){
+			printf("ERROR CHECKING CONNECTION\n");
+			fflush(stdout);
+			exit(1);
+                }
+
+        default: //parent
+                //wait on wget
+                waitpid(childid, &child_exit, 0);
+		if(child_exit == 0){
+			con = true;
+		}
+		else{
+			con = false;
+		}
+        }
+	if(con == true){ //clean up index.html
+		childid = fork();
+		        switch(childid){
+        
+	        case -1: //error
+	                printf("ERROR SPAWNING CHILD\n");
+	                fflush(stdout);
+	                exit(2);
+	        
+	        case 0: //child
+	                //exec into rm
+	                ret = execlp("rm", "rm", "./index.html", "-f", NULL);
+	                if(ret == -1){
+	                        printf("ERROR REMOVING INDEX.HTML\n");
+	                        fflush(stdout);
+	                        exit(1);
+	                }
+		        
+        	default: //parent
+        	        //wait on rm
+        	        waitpid(childid, &child_exit, 0);
+        	}
+	}
+	return con;
 }

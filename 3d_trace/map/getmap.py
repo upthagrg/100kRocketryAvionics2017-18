@@ -22,12 +22,13 @@ def make_url(lat, lon):
 	url = url + lat
 	url = url + ","
 	url = url + lon
-	url = url + "&zoom=14&size=512x512"
+	url = url + "&zoom=14&size=512x512&format=jpg"
 	return url
 
 #define names and paths for images
-pngname = '../resources/textures/map.png'
-bmpname = '../resources/textures/map.bmp'
+jpgname = '/home/glenn/100k7/100kRocketryAvionics2017-18/3d_trace/resources/textures/map.jpg'
+bmpname = '/home/glenn/100k7/100kRocketryAvionics2017-18/3d_trace/resources/textures/map.bmp'
+
 #define default latitude and longitude 
 deflat = '44.565028'
 deflon = '-123.276136'
@@ -40,15 +41,14 @@ else:
 	url = make_url(sys.argv[1], sys.argv[2])
 #get the map as a binary
 mapbin = mapsession.get(url)
-#open a .png file
-mapfile = open(pngname ,'wb')
-#write the binary map to the .png
+#open a .jpg file
+mapfile = open(jpgname ,'wb')
+#write the binary map to the .jpg
 mapfile.write(mapbin.content)
-#close the .png file
+#close the .jpg file
 mapfile.close()
-#open the .png as an Image
-pngmap = Image.open(pngname)
+jpgmap = Image.open(jpgname)
 #save the Image as a .bmp file 
-pngmap.save(bmpname)
-#remove the .png file
-subprocess.call(["rm", pngname])
+jpgmap.save(bmpname, 'bmp')
+#remove the .jpg file
+subprocess.call(["rm", jpgname])
