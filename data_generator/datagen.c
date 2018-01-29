@@ -58,7 +58,12 @@ void gen_data(float freq, float salt, float svel, float slat, float slon){
 	do{ //loop until flight is "finished" 
 		total = 0;
 		memset(buff, '\0', 256);
+		if(pipe){
+			sprintf(buff,"{\"%s\":\"%f\", \"%s\":\"%f\", \"%s\":\"%f\", \"%s\":\"%f\", \"%s\":\"%f\"}&&", str1,vel,str2,lat,str3,lon,str4,alt,str5,time); //make JSON string
+		}
+		else{
 		sprintf(buff,"{\"%s\":\"%f\", \"%s\":\"%f\", \"%s\":\"%f\", \"%s\":\"%f\", \"%s\":\"%f\"}", str1,vel,str2,lat,str3,lon,str4,alt,str5,time); //make JSON string
+		}
 //		sprintf(buff3,"'{\"%s\":\"%f\", \"%s\":\"%f\", \"%s\":\"%f\", \"%s\":\"%f\", \"%s\":\"+%f\"}'", str1,vel,str2,lat,str3,lon,str4,alt,str5,time); //make JSON string
 		//fprintf(files[1], buff); //print JSON string
 		//fprintf(files[1], "\n"); //print newline
@@ -206,7 +211,7 @@ int main(int argc, char** argv){
 			buffsize = argv[i+1];
 		}
 		else if(strcmp(argv[i], "-debug") == 0){ //get update rate in Hz
-			debug = 1;;
+			debug = 1;
 			printf("data_gen debug: on\n");
 			fflush(stdout);
 		}
@@ -214,6 +219,7 @@ int main(int argc, char** argv){
 			proc_name = argv[i+1];
 			mypipe = 1;
 			pos = i+1;
+			break;
 		}
 		else if(strcmp(argv[i], "-pipeno") == 0){ //use a pipe, get pipe number
 			pipeno = atoi(argv[i+1]);
@@ -222,26 +228,26 @@ int main(int argc, char** argv){
 			proc_name = argv[i+1];
 			fifo = 1;
 			pos = i+1;
+			break;
 		}
-		if(mypipe || fifo){
-			//get args for execvp
-			args = (char**)malloc(sizeof(char*)*(argc-pos+1));
-			i=0;
-			for(i; i<argc-2; i++){
-				args[i] = (char*)malloc(sizeof(char)*64);
-				memset(args[i], '\0', 64);
-				strcpy(args[i], argv[i+pos]);
-			}
-			args[argc-pos] = NULL; // set last in array to NULL
+	}
+	if(mypipe || fifo){
+		//get args for execvp
+		args = (char**)malloc(sizeof(char*)*(argc-pos+1));
+		i=0;
+		for(i; i<argc-2; i++){
+			args[i] = (char*)malloc(sizeof(char)*64);
+			memset(args[i], '\0', 64);
+			strcpy(args[i], argv[i+pos]);
 		}
-		if(!mypipe && !fifo){ //pipe and fifo both not set, thus writing to file
-			file = 1; 
-		}
-		if(mypipe && fifo){
-			printf("CANNOT USE PIPE AND FIFO AT SAME TIME\n");
-			exit(7);
-		}
-
+		args[argc-pos] = NULL; // set last in array to NULL
+	}
+	if(!mypipe && !fifo){ //pipe and fifo both not set, thus writing to file
+		file = 1; 
+	}
+	if(mypipe && fifo){
+		printf("CANNOT USE PIPE AND FIFO AT SAME TIME\n");
+		exit(7);
 	}
 
 	if(mypipe){ //using a pipe
