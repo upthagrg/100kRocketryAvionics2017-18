@@ -1,12 +1,27 @@
-<h1>Hello</h1>
-{{ output }}
-<!-- {% for _telemetry in telemetry %}
-  <hr />
-  <p>altitude: {{ _telemetry.altitude }} </p>
-  <p>longitude: {{ _telemetry.longitude }} </p>
-  <p>latitude: {{ _telemetry.latitude }} </p>
-  <p>time: {{ _telemetry.time }} </p>
-  <p>velocity: {{ _telemetry.velocity }} </p>
-  <hr />
-{% endfor %}
- -->
+<html>
+<script src="http://code.jquery.com/jquery-3.3.1.min.js" integrity="sha256-FgpCb/KJQlLNfOu91ta32o/NMZxltwRo8QtmkMRdAu8="
+  crossorigin="anonymous"></script>
+<body>
+<h1>Async Test</h1>
+<div id="tel">
+  
+</div>
+</body>
+<script>
+  $.ajaxSetup({ cache: false });
+  (function poll() {
+      setTimeout(function () {
+  $.ajax({
+      cache: false,
+      dataType: "json",
+      url: "http://0.0.0.0:5000/api/v1.0/telemetry?_="+(new Date).getTime(),
+      method: 'GET',
+      success: function (data) {
+        console.log(data);
+        poll();
+      }
+    });}, 1000);
+  })();
+</script>
+</html>
+

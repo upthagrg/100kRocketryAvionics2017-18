@@ -17,4 +17,4 @@ api:
     - db
   tty: true
 db:
-  image: mongo:3.0.2
+   image: mongo:3.0.2
