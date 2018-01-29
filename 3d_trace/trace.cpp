@@ -26,7 +26,6 @@
 #include <convert.hpp>
 #include <tplane.hpp>
 
-<<<<<<< HEAD
 
 // multiprocessing includes 
 #include <sys/types.h>
@@ -36,8 +35,6 @@
 #include <unistd.h>
 
 
-=======
->>>>>>> 94938cdc9e6390c12af0013c86aea31433c12796
 //	This is a 3D trace for the flightpath of the rocket of the Oreon State University 
 //	chapter of AIAA high altitude rocketry challenge. Thus uses OpenGL through C++.  
 //
@@ -275,20 +272,14 @@ char apogeebuff[512];
 bool center;
 float xdist = 0.0;
 float zdist = 0.0;
-<<<<<<< HEAD
 char* defmap = "./resources/textures/defmap.bmp";
 char* ndefmap = "./resources/textures/map.bmp";
 char* usedmap;
-=======
->>>>>>> 94938cdc9e6390c12af0013c86aea31433c12796
 
 
 // function prototypes:
 
-<<<<<<< HEAD
 bool	detect_internet_connection();
-=======
->>>>>>> 94938cdc9e6390c12af0013c86aea31433c12796
 void	Animate( );
 void	Display( );
 void	DoAxesMenu( int );
@@ -466,7 +457,6 @@ ReadShort( FILE *fp )
 int
 main( int argc, char *argv[ ] )
 {
-<<<<<<< HEAD
 	char buff1[64];
 	char buff2[64];
 	int ret;
@@ -479,8 +469,6 @@ main( int argc, char *argv[ ] )
 	//detect internet
 	bool connected = detect_internet_connection();
 
-=======
->>>>>>> 94938cdc9e6390c12af0013c86aea31433c12796
 	cdebug = false; //initialize conversion debug 
 	center = false; //initialize center bool
 	for(int i=0; i<argc; i++){
@@ -504,17 +492,13 @@ main( int argc, char *argv[ ] )
 	InitGraphics( );
 
 	
-<<<<<<< HEAD
-=======
 	// create textures
 
-	InitTextures();
->>>>>>> 94938cdc9e6390c12af0013c86aea31433c12796
+//	InitTextures();
 
 	// create the display structures that will not change:
 
 	InitLists( );
-<<<<<<< HEAD
 	//get map
         if(connected){
                 //cout << "Internet detected" << endl;
@@ -549,8 +533,6 @@ main( int argc, char *argv[ ] )
 	// initialize textures
 	InitTextures();
 
-=======
->>>>>>> 94938cdc9e6390c12af0013c86aea31433c12796
 
 	sprintf(apogeebuff, "%s%s ft.", "Apogee: ", apaltbuff);
 
@@ -1629,19 +1611,11 @@ void InitTextures(){
 	glBindTexture( GL_TEXTURE_2D, maptex ); // make maptex texture current
 	
 	// and set its parameters
-<<<<<<< HEAD
 	maptex1 = BmpToTexture( usedmap, &width, &height );
-	glTexParameteri( GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_REPEAT );
-	glTexParameteri( GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_REPEAT ); 
-	glTexParameteri( GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR); //repeat if beyond 1 for s or t
-	glTexParameteri( GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR); //blended texels
-=======
-	maptex1 = BmpToTexture( "./resources/textures/map.bmp", &width, &height );
 	glTexParameteri( GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_REPEAT );
 	glTexParameteri( GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_REPEAT ); 
 	glTexParameteri( GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_NEAREST ); //repeat if beyond 1 for s or t
 	glTexParameteri( GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_NEAREST); //blended texels
->>>>>>> 94938cdc9e6390c12af0013c86aea31433c12796
 	glTexEnvf( GL_TEXTURE_ENV, GL_TEXTURE_ENV_MODE, GL_REPLACE ); //replace surface (no material illumination) 
 	glTexImage2D( GL_TEXTURE_2D, 0, 3, width, height, 0, GL_RGB, GL_UNSIGNED_BYTE, maptex1 );
 	//end map texture
@@ -1798,7 +1772,6 @@ MjbSphere( float radius, int slices, int stacks )
 	delete [ ] Pts;
 	Pts = NULL;
 }
-<<<<<<< HEAD
 
 /***********************************************
 * Title: detect_internet_connection
@@ -1870,5 +1843,3 @@ bool	detect_internet_connection(){
 	}
 	return con;
 }
-=======
->>>>>>> 94938cdc9e6390c12af0013c86aea31433c12796
