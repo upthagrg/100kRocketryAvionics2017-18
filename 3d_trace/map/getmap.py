@@ -26,8 +26,8 @@ def make_url(lat, lon):
 	return url
 
 #define names and paths for images
-jpgname = '/home/glenn/100k7/100kRocketryAvionics2017-18/3d_trace/resources/textures/map.jpg'
-bmpname = '/home/glenn/100k7/100kRocketryAvionics2017-18/3d_trace/resources/textures/map.bmp'
+jpgname = '../resources/textures/map.jpg'
+bmpname = '../resources/textures/map.bmp'
 
 #define default latitude and longitude 
 deflat = '44.565028'
