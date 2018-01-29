@@ -30,7 +30,7 @@ def get_all_telemetry():
 def get_telemetry():
     telemetry = db.telemetrydb
     output = []
-    cursor = telemetry.find().sort([("time", pymongo.DESCENDING)])
+    cursor = telemetry.find().sort([("_id", pymongo.DESCENDING)])
     output.append({
         'altitude': cursor[0]['altitude'],
         'longitude': cursor[0]['longitude'],
