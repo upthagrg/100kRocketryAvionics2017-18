@@ -58,11 +58,17 @@ void gen_data(float freq, float salt, float svel, float slat, float slon){
 	do{ //loop until flight is "finished" 
 		total = 0;
 		memset(buff, '\0', 256);
-		if(pipe){
+		if(mypipe){
+			if(debug){
+				printf("PIPE DETECTED\n");
+			}
 			sprintf(buff,"{\"%s\":\"%f\", \"%s\":\"%f\", \"%s\":\"%f\", \"%s\":\"%f\", \"%s\":\"%f\"}&&", str1,vel,str2,lat,str3,lon,str4,alt,str5,time); //make JSON string
 		}
 		else{
-		sprintf(buff,"{\"%s\":\"%f\", \"%s\":\"%f\", \"%s\":\"%f\", \"%s\":\"%f\", \"%s\":\"%f\"}", str1,vel,str2,lat,str3,lon,str4,alt,str5,time); //make JSON string
+			if(debug){
+				printf("PIPE NOT DETECTED\n");
+			}
+			sprintf(buff,"{\"%s\":\"%f\", \"%s\":\"%f\", \"%s\":\"%f\", \"%s\":\"%f\", \"%s\":\"%f\"}", str1,vel,str2,lat,str3,lon,str4,alt,str5,time); //make JSON string
 		}
 //		sprintf(buff3,"'{\"%s\":\"%f\", \"%s\":\"%f\", \"%s\":\"%f\", \"%s\":\"%f\", \"%s\":\"+%f\"}'", str1,vel,str2,lat,str3,lon,str4,alt,str5,time); //make JSON string
 		//fprintf(files[1], buff); //print JSON string

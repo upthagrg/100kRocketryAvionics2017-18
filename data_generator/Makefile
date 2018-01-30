@@ -5,4 +5,4 @@ wgcc:
 wclang:
 	clang datagen.c -std=c99 -lm -o gen../conversion
 clean: 
-	rm ./gen
+	rm ./gen ./*.txt ./*fifo 
