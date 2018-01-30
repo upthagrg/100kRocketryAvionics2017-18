@@ -513,7 +513,8 @@ main( int argc, char *argv[ ] )
                         case 0: //child
 				sprintf(buff1, "%f", slat);
 				sprintf(buff2, "%f", slon);
-                                ret = execlp("python", "python", "./map/getmap.py", buff1, buff2, NULL);
+				chdir("./map");
+                                ret = execlp("python", "python", "./getmap.py", buff1, buff2, NULL);
                                 if(ret == -1){
                                         printf("ERROR GENERATING MAP\n");
                                         fflush(stdout);
@@ -1616,8 +1617,10 @@ void InitTextures(){
 	glTexParameteri( GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_REPEAT ); 
 	glTexParameteri( GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_NEAREST ); //repeat if beyond 1 for s or t
 	glTexParameteri( GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_NEAREST); //blended texels
+	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR_MIPMAP_LINEAR); //set linear mip map filter
 	glTexEnvf( GL_TEXTURE_ENV, GL_TEXTURE_ENV_MODE, GL_REPLACE ); //replace surface (no material illumination) 
-	glTexImage2D( GL_TEXTURE_2D, 0, 3, width, height, 0, GL_RGB, GL_UNSIGNED_BYTE, maptex1 );
+//	glTexImage2D( GL_TEXTURE_2D, 0, 3, width, height, 0, GL_RGB, GL_UNSIGNED_BYTE, maptex1 ); //make texture
+	gluBuild2DMipmaps( GL_TEXTURE_2D, 3, width, height, GL_RGB, GL_UNSIGNED_BYTE, maptex1 ); //make mipmaps 
 	//end map texture
 }
 

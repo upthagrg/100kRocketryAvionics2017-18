@@ -2,7 +2,6 @@
 *Title: datagen.c
 *Author: Glenn Upthagrove
 *Date: 01/29/2018
-*Description: A semi-random generator of JSON formatted data for testing other pieces of the 
 *tracking software. The altitude is a simple quadratic, and the velocity is the derivative
 *thereof. The rate of update can be set via -rate, the initial altitude via -alt, the 
 *initial latitude via -lat, the initial longitude via -lon, and the initial velocity via 
@@ -33,6 +32,7 @@ char* fifoname = "./commfifo";
 int debug;
 char* name;
 int pipeno;
+int myfile;
 void gen_data(float freq, float salt, float svel, float slat, float slon){
 	char str1[9] = "velocity";
 	char str2[9] = "latitude";
@@ -70,7 +70,6 @@ void gen_data(float freq, float salt, float svel, float slat, float slon){
 			}
 			sprintf(buff,"{\"%s\":\"%f\", \"%s\":\"%f\", \"%s\":\"%f\", \"%s\":\"%f\", \"%s\":\"%f\"}", str1,vel,str2,lat,str3,lon,str4,alt,str5,time); //make JSON string
 		}
-//		sprintf(buff3,"'{\"%s\":\"%f\", \"%s\":\"%f\", \"%s\":\"%f\", \"%s\":\"%f\", \"%s\":\"+%f\"}'", str1,vel,str2,lat,str3,lon,str4,alt,str5,time); //make JSON string
 		//fprintf(files[1], buff); //print JSON string
 		//fprintf(files[1], "\n"); //print newline
 		buff2 = buff;
@@ -89,8 +88,8 @@ void gen_data(float freq, float salt, float svel, float slat, float slon){
 				wret = write(fifo_file, buff2, (strlen(buff2))); //write to FIFO
 			}
 			else if(file){//if writing to file
-				wret = write(1, buff2, (strlen(buff2)));
-				write(1, "\n", 1);
+				wret = write(myfile, buff2, (strlen(buff2)));
+				write(myfile, "\n", 1);
 			}
 			else{ //using pipe
 				wret = write(files[1], buff2, (strlen(buff2)));
@@ -190,6 +189,7 @@ int main(int argc, char** argv){
 	char* proc_name = NULL; //name of process to launch
 	char** args; //set of arguments for launched process
 	int pos; //position for grabbing arguments
+	int minus=2; //for figuring out argument stripping
 	pipeno = 3; //default use fd3
 	mypipe = 0; //default no pipe
 	fifo = 0; //default no fifo
@@ -197,6 +197,7 @@ int main(int argc, char** argv){
 	debug = 0; //default debug off
 	name = NULL;
 	srand(time(NULL)); //seed random
+	myfile = 1; //initialize to stdout
 	for(i; i<argc; i++){
 		if(strcmp(argv[i], "-vel") == 0){ //get starting velocity
 			svel = atof(argv[i+1]);
@@ -215,6 +216,14 @@ int main(int argc, char** argv){
 		}
 		else if(strcmp(argv[i], "-buff") == 0){ //get read buffer size for logger
 			buffsize = argv[i+1];
+		}
+		else if(strcmp(argv[i], "-to") == 0){ //get read buffer size for logger
+			myfile = open(argv[i+1], O_WRONLY|O_CREAT, 0644); //open specified file
+			file = 1;
+		}
+		else if(strcmp(argv[i], "-test") == 0){ //get read buffer size for logger
+			srand(5); //seed random
+			minus++;
 		}
 		else if(strcmp(argv[i], "-debug") == 0){ //get update rate in Hz
 			debug = 1;
@@ -241,7 +250,7 @@ int main(int argc, char** argv){
 		//get args for execvp
 		args = (char**)malloc(sizeof(char*)*(argc-pos+1));
 		i=0;
-		for(i; i<argc-2; i++){
+		for(i; i<argc-minus; i++){
 			args[i] = (char*)malloc(sizeof(char)*64);
 			memset(args[i], '\0', 64);
 			strcpy(args[i], argv[i+pos]);
@@ -371,6 +380,9 @@ int main(int argc, char** argv){
 
 	else{ // writing to file
 		gen_data(freq, salt, svel, slat, slon);
+	}
+	if(myfile > 2){
+		close(myfile);//close the file
 	}
 	return 0;
 
