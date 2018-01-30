@@ -1,5 +1,5 @@
 default:
-	gcc logging/generate/datagen.c -std=c99 -lm -o logging/gen
+	gcc ./data_generator/datagen.c -std=c99 -lm -o ./gen
 	gcc logging/logger.c  -std=c99 -lm -o logging/logger -Wno-format-security
 wgcc:
 	gcc logging/logger.c -std=c99 -lm -o logging/logger
