@@ -1,7 +1,7 @@
 /*******************************************************
 *Title: trace.cpp
 *Author: Glenn Upthagrove
-*Date: 01/27/18
+*Date: 01/30/18
 *Description: A 3D Trace for the flight path of the 
 *rocket for the high altitude rocketry challenge. 
 *******************************************************/
@@ -9,6 +9,8 @@
 #include <stdlib.h>
 #include <ctype.h>
 #include <string.h> //for strcmp
+#include <vector>
+#include "../conversion/telemetry.h"
 
 #define _USE_MATH_DEFINES
 #include <math.h>
@@ -33,6 +35,9 @@
 #include <fcntl.h>
 #include <sys/wait.h>
 #include <unistd.h>
+
+//multithreading include 
+#include <pthread.h>
 
 
 //	This is a 3D trace for the flightpath of the rocket of the Oreon State University 
@@ -275,6 +280,11 @@ float zdist = 0.0;
 char* defmap = "./resources/textures/defmap.bmp";
 char* ndefmap = "./resources/textures/map.bmp";
 char* usedmap;
+GLuint pathlists[2];				//lists for nrt mode
+int pl_used; 					//index of pathlists
+pthread_mutex_t list_lock;			//nrt lock
+bool nrt;					//nrt flag
+vector<struct telem_data>data;
 
 
 // function prototypes:
@@ -457,6 +467,10 @@ ReadShort( FILE *fp )
 int
 main( int argc, char *argv[ ] )
 {
+	slat = 45.0;
+	slon = 45.0;
+	nrt = false;
+	pl_used = 0;
 	char buff1[64];
 	char buff2[64];
 	int ret;
@@ -477,6 +491,9 @@ main( int argc, char *argv[ ] )
                 }
                 else if(strcmp(argv[i], "-center") == 0){ //debug on?
                         center = true;
+                }
+                else if(strcmp(argv[i], "-nrt") == 0){ //near real time mode?
+                        nrt = true;
                 }
 
 	}
@@ -499,6 +516,12 @@ main( int argc, char *argv[ ] )
 	// create the display structures that will not change:
 
 	InitLists( );
+
+	//start recieving data in nrt
+	//HERE
+	//spawn thread to read data from a pipe
+
+
 	//get map
         if(connected){
                 //cout << "Internet detected" << endl;
@@ -511,6 +534,8 @@ main( int argc, char *argv[ ] )
                                 exit(2);
 
                         case 0: //child
+				cout << "slat: " << slat << endl;
+				cout << "slon: " << slon << endl;
 				sprintf(buff1, "%f", slat);
 				sprintf(buff2, "%f", slon);
 				chdir("./map");
@@ -534,8 +559,9 @@ main( int argc, char *argv[ ] )
 	// initialize textures
 	InitTextures();
 
-
-	sprintf(apogeebuff, "%s%s ft.", "Apogee: ", apaltbuff);
+	if(!nrt){
+		sprintf(apogeebuff, "%s%s ft.", "Apogee: ", apaltbuff);
+	}
 
 	// init all the global variables used by Display( ):
 	// this will also post a redisplay
@@ -731,17 +757,29 @@ Display( )
 	glDisable (GL_TEXTURE_2D); //disable texturing
 
 	//draw path
-	glPushMatrix();
-		if(center){ // if centered requested
-			glTranslatef(-apx, 0., -apz);
-		}
-		glCallList( PathList );
-	glPopMatrix();
-	if(center){ // if centered requested
-		DoRasterString( 0., apy+1.0, 0., apogeebuff );
+	if(nrt){
+		glPushMatrix();
+			if(center){ // if centered requested
+				glTranslatef(-apx, 0., -apz);
+			}
+			glCallList(pathlists[pl_used]);
+		glPopMatrix();	
 	}
 	else{
-		DoRasterString( apx, apy+1.0, apz, apogeebuff );
+		glPushMatrix();
+			if(center){ // if centered requested
+				glTranslatef(-apx, 0., -apz);
+			}
+			glCallList( PathList );
+		glPopMatrix();
+	}
+	if(!nrt){
+		if(center){ // if centered requested
+			DoRasterString( 0., apy+1.0, 0., apogeebuff );
+		}
+		else{
+			DoRasterString( apx, apy+1.0, apz, apogeebuff );
+		}
 	}
 
 	if( DepthFightingOn != 0 )
@@ -1176,8 +1214,18 @@ InitLists( )
 			Axes( 1. );
 		glLineWidth( 1. );
 	glEndList( );
-
-	make_trace_list("./log.txt");
+	if(nrt){
+		pathlists[pl_used] = glGenLists( 1 );
+		glNewList( pathlists[pl_used], GL_COMPILE );
+			glLineWidth( 1 );
+				glVertex3f(0.,0.1,0.);
+				glVertex3f(0.,0.2,0.);
+			glLineWidth( 1. );
+		glEndList( );
+	}
+	else{
+		make_trace_list("./log.txt");
+	}
 	tplane(PLANERES, PLANESIZE);
 }
 
@@ -1845,4 +1893,18 @@ bool	detect_internet_connection(){
         	}
 	}
 	return con;
+}
+
+void nrt_listen(){
+	//get lock on inited int
+	//while(!over)
+		//read from pipe
+		//convert data?
+			//if(!inited)
+				//set slat and slon
+				//unlock inited int
+		//update list not used
+		//get lock on pl_used int
+		//switch it
+		//unlock pl_used int
 }
