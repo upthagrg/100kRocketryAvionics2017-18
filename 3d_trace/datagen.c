@@ -263,7 +263,6 @@ int main(int argc, char** argv){
 	}
 	if(mypipe || fifo){
 		//get args for execvp
-		printf("minus: %d", minus);
 		args = (char**)malloc(sizeof(char*)*(argc-pos+1));
 		i=0;
 		for(i; i<argc-minus; i++){

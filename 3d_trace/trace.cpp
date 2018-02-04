@@ -280,12 +280,16 @@ float zdist = 0.0;
 char* defmap = "./resources/textures/defmap.bmp";
 char* ndefmap = "./resources/textures/map.bmp";
 char* usedmap;
-GLuint pathlists[2];				//lists for nrt mode
-int pl_used; 					//index of pathlists
-pthread_mutex_t list_lock;			//nrt lock
 bool nrt;					//nrt flag
+bool nrt2;					//nrt flag
 vector<struct telem_data>data;
-
+bool inited;
+char message[256];
+char message2[256];
+char buff[10];
+bool over = false;
+int bytes;
+char* end = NULL;
 
 // function prototypes:
 
@@ -320,6 +324,8 @@ void	HsvRgb( float[3], float [3] );
 struct point * PtsPointer( int lat, int lng );
 void DrawPoint( struct point *p );
 void MjbSphere( float radius, int slices, int stacks );
+//thread function
+void* nrt_listen(void*);
 
 
 // teture functions 
@@ -467,15 +473,18 @@ ReadShort( FILE *fp )
 int
 main( int argc, char *argv[ ] )
 {
+	inited = 0;
 	slat = 45.0;
 	slon = 45.0;
 	nrt = false;
-	pl_used = 0;
+	nrt2 = false;
+//	pl_used = 0;
 	char buff1[64];
 	char buff2[64];
 	int ret;
 	pid_t childid;
 	int child_exit = -5;
+//	pthread_t pipethread;
 
 	memset(buff1, '\0', 64);
 	memset(buff2, '\0', 64);
@@ -494,28 +503,55 @@ main( int argc, char *argv[ ] )
                 }
                 else if(strcmp(argv[i], "-nrt") == 0){ //near real time mode?
                         nrt = true;
+			cout << "in nrt mode" << endl;
+			fflush(stdout);
                 }
 
 	}
 	// turn on the glut package:
 	// (do this before checking argc and argv since it might
 	// pull some command line arguments out)
-
+	cout << "glut init" << endl;
 	glutInit( &argc, argv );
 
 
 	// setup all the graphics stuff:
 
+	cout << "initing graphics" << endl;
 	InitGraphics( );
 
-	
-	// create textures
+	//get slat and slon
+	if(nrt){//hang until data is recieved
+		//read from pipe
+        	memset(message, '\0', 256);
+        	while(strstr(message, "&&") == NULL){
+                        memset(buff, '\0', 10);
+                       	bytes = read(3, buff, 9);
+                       	strcat(message, buff);
+                       	if(bytes == -1){ //error cases
+                     	          printf("READ ERROR IN LOGGER, RETURN OF -1\n");
+                     	          fflush(stdout);
+                     	          exit(4);
+                       	}
+                    	if(bytes == 0){
+                             	  printf("NO READ IN LOGGER, RETURN OF 0\n");
+                                  fflush(stdout);
+                             	  exit(5);
+                        }
 
-//	InitTextures();
+                }
+                //fix the string
+                end = strstr(message, "&&"); //points to first &
+                *end = '\0'; //null terminate
+                cout << "main recieved: " << message << endl;
+                fflush(stdout);
+	}
 
-	// create the display structures that will not change:
-
+	slat = 45.0;
+	slon = 45.0;
+	cout << "starting init lists" << endl;
 	InitLists( );
+	cout << "leaving init lists" << endl;
 
 	//start recieving data in nrt
 	//HERE
@@ -565,19 +601,24 @@ main( int argc, char *argv[ ] )
 
 	// init all the global variables used by Display( ):
 	// this will also post a redisplay
-
+	cout << "reseting" <<endl;
 	Reset( );
 
 
 	// setup all the user interface stuff:
 
+	cout << "calling init menus" <<endl;
 	InitMenus( );
+	cout << "leaving init menus" <<endl;
 
 
 	// draw the scene once and wait for some interaction:
 	// (this will never return)
 
+	cout << "calling glut set window" <<endl;
 	glutSetWindow( MainWindow );
+	cout << "leaving glut set window" <<endl;
+	cout << "enterting main loop" <<endl;
 	glutMainLoop( );
 
 
@@ -616,6 +657,56 @@ Animate( )
 void
 Display( )
 {
+	//get new data or no new data signal
+	cout << "in display" <<endl;
+	if(nrt && (!over)){//hang until data is recieved
+		cout << "in nrt and not over" << endl;
+		//read from pipe
+		cout << "memsetting message" << endl;
+        	memset(message, '\0', 256);
+		if(message2[0] != '\0'){
+			strcat(message, message2);
+		}
+        	memset(message2, '\0', 256);
+		cout << "done" << endl;
+		cout << "memsetting buff" << endl;
+                memset(buff, '\0', 10);
+		cout << "done" << endl;
+        	while(strstr(message, "&&") == NULL){
+			cout << "memsetting buff" << endl;
+                        memset(buff, '\0', 10);
+			cout << "done" << endl;
+			cout << "reading from pipe" << endl;
+                       	bytes = read(3, buff, 9);
+			cout << "read from pipe: " << buff << endl;
+                       	strcat(message, buff);
+			cout << "message is now: " << message << endl;
+                       	if(bytes == -1){ //error cases
+                     	          printf("READ ERROR IN LOGGER, RETURN OF -1\n");
+                     	          fflush(stdout);
+                     	          exit(4);
+                       	}
+                    	if(bytes == 0){
+                             	  printf("NO READ IN LOGGER, RETURN OF 0\n");
+                                  fflush(stdout);
+                             	  exit(5);
+                        }
+			if(strcmp(message, "**&&")==0){
+				over = true;
+			}
+                }
+                //fix the string
+                end = strstr(message, "&&"); //points to first &
+                *end = '\0'; //null terminate
+		if(end+2 != '\0'){
+			strcat(message2, end+2);
+		}
+                cout << "display recieved: " << message << endl;
+                fflush(stdout);
+//		if(strcmp(message, "**")==0){
+//			over = true;
+//		}
+	}
 	if( DebugOn != 0 )
 	{
 		fprintf( stderr, "Display\n" );
@@ -757,22 +848,22 @@ Display( )
 	glDisable (GL_TEXTURE_2D); //disable texturing
 
 	//draw path
-	if(nrt){
-		glPushMatrix();
-			if(center){ // if centered requested
-				glTranslatef(-apx, 0., -apz);
-			}
-			glCallList(pathlists[pl_used]);
-		glPopMatrix();	
-	}
-	else{
+//	if(nrt){//in nrt mode
+//		glPushMatrix();
+//			if(center){ // if centered requested
+//				glTranslatef(-apx, 0., -apz);
+//			}
+//			glCallList(pathlists[pl_used]);
+//		glPopMatrix();	
+//	}
+//	else{// in normal mode 
 		glPushMatrix();
 			if(center){ // if centered requested
 				glTranslatef(-apx, 0., -apz);
 			}
 			glCallList( PathList );
 		glPopMatrix();
-	}
+//	}
 	if(!nrt){
 		if(center){ // if centered requested
 			DoRasterString( 0., apy+1.0, 0., apogeebuff );
@@ -1214,18 +1305,18 @@ InitLists( )
 			Axes( 1. );
 		glLineWidth( 1. );
 	glEndList( );
-	if(nrt){
-		pathlists[pl_used] = glGenLists( 1 );
-		glNewList( pathlists[pl_used], GL_COMPILE );
-			glLineWidth( 1 );
-				glVertex3f(0.,0.1,0.);
-				glVertex3f(0.,0.2,0.);
-			glLineWidth( 1. );
-		glEndList( );
-	}
-	else{
+//	if(nrt){
+//		pathlists[pl_used] = glGenLists( 1 );
+//		glNewList( pathlists[pl_used], GL_COMPILE );
+//			glLineWidth( 1 );
+//				glVertex3f(0.,0.1,0.);
+//				glVertex3f(0.,0.2,0.);
+//			glLineWidth( 1. );
+//		glEndList( );
+//	}
+//	else{
 		make_trace_list("./log.txt");
-	}
+//	}
 	tplane(PLANERES, PLANESIZE);
 }
 
@@ -1895,16 +1986,73 @@ bool	detect_internet_connection(){
 	return con;
 }
 
-void nrt_listen(){
+void* nrt_listen(void* input){
+//	pthread_mutex_lock(&init_lock);
+	char message[256];
+	char buff[64];
+	bool over = false;
+	int bytes;
+	char* end = NULL;
 	//get lock on inited int
-	//while(!over)
+//	cout << "start of thread" << endl;
+	while(!over){
+//		cout << "start of thread main loop" << endl;
 		//read from pipe
+		memset(message, '\0', 256);
+		while(strstr(buff, "&&") == NULL){
+			memset(buff, '\0', 256);
+			bytes = read(3, buff, 64-1);
+			strcat(message, buff);
+                        if(bytes == -1){ //error cases
+//                                printf("READ ERROR IN LOGGER, RETURN OF -1\n");
+//                                fflush(stdout);
+//                                exit(4);
+                        }
+                        if(bytes == 0){
+//                                printf("NO READ IN LOGGER, RETURN OF 0\n");
+//                                fflush(stdout);
+//                                exit(5);
+                        }
+
+		}
+		//fix the string
+                end = strstr(message, "&&"); //points to first &
+                *end = '\0'; //null terminate
+//		cout << "trace recieved: " << message << endl;
+		fflush(stdout);
+/**************************************WORK NEEDED
+
 		//convert data?
-			//if(!inited)
-				//set slat and slon
-				//unlock inited int
+
+
+
 		//update list not used
+		if(pl_used == 0){
+			//update pathlists[1]
+		}
+		else{
+			//update pathlists[0]
+		}
+		if(!inited){
+			//set slat and slon
+			inited = true;
+			//unlock inited int
+			pthread_mutex_unlock(&init_lock);
+		}
+
+***********************************/
+
 		//get lock on pl_used int
+//		pthread_mutex_lock(&list_lock);
 		//switch it
+//		if(pl_used == 0){
+//			pl_used = 1;
+//		}
+//		else{
+//			pl_used = 0;
+//		}
 		//unlock pl_used int
+//		pthread_mutex_unlock(&list_lock);
+//		cout << "thread unlocked and starting over" << endl;
+	}
 }
