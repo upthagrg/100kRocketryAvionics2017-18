@@ -33,6 +33,7 @@ int debug;
 char* name;
 int pipeno;
 int myfile;
+int wind;
 void gen_data(float freq, float salt, float svel, float slat, float slon){
 	char str1[9] = "velocity";
 	char str2[9] = "latitude";
@@ -143,6 +144,9 @@ void gen_data(float freq, float salt, float svel, float slat, float slon){
 		else{
 			lon -= 0.001;
 		}
+		if(wind == 1){
+			lon -= 0.0001;
+		}
 		vel = ((-9.8*time) + (svel)); //update vel
 		usleep(1000000/freq);
 
@@ -190,6 +194,7 @@ int main(int argc, char** argv){
 	char** args; //set of arguments for launched process
 	int pos; //position for grabbing arguments
 	int minus=2; //for figuring out argument stripping
+	wind = -5;
 	pipeno = 3; //default use fd3
 	mypipe = 0; //default no pipe
 	fifo = 0; //default no fifo
@@ -217,6 +222,10 @@ int main(int argc, char** argv){
 		else if(strcmp(argv[i], "-lon") == 0){ //get starting longitude
 			slon = atof(argv[i+1]);
 			minus++;
+			minus++;
+		}
+		else if(strcmp(argv[i], "-wind") == 0){ //get starting longitude
+			wind = 1;;
 			minus++;
 		}
 		else if(strcmp(argv[i], "-rate") == 0){ //get update rate in Hz

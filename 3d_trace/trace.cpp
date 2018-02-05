@@ -92,6 +92,14 @@ struct bmih
         int biClrImportant;
 } InfoHeader;
 
+//rocket data
+struct rocket_data{
+	float x;
+	float y;
+	float z;
+};
+
+
 //sphere stuff
 bool	Distort;		// global -- true means to distort the texture
 
@@ -286,10 +294,15 @@ vector<struct telem_data>data;
 bool inited;
 char message[256];
 char message2[256];
+char messagecpy[256];
 char buff[10];
 bool over = false;
 int bytes;
 char* end = NULL;
+vector<struct rocket_data> r_data;
+char* token;
+struct rocket_data temprd;
+int track;
 
 // function prototypes:
 
@@ -326,6 +339,7 @@ void DrawPoint( struct point *p );
 void MjbSphere( float radius, int slices, int stacks );
 //thread function
 void* nrt_listen(void*);
+void update_data();
 
 
 // teture functions 
@@ -485,6 +499,7 @@ main( int argc, char *argv[ ] )
 	pid_t childid;
 	int child_exit = -5;
 //	pthread_t pipethread;
+	track = 59;
 
 	memset(buff1, '\0', 64);
 	memset(buff2, '\0', 64);
@@ -540,15 +555,34 @@ main( int argc, char *argv[ ] )
                         }
 
                 }
+		memset(messagecpy, '\0', 256);
                 //fix the string
                 end = strstr(message, "&&"); //points to first &
                 *end = '\0'; //null terminate
-                cout << "main recieved: " << message << endl;
+
+		strcpy(messagecpy, message);
+		token = strtok(messagecpy, ":");
+		token = strtok(NULL, ":");
+		token = strtok(NULL, "\"");
+		temprd.z = atof(token);
+		token = strtok(NULL, ":");
+		token = strtok(NULL, "\"");
+		temprd.x = atof(token);
+		token = strtok(NULL, ":");
+		token = strtok(NULL, "\"");
+		temprd.y = atof(token);
+		slat = temprd.z;
+		slon = temprd.x;
+		temprd.x = ((slon - temprd.x) * (cos(slat*(M_PI/180.0))*69.172));
+		temprd.y = temprd.y / 5280.0;
+		temprd.z = ((slat - temprd.z)*69.0);
+		r_data.push_back(temprd);
+
                 fflush(stdout);
 	}
 
-	slat = 45.0;
-	slon = 45.0;
+//	slat = 45.0;
+//	slon = 45.0;
 	cout << "starting init lists" << endl;
 	InitLists( );
 	cout << "leaving init lists" << endl;
@@ -658,29 +692,30 @@ void
 Display( )
 {
 	//get new data or no new data signal
-	cout << "in display" <<endl;
+	//cout << "in display" <<endl;
 	if(nrt && (!over)){//hang until data is recieved
-		cout << "in nrt and not over" << endl;
+		track++;
+		//cout << "in nrt and not over" << endl;
 		//read from pipe
-		cout << "memsetting message" << endl;
+		//cout << "memsetting message" << endl;
         	memset(message, '\0', 256);
 		if(message2[0] != '\0'){
 			strcat(message, message2);
 		}
         	memset(message2, '\0', 256);
-		cout << "done" << endl;
-		cout << "memsetting buff" << endl;
+		//cout << "done" << endl;
+		//cout << "memsetting buff" << endl;
                 memset(buff, '\0', 10);
-		cout << "done" << endl;
+		//cout << "done" << endl;
         	while(strstr(message, "&&") == NULL){
-			cout << "memsetting buff" << endl;
+			//cout << "memsetting buff" << endl;
                         memset(buff, '\0', 10);
-			cout << "done" << endl;
-			cout << "reading from pipe" << endl;
+			//cout << "done" << endl;
+			//cout << "reading from pipe" << endl;
                        	bytes = read(3, buff, 9);
-			cout << "read from pipe: " << buff << endl;
+			//cout << "read from pipe: " << buff << endl;
                        	strcat(message, buff);
-			cout << "message is now: " << message << endl;
+			//cout << "message is now: " << message << endl;
                        	if(bytes == -1){ //error cases
                      	          printf("READ ERROR IN LOGGER, RETURN OF -1\n");
                      	          fflush(stdout);
@@ -701,11 +736,15 @@ Display( )
 		if(end+2 != '\0'){
 			strcat(message2, end+2);
 		}
-                cout << "display recieved: " << message << endl;
+                //cout << "display recieved: " << message << endl;
+		if(track >= 60){
+			update_data(); //HERE updates the vector
+			track = 0;
+		}
                 fflush(stdout);
-//		if(strcmp(message, "**")==0){
-//			over = true;
-//		}
+		if(strcmp(message, "**")==0){
+			over = true;
+		}
 	}
 	if( DebugOn != 0 )
 	{
@@ -848,22 +887,32 @@ Display( )
 	glDisable (GL_TEXTURE_2D); //disable texturing
 
 	//draw path
-//	if(nrt){//in nrt mode
-//		glPushMatrix();
-//			if(center){ // if centered requested
-//				glTranslatef(-apx, 0., -apz);
-//			}
-//			glCallList(pathlists[pl_used]);
-//		glPopMatrix();	
-//	}
-//	else{// in normal mode 
+	if(nrt){//in nrt mode
+		glPushMatrix();
+			//glLineWidth(5.);
+			//glBegin(GL_LINE_STRIP);
+
+			glColor3f(1.,0.,0.);
+
+			//cout << "drawing" <<endl;
+			//for(int i=0; i<r_data.size(); i++){
+				//cout << "point: " << r_data[i].x << ", " << r_data[i].y << ", " <<r_data[i].z << endl;
+			//	glVertex3f(r_data[i].x, r_data[i].y, r_data[i].z);
+			//}
+			//cout << "done" <<endl;
+
+			glCallList( PathList );
+
+		glPopMatrix();
+	}
+	else{// in normal mode 
 		glPushMatrix();
 			if(center){ // if centered requested
 				glTranslatef(-apx, 0., -apz);
 			}
 			glCallList( PathList );
 		glPopMatrix();
-//	}
+	}
 	if(!nrt){
 		if(center){ // if centered requested
 			DoRasterString( 0., apy+1.0, 0., apogeebuff );
@@ -2055,4 +2104,31 @@ void* nrt_listen(void* input){
 //		pthread_mutex_unlock(&list_lock);
 //		cout << "thread unlocked and starting over" << endl;
 	}
+}
+
+void update_data(){
+	strcpy(messagecpy, message);
+	token = strtok(messagecpy, ":");
+	token = strtok(NULL, ":");
+	token = strtok(NULL, "\"");
+	temprd.z = atof(token);
+	token = strtok(NULL, ":");
+	token = strtok(NULL, "\"");
+	temprd.x = atof(token);
+	token = strtok(NULL, ":");
+	token = strtok(NULL, "\"");
+	temprd.y = atof(token);
+	temprd.x = ((slon - temprd.x) * (cos(slat*(M_PI/180.0))*69.172));
+	temprd.y = temprd.y / 5280.0;
+	temprd.z = ((slat - temprd.z)*69.0);
+	r_data.push_back(temprd);
+	PathList = glGenLists(1);
+	glNewList(PathList, GL_COMPILE);
+		glLineWidth(5.);
+		glBegin(GL_LINE_STRIP);
+		for(int i=0; i<r_data.size(); i++){
+			glVertex3f(r_data[i].x, r_data[i].y, r_data[i].z);
+		}
+		glEnd();
+	glEndList();
 }
