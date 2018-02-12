@@ -90,7 +90,7 @@ vector<struct fpoint>  make_trace_list(char* filename){
 			inited = 1;
 		}
 		// delta miles = ((ending longitude - starting longitude) * (cos(starting latitude * (pi/180)) * 69.172))
-		temp.x=((slon - atof(numbuff)) * (cos(slat * (M_PI/180.0)) * 69.172)); //HERE
+		temp.x=(-(slon - atof(numbuff)) * (cos(slat * (M_PI/180.0)) * 69.172)); //HERE
 //		cout << "slon: " << slon << " lon: " << atof(numbuff) << " slon - lon: " << slon - atof(numbuff) << endl;
 //		cout << "slat: " << slat << " slat*(pi/180): " << slat * (M_PI/180.0) << endl;
 //		cout << "cos(slat*(pi/180)): " << cos(slat*(M_PI/180.0)) << " cos() * 69.172: " << cos(slat*(M_PI/180.0))*69.172 << endl;
