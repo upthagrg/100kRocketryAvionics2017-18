@@ -1,0 +1,213 @@
+\documentclass[onecolumn, draftclsnofoot,10pt, compsoc]{IEEEtran}
+\usepackage{graphicx}
+\usepackage{subcaption}
+\usepackage{url}
+\usepackage{setspace}
+%\usepackage{hyperref}
+\usepackage{array}
+
+\usepackage{geometry}
+\geometry{textheight=9.5in, textwidth=7in}
+
+% 1. Fill in these details
+\def \CapstoneTeamName{		100k Challenge CS}
+\def \CapstoneTeamNumber{		42}
+\def \GroupMemberOne{			Michael Elliott}
+\def \GroupMemberTwo{		 	Sam Hudson}
+\def \GroupMemberThree{			Glenn Upthagrove}
+\def \CapstoneProjectName{		100K Spaceport America Demonstration Rocket Project }
+\def \CapstoneSponsorCompany{	School of MIME}
+\def \CapstoneSponsorPerson{		Nancy Squires}
+
+% 2. Uncomment the appropriate line below so that the document type works
+\def \DocType{		%Technology Review
+				%Requirements Document
+				%Technology Review
+				%Design Document
+				Progress Report
+				}
+			
+\newcommand{\NameSigPair}[1]{\par
+\makebox[2.75in][r]{#1} \hfil 	\makebox[3.25in]{\makebox[2.25in]{\hrulefill} \hfill		\makebox[.75in]{\hrulefill}}
+\par\vspace{-12pt} \textit{\tiny\noindent
+\makebox[2.75in]{} \hfil		\makebox[3.25in]{\makebox[2.25in][r]{Signature} \hfill	\makebox[.75in][r]{Date}}}}
+% 3. If the document is not to be signed, uncomment the RENEWcommand below
+\renewcommand{\NameSigPair}[1]{#1}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\begin{document}
+\begin{titlepage}
+    \pagenumbering{gobble}
+    \begin{singlespace}
+    	\includegraphics[height=4cm]{coe_v_spot1} %HERE
+        \hfill 
+        % 4. If you have a logo, use this includegraphics command to put it on the coversheet.
+        %\includegraphics[height=4cm]{CompanyLogo}   
+        \par\vspace{.2in}
+        \centering
+        \scshape{
+            \huge CS Capstone \DocType \par
+            {\large\today}\par
+            \vspace{.5in}
+            \textbf{\Huge\CapstoneProjectName}\par
+            \vfill
+            {\large Prepared for}\par
+            \Huge \CapstoneSponsorCompany\par
+            \vspace{5pt}
+            {\Large\NameSigPair{\CapstoneSponsorPerson}\par}
+            {\large Prepared by }\par
+            Group\CapstoneTeamNumber\par
+            % 5. comment out the line below this one if you do not wish to name your team
+            %\CapstoneTeamName\par 
+            \vspace{5pt}
+            {\Large
+                \NameSigPair{\GroupMemberOne}\par
+                \NameSigPair{\GroupMemberTwo}\par
+                \NameSigPair{\GroupMemberThree}\par
+            }
+            \vspace{20pt}
+        }
+        \begin{abstract}
+        % 6. Fill in your abstract    
+	The software developed for the 100k Spaceport America challenge shall collect telemetry data, filter noise, transmit to a ground station, create a visualization, and log the data. The data shall travel down a pipeline starting on the rocket and ending at the visualization on the display. The following document details the progress made on this progress for the first half of Winter term 2018.  
+        \end{abstract}     
+    \end{singlespace}
+\end{titlepage}
+\newpage
+\pagenumbering{arabic}
+\tableofcontents
+% 7. uncomment this (if applicable). Consider adding a page break.
+%\listoffigures
+%\listoftables
+\clearpage
+
+% 8. now you write!
+\section {Purpose and Goals}
+The Spaceport America 100k rocketry challenge is a contest in which the Oregon State University chapter of the American Institute of Aeronautics and Astronautics (AIAA) is competing. The rocket is being designed and created by an interdisciplinary team of engineering seniors, from both the School of Mechanical Industrial and Manufacturing Engineering and the School of Electrical Engineering and Computer Science. The 18 person team contains engineering students from various disciplines, combining their skills to create, launch and track a high altitude rocket. The goal is for the rocket to exceed 100,000 feet in altitude. The specific goal of the computer science sub-team is to develop software to effectively track the rocket, successfully recover it, and to visualize its flight path. \par
+\section {Current Progress} 
+The first half of this term has been spent on development of the teletry software. Each team member has parts of the project they are each responsible for. Each team member also can help other with their parts when neede. Thus far we have completed or are nearing completion of several components. data conversion into JSON strings has been completed, as well as logging these packets to a file. Pushing data through and API into a database has been completed. This data can also now be read asychronously from the data base by the web application. A 3D trace of the flight path is nearly completed, for both post flight and near real time modes. Other parts are still works in progress. The web application has several components made but has yet to have them all put together and polished. The trace has a few bugs yet to be repaired. The Kalman filter and interpolation are not yet complete and the retrieval of data from hardware has to be implemented. `\par
+\section {Retrospective}
+\begin {center}
+ \begin {tabular} { | p{5cm} | p{5cm} | p{5cm} | }
+ \hline
+ Positives & Deltas & Actions \\
+ \hline
+ Some rapid progress has been made on several fronts. The winter break also gave us a chance to develope some of the important tools needed for this project. GitHub makes development very celan and elegant, and the issues section makes project management much better. & Many pieces till need work and all of them need more extensive testing to ensure reliability. Some parts have also had very infrequant updates or no official pushes at all. We have yet to feel any part was sufficient to be called a milestone and thus have no tags. & More updates will easily be accomplished by enforcing regular pushes in the coming half of a term. We will begin tagging as soon as the 3D trace and web app have a first version finished as this will be considered the minimum for trakiing. We will be writing many more tests and combining them with Travis CI to ensure testing is run on every commit.\\
+ \hline
+ \end {tabular}
+\end {center} 
+\section {Detailed Development}
+\subsection {Week 1}
+\subsubsection{Michael Elliott}
+\begin {itemize}
+\item \textbf{Plans: }
+ This week I plan to get a team together to work on the 100K Spaceport America Demonstration Rocket Project. This is the project that interests me the most and I have already talked to the members of the other teams. The next steps include finding 2 more members for the CS team and talking to Nancy Squires, the project's client, about requesting us as her team.
+\item \textbf{Problems: }
+  The biggest problem I ran in to during this first week was finding other talented individuals who wanted to work on the project. Many showed interest but did not want to make a commitment.
+\item \textbf{Progress: }
+  I have found 2 other members for our team and have been in contact with Dr. Squires. Hopefully we will be able to solidify our positions on the team. We also attended the first all team meeting this week since work on the project needs to be started immediately due to the reduced timeline even though we have not been confirmed for the project yet. We used this meeting to introduce ourselves to each other and familiarize ourselves with the project. We also held a second team meeting with all of the avionics teams to start very high level planning.
+\end {itemize}
+\subsubsection{Sam Hudson}
+\begin {itemize}
+\item \textbf{Summary: }This week I met with team to touch base on progress over the winter break. Discussed a few different a strategies to approach the development and worked with ECE team to understand exactly what was required of us to support them.
+\end {itemize}
+\subsubsection{Glenn Upthagrove}
+\begin {itemize}
+ \item \textbf{Plans: }Get back in touch with the groups and form a plan  
+ \item \textbf{Problems: }Catching up and figuring out what we have all been done takes time 
+ \item \textbf{Progress: }I attended my meetings and we have a plan set up 
+ \item \textbf{Summary: }This week I focused on getting the rest of the term in motion, by speaking with the others on my sub-team as well as the other sub-teams. My team has made some noticeable progress over the break and we now know what we need to do in the coming weeks.  
+\end {itemize}
+\subsection {Week 2}
+\subsubsection{Michael Elliott}
+\begin {itemize}
+\item \textbf{Plans: }
+  Go to the AIAA meeting Wednesday at 6pm in LPSC 125 as well as the OROC mentors meeting Saturday at 11am in Rogers. Start defining the problems we will need to solve and identifying potential solutions.
+\item \textbf{Problems: }
+  We didn't have any serious issues this week.
+\item \textbf{Progress: }
+  I met with Keith Packard from OROC, the creator of the Telemega. We discussed the capabilities of the Telemega as well as some of the problems we might encounter. We also discussed some of the problems encountered by last year's team. I talked to him about Kalman filters and he explained how they work. Additionally, I did my own research into the capabilities of the Telemega and Kalman filters. I also went to the AIAA meeting with Glenn to talk about our team to other students. We met with Dr. Squires in person as well after the meeting.
+\end {itemize}
+\subsubsection{Sam Hudson}
+\begin {itemize}
+\item \textbf{Summary: }This week I configured a Docker environment which included a database container, API container and Web Application container. I created a docker-compose file which built images with each containers requirements. For example the API container has Flask installed with the requests library and the database container has mongo db installed.
+\end {itemize}
+\subsubsection{Glenn Upthagrove}
+\begin {itemize}
+ \item \textbf{Plans: }Get multiple parts integrated and start making others, specifically get JSON data into the database 
+ \item \textbf{Problems: }Figuring out exact integration has been a challenge since some of these modules were developed during the break, and thus were at the time unaware of each other. 
+ \item \textbf{Progress: }Sam and I have made a solid plan for integrating most parts of the pipeline together and we wrote a Python module to connect my part with his.
+ \item \textbf{Summary: }This week I focused on getting My part in the pipeline to connect to Sam's. Which at this point seems to be working. I also have made some changes to the trace and setup portions. We also have made a more solid plan for how all the other parts will link together.  
+\end {itemize}
+\subsection {Week 3}
+\subsubsection{Michael Elliott}
+\begin {itemize}
+\item \textbf{Plans: }
+  We plan to do more research into the problems and solutions discussed with Keith and work on the Problem Statement. Do research on transmission protocols and the types and causes of sensor noise.
+\item \textbf{Problems: }
+  While we didn't have much trouble identifying problems, we did have a bit of trouble identifying solutions to those problems and even more so we had trouble coming up with ways to gauge our success.
+\item \textbf{Progress: }
+  We worked on identifiying the problems we will need to solve and writing our Problem Statement assignment. I did research into possible solutions to our problems. We created our goals for the term and made sure they were attainable.
+\end {itemize}
+\subsubsection{Sam Hudson}
+\begin {itemize}
+\item \textbf{Summary: }This week was a productive week I managed to implement the API endpoints for posting and getting data from mongodb. I also managed create a basic web application which made requests to the database via the API. This implementation was purposefully designed to be technology agnostic.
+\end {itemize}
+\subsubsection{Glenn Upthagrove}
+\begin {itemize}
+ \item \textbf{Plans: }Get more done on the trace, begin tracking data retrieval 
+ \item \textbf{Problems: }Figuring out exact how data is going to be incoming is my largest hurdle at this point. This is amplified by rapid changes in plan for the hardware its self. 
+ \item \textbf{Progress: }Spoken with Michael about integration with his parts. I am hoping to get a meeting set up with the ECE team to start this work, they are aware I want their help.  
+ \item \textbf{Summary: }This week I focused on the trace and data handling. The trace has progressed faster than I expected and I hope I will keep this momentum. I still have three crucial points to work on with regards to the trace. Data handling is the next big chunk I need to work on. Progress on this has been minimal, but I hope to set up a meeting with the ECE team and make more substantial progress soon. 
+\end {itemize}
+\subsection {Week 4}
+\subsubsection{Michael Elliott}
+\begin {itemize}
+\item \textbf{Plans: }
+  This week we need to figure out our budget, coordinate our goals with the goals of the ECE and ME avionics teams, and write a mission statement for the project. We also need to begin solidifying high level designs for how our programs are going to fit together. In addition we need to finish our final draft of our problem statement.
+\item \textbf{Problems: }
+  We had a small hiccup combining our individual problem statements into one cohesive group one. Git helped us out.
+\item \textbf{Progress: }
+  I created and submitted our budget proposal. We met with the ECE team to discuss our possible solutions we came up with for the Problem Statement. We also finished the final draft of the Problem Statement and submitted it.
+\end {itemize}
+\subsubsection{Sam Hudson}
+\begin {itemize}
+\item \textbf{Summary: }This week I helped Glenn implement a data handler to interface with the API and handles data generated from the data generator. Once this was developed we were able to simulate some telemetry transactions and see the update in real time on the web application. I implemented an ASYNC function in javascript that polled the database via the API to ensure new information was updated to the web application once per second.
+\end {itemize}
+\subsubsection{Glenn Upthagrove}
+\begin {itemize}
+ \item \textbf{Plans: }Get more done on the trace, do firmware with ECE sub-team.
+ \item \textbf{Problems: }Putting off the data  retrieval to help ECE do firmware on the rocket side. Have to learn SPI and work on their board in a very short window of time. 
+ \item \textbf{Progress: }Planning work this weekend. A second repo is set up for firmware. I started NRT mode on the trace. 
+ \item \textbf{Summary: }This week I focused on the trace. I made the preliminary version of the NRT mode. I have an issue with OpenGL and threading, but I am certain I can fix it, if not I have a backup single threaded version. I am guaranteeing a workable version by Monday. This weekend we are also writing the firmware for sensor data retrieval on the rocket's board made by the ECE team.  
+\end {itemize}
+\subsection {Week 5}
+\subsubsection{Michael Elliott}
+\begin {itemize}
+\item \textbf{Plans: }
+  This week we will set up meeting with our TA and start working on our requirements.
+\item \textbf{Problems: }
+  I was sick so I didn't meet all my personal goals for the week. Fortunately this will not impact us negatively in the long run.
+\item \textbf{Progress: }
+  I made contact at JPL who worked on the software for the Cassini project as well as others. He had some really good insights into how to go about solving certain problems. We also met with our TA and set up a weekly meeting time.
+\item \textbf{Summary: }
+\end {itemize}
+\subsubsection{Sam Hudson}
+\begin {itemize}
+\item \textbf{Summary: }This week I worked on firmware with ECE. Glenn and I talked worked through the logic for interfacing with the sensors. I wrote the SPI read and write functions in C for passing data. We are just waiting ECE to flash the board so we can install the firmware to actually test this. This week I also managed to create some D3 visualizations. Have not integrated this get with the ASYNC function.
+\end {itemize}
+\subsubsection{Glenn Upthagrove}
+\begin {itemize}
+ \item \textbf{Plans: }Get more done on the trace, do firmware with ECE sub-team. Get more done on the web app.
+ \item \textbf{Problems: }Progress has slowed with busy schedules around midterms, There are also several documents due soon. 
+ \item \textbf{Progress: }Sam has completed significant work on the web app. I have mode progress on the trace. We have a plan for getting the documents done as well. 
+ \item \textbf{Summary: }This week I did not have a focus. I have been very busy and I am more working in bursts on whatever needs to be polished. Luckily, most of my pieces are done or nearly done, and now I am able to aid with work on other parts that still need polishing or completion. 
+\end {itemize}
+
+
+
+%\bibliographystyle{IEEEtran}
+%\bibliography{bibliography}
+
+
+\end{document}
