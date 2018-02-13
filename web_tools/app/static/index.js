@@ -33,13 +33,16 @@ const label = svg.append('text').classed('label', true)
 function setPosition(value) {
     const newVal = Math.round(value)
     label.text(newVal)
-    needle.transition().duration(1).ease(d3.easeInCubic)
-        .attr('transform', `rotate(${angleScale(newVal)})`)
+    //label.text(value)
+    needle.transition().duration(1).ease(d3.easePoly)
+        .attr('transform', `rotate(${angleScale(value)})`)
 }
 
 
 function deg2rad(deg) { return deg * Math.PI / 180 }
-var i=0
+var i=0.0
 setInterval(() => {
-    setPosition(i++);
-}, 200)
+    if(i<100.0){
+      setPosition(i+=0.1);
+    }
+}, 10.0)
