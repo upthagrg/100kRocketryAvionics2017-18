@@ -1,5 +1,6 @@
 app:
   build: ./app
+  container_name: "app"
   command: python -u app.py
   ports:
     - "8080:8080"
@@ -8,6 +9,7 @@ app:
   tty: true
 api:
   build: ./api
+  container_name: "api"
   command: python -u app.py
   ports:
     - "5000:5000"
@@ -17,4 +19,6 @@ api:
     - db
   tty: true
 db:
-   image: mongo:3.0.2
+  image: mongo:3.0.2
+  command: mongod --smallfiles
+
