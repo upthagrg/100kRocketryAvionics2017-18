@@ -92,7 +92,7 @@ The first half of this term has been spent on development of the teletry softwar
  \hline
  Positives & Deltas & Actions \\
  \hline
- Some rapid progress has been made on several fronts. The winter break also gave us a chance to develope some of the important tools needed for this project. GitHub makes development very celan and elegant, and the issues section makes project management much better. & Many pieces till need work and all of them need more extensive testing to ensure reliability. Some parts have also had very infrequant updates or no official pushes at all. We have yet to feel any part was sufficient to be called a milestone and thus have no tags. & More updates will easily be accomplished by enforcing regualr pushes in the coming half of a term. We will begin tagging as soon as the 3D trace and web app have a first version finished as this will be considered the minimum for trakiing. We will be writing many more tests and combining them with Travis CI to ensure testing is run on every commit.\\
+ Some rapid progress has been made on several fronts. The winter break also gave us a chance to develope some of the important tools needed for this project. GitHub makes development very celan and elegant, and the issues section makes project management much better. & Many pieces till need work and all of them need more extensive testing to ensure reliability. Some parts have also had very infrequant updates or no official pushes at all. We have yet to feel any part was sufficient to be called a milestone and thus have no tags. & More updates will easily be accomplished by enforcing regular pushes in the coming half of a term. We will begin tagging as soon as the 3D trace and web app have a first version finished as this will be considered the minimum for trakiing. We will be writing many more tests and combining them with Travis CI to ensure testing is run on every commit.\\
  \hline
  \end {tabular}
 \end {center} 
@@ -109,17 +109,14 @@ The first half of this term has been spent on development of the teletry softwar
 \end {itemize}
 \subsubsection{Sam Hudson}
 \begin {itemize}
-\item \textbf{Plans: }Discover what is required for CS 461.
-\item \textbf{Problems: }Some issues establishing best meeting times for group.
-\item \textbf{Progress: }We determined that Monday was the best time to meet with all groups related to the project and Wednesday was the best time to meet for our subteam meeting.
-\item \textbf{Summary: }This week I met with the 100k rocket team in Rogers. We discussed project management strategies and I suggested to use a project management tool called Jira. I configured Jira for the team to try. We discussed a few resources to consider for the project including a book discussing aspects of test driven development for embedded C. Towards the end of the meeting I submitted my project preferences. 
+\item \textbf{Summary: }This week I met with team to touch base on progress over the winter break. Discussed a few different a strategies to approach the development and worked with ECE team to understand exactly what was required of us to support them.
 \end {itemize}
 \subsubsection{Glenn Upthagrove}
 \begin {itemize}
- \item \textbf{Plans: }Find projects that interest me. 
- \item \textbf{Problems: }We are having trouble getting in touch with the professor in charge of the AIAA 100k challenge team. 
- \item \textbf{Progress: }I have discovered an opportunity to be on the 100k rocket challenge avionics team and I have been to the first two meetings. It looks very interesting and challenging.  
- \item \textbf{Summary: }This week I started out uncertain as to which projects I would be interested in. I searched through them for a day or two and then was presented with the chance to visit the first meeting of the AIAA 100k challenge. I have been taken onto the team for almost certain. I am excited for this challenge and I look forward to it as we have already started to collaborate, brainstorm and review last years work to develop a plan for improvements and revisions.  
+ \item \textbf{Plans: }Get back in touch with the groups and form a plan  
+ \item \textbf{Problems: }Catching up and figuring out what we have all been done takes time 
+ \item \textbf{Progress: }I attended my meetings and we have a plan set up 
+ \item \textbf{Summary: }This week I focused on getting the rest of the term in motion, by speaking with the others on my sub-team as well as the other sub-teams. My team has made some noticeable progress over the break and we now know what we need to do in the coming weeks.  
 \end {itemize}
 \subsection {Week 2}
 \subsubsection{Michael Elliott}
@@ -133,17 +130,14 @@ The first half of this term has been spent on development of the teletry softwar
 \end {itemize}
 \subsubsection{Sam Hudson}
 \begin {itemize}
-\item \textbf{Plans: }Understand what is involved with the 100k Rocketry Challenge.
-\item \textbf{Problems: }Getting to terms with what is expected from a computer science perspective. 
-\item \textbf{Progress: }Received an overview of the requirement specification from the professor leading the project and other sub teams involved.
-\item \textbf{Summary: }This week went over the structure of the course and determined what was the best method for approaching assignments. Very useful feedback was given.
+\item \textbf{Summary: }This week I configured a Docker environment which included a database container, API container and Web Application container. I created a docker-compose file which built images with each containers requirements. For example the API container has Flask installed with the requests library and the database container has mongo db installed.
 \end {itemize}
 \subsubsection{Glenn Upthagrove}
 \begin {itemize}
- \item \textbf{Plans: }Go to AIAA meeting and introduce ourselves to client
- \item \textbf{Problems: }We are having trouble scheduling a time we can all meet.
- \item \textbf{Progress: }We have met the client in person and sent an introduction email. We still need to work on scheduling for all three of us. 
- \item \textbf{Summary: }This week we focused on contacting the client and the other capstones groups we needed to contact due to this being an interdisciplinary project. The client offered us the option to adjust requirements if necessary later in the year, to accommodate the fact that the other teams have deliverables in the winter. We attended an AIAA meeting and presented our team's mission to other undergraduates in the hopes that they may get involved. 
+ \item \textbf{Plans: }Get multiple parts integrated and start making others, specifically get JSON data into the database 
+ \item \textbf{Problems: }Figuring out exact integration has been a challenge since some of these modules were developed during the break, and thus were at the time unaware of each other. 
+ \item \textbf{Progress: }Sam and I have made a solid plan for integrating most parts of the pipeline together and we wrote a Python module to connect my part with his.
+ \item \textbf{Summary: }This week I focused on getting My part in the pipeline to connect to Sam's. Which at this point seems to be working. I also have made some changes to the trace and setup portions. We also have made a more solid plan for how all the other parts will link together.  
 \end {itemize}
 \subsection {Week 3}
 \subsubsection{Michael Elliott}
@@ -157,17 +151,14 @@ The first half of this term has been spent on development of the teletry softwar
 \end {itemize}
 \subsubsection{Sam Hudson}
 \begin {itemize}
-\item \textbf{Plans: }Determine what’s required for the problem statement assignment.
-\item \textbf{Problems: }Effectively categorizing a list of goals for the team to work towards throughout the year.
-\item \textbf{Progress: }Discovered what contributions could be made and some proposed solutions.
-\item \textbf{Summary: }This week we gathered a list of all contributions to the project from an avionics perspective. We discussed with the ECE team how things might integrate.
+\item \textbf{Summary: }This week was a productive week I managed to implement the API endpoints for posting and getting data from mongodb. I also managed create a basic web application which made requests to the database via the API. This implementation was purposefully designed to be technology agnostic.
 \end {itemize}
 \subsubsection{Glenn Upthagrove}
 \begin {itemize}
- \item \textbf{Plans: }Get in contact with client to speak about requirements. Write problem statement rough draft. Order book. Set up GitHub
- \item \textbf{Problems: }We had some trouble with understanding what our performance metrics could and should be. 
- \item \textbf{Progress: }We have met the client in person and were given some ideas. I spoke with McGrath about this as well. I have written the rough draft of my problem statement. I have set up GitHub. 
- \item \textbf{Summary: }This week we focused on the problem statements. We have rough drafts for each of us and The GitHub is now live. We invited both professor McGrath and professor Winters as collaborators. There is still some polish to be done on my rough draft of the problem statement. The expectations of us are still very vague at this point but professor McGrath expects this and I am doing my best with my team to come up with reasonable promises, as well as some things we would like to do. 
+ \item \textbf{Plans: }Get more done on the trace, begin tracking data retrieval 
+ \item \textbf{Problems: }Figuring out exact how data is going to be incoming is my largest hurdle at this point. This is amplified by rapid changes in plan for the hardware its self. 
+ \item \textbf{Progress: }Spoken with Michael about integration with his parts. I am hoping to get a meeting set up with the ECE team to start this work, they are aware I want their help.  
+ \item \textbf{Summary: }This week I focused on the trace and data handling. The trace has progressed faster than I expected and I hope I will keep this momentum. I still have three crucial points to work on with regards to the trace. Data handling is the next big chunk I need to work on. Progress on this has been minimal, but I hope to set up a meeting with the ECE team and make more substantial progress soon. 
 \end {itemize}
 \subsection {Week 4}
 \subsubsection{Michael Elliott}
@@ -181,17 +172,14 @@ The first half of this term has been spent on development of the teletry softwar
 \end {itemize}
 \subsubsection{Sam Hudson}
 \begin {itemize}
-\item \textbf{Plans: }Re-determine what the best method is for tracking project.
-\item \textbf{Problems: }Had to reevaluate the best tool to use for tracking because of budget constraints.
-\item \textbf{Progress: }I looked into different tools to track issues throughout the project going forward. I initially had considered using Jira as a tool for project management. Although this tool wasn't as familiar to everyone on the team so we made an active decision to use Github issue tracking. 
-\item \textbf{Summary: }This week I did some research surrounding unidirectional protocols to get a better idea of what some limitations could be. Some materials on the rocket can affect the capability receiving signals. 
+\item \textbf{Summary: }This week I helped Glenn implement a data handler to interface with the API and handles data generated from the data generator. Once this was developed we were able to simulate some telemetry transactions and see the update in real time on the web application. I implemented an ASYNC function in javascript that polled the database via the API to ensure new information was updated to the web application once per second.
 \end {itemize}
 \subsubsection{Glenn Upthagrove}
 \begin {itemize}
- \item \textbf{Plans: }Finish the problem statement. We need to make a forecast for expenses. We also need an outreach statement. 
- \item \textbf{Problems: }We are not certain how to make this a 10,000 foot view of the problem. We are getting a bit too technical in our description. 
- \item \textbf{Progress: }We have received feedback and have edited some parts of the description. We decided we need no money. We also wrote an outreach statement. 
- \item \textbf{Summary: }This week we focused on writing the problem statement and the outreach statement for AIAA. I have also personally looked more into Kalman filters and I have found some books that I may want to buy or check out at the library.  
+ \item \textbf{Plans: }Get more done on the trace, do firmware with ECE sub-team.
+ \item \textbf{Problems: }Putting off the data  retrieval to help ECE do firmware on the rocket side. Have to learn SPI and work on their board in a very short window of time. 
+ \item \textbf{Progress: }Planning work this weekend. A second repo is set up for firmware. I started NRT mode on the trace. 
+ \item \textbf{Summary: }This week I focused on the trace. I made the preliminary version of the NRT mode. I have an issue with OpenGL and threading, but I am certain I can fix it, if not I have a backup single threaded version. I am guaranteeing a workable version by Monday. This weekend we are also writing the firmware for sensor data retrieval on the rocket's board made by the ECE team.  
 \end {itemize}
 \subsection {Week 5}
 \subsubsection{Michael Elliott}
@@ -206,138 +194,16 @@ The first half of this term has been spent on development of the teletry softwar
 \end {itemize}
 \subsubsection{Sam Hudson}
 \begin {itemize}
-\item \textbf{Plans: }Meet with T/A to establish what level of help we may need.
-\item \textbf{Problems: }Determining a time that best suits all parties for meeting with T/A.
-\item \textbf{Progress: }Determined the best time to meet during the week remotely on Tuesdays at 3:30pm.
-\item \textbf{Summary: }This week, we established the best meeting time, worked on Github naming conventions and gave some good feedback on writing posts.
+\item \textbf{Summary: }This week I worked on firmware with ECE. Glenn and I talked worked through the logic for interfacing with the sensors. I wrote the SPI read and write functions in C for passing data. We are just waiting ECE to flash the board so we can install the firmware to actually test this. This week I also managed to create some D3 visualizations. Have not integrated this get with the ASYNC function.
 \end {itemize}
 \subsubsection{Glenn Upthagrove}
 \begin {itemize}
- \item \textbf{Plans: }Make a rough draft of the requirements document.
- \item \textbf{Problems: }Two of our team members are sick, so progress on all fronts has been slowed.
- \item \textbf{Progress: }The rough draft of the requirements document is done and an appointment is set up with the client for Monday to double check our understanding. 
- \item \textbf{Summary: }This week we focused on the requirements document. We also met with our TA for the first time. We have set up an appointment with Dr. Squires to make sure that we understand her expectations before the final draft is done.  
+ \item \textbf{Plans: }Get more done on the trace, do firmware with ECE sub-team. Get more done on the web app.
+ \item \textbf{Problems: }Progress has slowed with busy schedules around midterms, There are also several documents due soon. 
+ \item \textbf{Progress: }Sam has completed significant work on the web app. I have mode progress on the trace. We have a plan for getting the documents done as well. 
+ \item \textbf{Summary: }This week I did not have a focus. I have been very busy and I am more working in bursts on whatever needs to be polished. Luckily, most of my pieces are done or nearly done, and now I am able to aid with work on other parts that still need polishing or completion. 
 \end {itemize}
-\subsection {Week 6}
-\subsubsection{Michael Elliott}
-\begin {itemize}
-\item \textbf{Plans: }
-  This week we need to finalize some decisions in order to start making more progress with our project. We also need to finish and submit our requirements document.
-\item \textbf{Problems: }
-  We had some trouble reaching out to the client about our requirements document.
-\item \textbf{Progress: }
-  We finished our requirements document and started making design decisions and researching the technical implications of various options. We also met with the ECE team to coordinate their hardware with our solution proposals.
-\end {itemize}
-\subsubsection{Sam Hudson}
-\begin {itemize}
-\item \textbf{Plans: }To discuss package sizes and package composition.
-\item \textbf{Problems: }Understand exactly what’s required for the requirements document.
-\item \textbf{Progress: }We meet 3 times this week to discuss technologies that might be required to provide our solution.
-\item \textbf{Summary: }This week I researched visualization technologies and also I worked on the requirements document and fixed some of the formatting.
-\end {itemize}
-\subsubsection{Glenn Upthagrove}
-\begin {itemize}
- \item \textbf{Plans: }Meet with client and make final draft. 
- \item \textbf{Problems: }We are having trouble getting in contact with the client.
- \item \textbf{Progress: }We have a document and we have emailed the professors and the client, but we may or may not need to make changes after the due date if she disagrees with the current draft.
- \item \textbf{Summary: }This week we focused on the requirements document. We are trying to get in contact with our client, but being as busy as she is it is understandable that she has not gotten in contact with us. We are going to keep trying to contact the client and we will submit what we have. Hopefully, seeing as I have talked with professor Winters and emailed both her and professor McGrath, if changes are needed we can easily make them.  
-\end {itemize}
-\subsection {Week 7}
-\subsubsection{Michael Elliott}
-\begin {itemize}
-\item \textbf{Plans: }
-  This week we will compare and contrast different options for potential design decisions. We also plan to finalize these decisions and discuss the decisions with the ECE team.
-\item \textbf{Problems: }
-  I've been having some issues with finding convincing alternatives for technologies that are already clearly the best choice for the application. My conversation with my contact at JPL certainly helped with this.
-\item \textbf{Progress: }
-  I began preliminary packet design for the transmission protocol. I also explored alternative programming languages, static analyzers, protocol models, and raw data interpretation methods.
-\end {itemize}
-\subsubsection{Sam Hudson}
-\begin {itemize}
-\item \textbf{Plans: }Look into different web technologies for frontend and backend web application development.
-\item \textbf{Problems: }There was some discussion around whether there would be two onboard systems for monitoring telemetry at different stages of the launch.
-\item \textbf{Progress: } The resolution was to have two onboard systems for telemetry acquisition. I did some research around these different web technologies such as Flask, MongoDB and MaterializeCSS.
-\item \textbf{Summary: }This week, we had a lot of discussion around where the onboard systems will be placed and how materials and placement would effect telemetry instruments. In addition found some great resources for front-end development.
-\end {itemize}
-\subsubsection{Glenn Upthagrove}
-\begin {itemize}
- \item \textbf{Plans: }Figure out our individual modules for research and start technology review.
- \item \textbf{Problems: }I am having trouble finding an appropriate third module for me. 
- \item \textbf{Progress: }We have made a list of modules that we can each research, as well as technologies we can start looking into. 
- \item \textbf{Summary: }This week we focused on the technology review. We have met together and figured out modules for each of us to research. We also have some ideas for the technologies to look into. We also spoke with the electrical team about packet length. 
-\end {itemize}
-\subsection {Week 8}
-\subsubsection{Michael Elliott}
-\begin {itemize}
-\item \textbf{Plans: }
-  This week we will be working on our Tech Reviews and finalizing all of our design decisions. We will be working closely with the ECE subteam in communicating our design decisions and our needs as well as making sure our decisions don't get in the way of their needs.
-\item \textbf{Problems: }
-  I forgot to bring my Tech Review draft to class on the day we did peer reviews.
-\item \textbf{Progress: }
-  We finalized the major design decisions that we needed to make in order to begin making more detailed plans of execution. We prepared ourselves for the coming short week.
-\end {itemize}
-\subsubsection{Sam Hudson}
-\begin {itemize}
-\item \textbf{Plans: }To establish responsibility of contribution for each team member.
-\item \textbf{Problems: }I was sick towards the end of the week which limited my productivity. 
-\item \textbf{Progress: }During the beginning of the week I was able to convey some research I conducted to the team.
-\item \textbf{Summary: }This week, I presented to the rocketry group discussing different types of monitoring tools and discussed the web backend that I will standup for the team. We discussed regression and different statistical techniques to create estimates of trajectory etc.
-\end {itemize}
-\subsubsection{Glenn Upthagrove}
-\begin {itemize}
- \item \textbf{Plans: }Discuss the tech review more. Get more solid ideas on the ground station setup. 
- \item \textbf{Problems: }I am personally trying to find a time to speak with the client, but it is proving difficult. 
- \item \textbf{Progress: }I have found office hours posted and I will also try to email the client to try and set up a meeting.
- \item \textbf{Summary: }This week I was considering more deeply how the ground station should be set up and how my code will run on it. I also have confirmed that Dr. Yavuz will let me discuss some networking topics with him. Dr. Bailey has confirmed I am allowed to use any code he provided during CS450 in my code for the 3D trace.  
-\end {itemize}
-\subsection {Week 9}
-\subsubsection{Michael Elliott}
-\begin {itemize}
-\item \textbf{Plans: }
-  There is not much to do this week due to Thanksgiving break besides the work for the class. We still need to meet with the other subteams and our TA to coordinate.
-\item \textbf{Problems: }
-  Thanksgiving break is making it hard to coordinate schedules and get work done.
-\item \textbf{Progress: }
-  I completed my Tech Review and worked on my Design Document. We met with the other subteams and our TA to talk about our progress.
-\end {itemize}
-\subsubsection{Sam Hudson}
-\begin {itemize}
-\item \textbf{Plans: }More research around frameworks and data transactions. 
-\item \textbf{Problems: }A lot of thought into determining the best frameworks to use.
-\item \textbf{Progress: }The tech review helped narrow down which would be the best options to use.
-\item \textbf{Summary: }This week, we had a discussion around different frameworks that would be used in the construction of the web application to organize the telemetry data.  The frameworks were broken down into three different sections. Chart/Graphic generation frameworks, front-end frameworks and server-side frameworks. This was used as a basis for the tech review document. 
-\end {itemize}
-\subsubsection{Glenn Upthagrove}
-\begin {itemize}
- \item \textbf{Plans: }Finish the technology review. 
- \item \textbf{Problems: }I am personally not certain that much work shall be done this week as this thursday thanksgiving. I must finish the technology review this week.
- \item \textbf{Progress: }I have finished the technology review and set a number of upcoming goals for the actual programming coming up. 
- \item \textbf{Summary: }This week I finished the technoloy review. I am not doing much else this week due to the holiday, and also personal medical concerns. I will be working over the break, but also spending time with doctors, so progress may be minimal. 
-\end {itemize}
-\subsection {Week 10}
-\subsubsection{Michael Elliott}
-\begin {itemize}
-\item \textbf{Plans: }
-  For this week we need to finish the Design Document and meet with the ECE subteam to coordinate our winter break schedules and create preliminary deadlines.
-\item \textbf{Problems: }
-  Unfortunately I was unable to attend the all team meeting this week. I was still able to brief the other CS team members on what needed to be discussed as well as obtain notes from the meeting.
-\item \textbf{Progress: }
-  Worked on design document and met with TA and other subteams.
-\end {itemize}
-\subsubsection{Sam Hudson}
-\begin {itemize}
-\item \textbf{Plans: }Design document and make a final decision surrounding technologies.
-\item \textbf{Problems: }Finding the best time to meet as we all had a busy week with final assignments.
-\item \textbf{Progress: }Together we finalized the design document.
-\item \textbf{Summary: }This week we made a final decision on the frameworks we are going to use. We decided on D3.JS to handle graphics, materializeCSS for use on the frontend and flash with MongoDB as our server-side framework. There was an Impromptu style Q\&A where I went to learn more about how the design document should be structured. 
-\end {itemize}
-\subsubsection{Glenn Upthagrove}
-\begin {itemize}
- \item \textbf{Plans: }Make the final draft of the design document. 
- \item \textbf{Problems: }I was under the impression the rough draft was due this Friday, but it was actually last Friday, and thus I am concerned. Running OpenGL code on the RaspberryPi I have borrowed is proving more difficult than I had imagined.
- \item \textbf{Progress: }I know Dr. Winters has office hours on Wednesday, and I can speak with her then.
- \item \textbf{Summary: }This week I am focusing on the design document. I also have learned how to set up continuous integration testing on our GitHub.
-\end {itemize}
+
 
 
 %\bibliographystyle{IEEEtran}

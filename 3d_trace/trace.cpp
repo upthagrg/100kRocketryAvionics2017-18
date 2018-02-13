@@ -573,7 +573,7 @@ main( int argc, char *argv[ ] )
 		temprd.y = atof(token);
 		slat = temprd.z;
 		slon = temprd.x;
-		temprd.x = ((slon - temprd.x) * (cos(slat*(M_PI/180.0))*69.172));
+		temprd.x = (-(slon - temprd.x) * (cos(slat*(M_PI/180.0))*69.172));
 		temprd.y = temprd.y / 5280.0;
 		temprd.z = ((slat - temprd.z)*69.0);
 		r_data.push_back(temprd);
@@ -736,15 +736,17 @@ Display( )
 		if(end+2 != '\0'){
 			strcat(message2, end+2);
 		}
+		if(strcmp(message, "**")==0){
+			over = true;
+			cout << "over signal recieved" << endl;
+		}
                 //cout << "display recieved: " << message << endl;
 		if(track >= 60){
+                	cout << "display recieved: " << message << endl;
 			update_data(); //HERE updates the vector
 			track = 0;
 		}
                 fflush(stdout);
-		if(strcmp(message, "**")==0){
-			over = true;
-		}
 	}
 	if( DebugOn != 0 )
 	{
@@ -2118,7 +2120,7 @@ void update_data(){
 	token = strtok(NULL, ":");
 	token = strtok(NULL, "\"");
 	temprd.y = atof(token);
-	temprd.x = ((slon - temprd.x) * (cos(slat*(M_PI/180.0))*69.172));
+	temprd.x = (-(slon - temprd.x) * (cos(slat*(M_PI/180.0))*69.172));
 	temprd.y = temprd.y / 5280.0;
 	temprd.z = ((slat - temprd.z)*69.0);
 	r_data.push_back(temprd);

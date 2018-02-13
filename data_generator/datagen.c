@@ -145,7 +145,7 @@ void gen_data(float freq, float salt, float svel, float slat, float slon){
 			lon -= 0.001;
 		}
 		if(wind == 1){
-			lon -= 0.0001;
+			lon += 0.00001; //east
 		}
 		vel = ((-9.8*time) + (svel)); //update vel
 		usleep(1000000/freq);
@@ -225,7 +225,7 @@ int main(int argc, char** argv){
 			minus++;
 		}
 		else if(strcmp(argv[i], "-wind") == 0){ //get starting longitude
-			wind = 1;;
+			wind = 1; //east
 			minus++;
 		}
 		else if(strcmp(argv[i], "-rate") == 0){ //get update rate in Hz
