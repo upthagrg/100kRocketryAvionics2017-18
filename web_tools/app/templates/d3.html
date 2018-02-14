@@ -7,9 +7,13 @@
 </head>
 
 <body>
-    <div id="speedometerdiv" style="position:relative;background-color:black;text-align:center;height:700px;width:700px;">
-	    <p style="text-align:left;color:white"><b>Speedometer:</b></p>
-	    <svg style="color:white;position:absolute;left:-60px;top:150px;height:800px;width:800px;" id="canvas"></svg>
+    <div class="dial" id="speedometerdiv" style="border:8px solid grey;position:absolute;right:308px;background-color:black;text-align:center;height:300px;width:300px;">
+	    <p style="padding-left: 4px;text-align:left;color:white"><b>Speedometer:</b></p>
+	    <svg class="dialcanvas" style="color:white;position:absolute;left:10px;top:-130px;height:800px;width:280px;" id="canvas1"></svg>
+    </div>
+    <div class="dial" id="altimeterdiv" style="border:8px solid grey;position:absolute;right:0px;background-color:black;text-align:center;height:300px;width:300px;">
+	    <p style="padding-left: 4px;text-align:left;color:white"><b>Altimeter:</b></p>
+	    <svg class ="dialcanvas" style="color:white;position:absolute;left:10px;top:-130px;height:800px;width:280px;" id="canvas2"></svg>
     </div>
     <script type="text/babel" src="/static/index.js"></script>
 </body>
