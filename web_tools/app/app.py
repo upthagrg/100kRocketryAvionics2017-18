@@ -8,9 +8,7 @@ app = Flask(__name__)
 
 @app.route('/')
 def home_page():
-    r = requests.get('http://172.17.0.4:5000/api/v1.0/telemetry')
-    telemetry = json.loads(r.text)['result']
-    return render_template("index.html", telemetry=telemetry)
+    return render_template("home.html")
 
 
 @app.route('/visual')

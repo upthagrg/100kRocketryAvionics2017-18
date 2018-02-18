@@ -1,0 +1,22 @@
+body {
+    display: flex ;
+    min-height: 100vh;
+    flex-direction: column;
+  }
+
+  main {
+    flex: 1 0 auto;
+  }
+  .brand-logo {
+    margin-left: 20px;
+  }
+
+  nav {
+    background-color: rgba(0, 0, 0, .75)
+  }
+  nav .brand-logo {
+    font-size: 1.5rem !important;
+  }
+  .page-footer {
+    background-color: rgba(0, 0, 0, .75)
+  }
