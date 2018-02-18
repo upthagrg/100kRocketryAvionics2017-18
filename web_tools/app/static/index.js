@@ -50,15 +50,16 @@ const label2 = svg2.append('text').classed('label', true)
     .attr('text-anchor', 'middle')
     .text('0')
 
-function setPosition(value) {
+function setPosition(value, value2) {
     const newVal = Math.round(value)
+    const newVal2 = Math.round(value2)
     label.text(newVal)
-    label2.text(newVal)
+    label2.text(newVal2)
     //label.text(value)
     needle.transition().duration(1).ease(d3.easePoly)
         .attr('transform', `rotate(${angleScale(value)})`)
     needle2.transition().duration(1).ease(d3.easePoly)
-        .attr('transform', `rotate(${angleScale(value)})`)
+        .attr('transform', `rotate(${angleScale(value2)})`)
 }
 
 
@@ -66,6 +67,10 @@ function deg2rad(deg) { return deg * Math.PI / 180 }
 var i=0.0
 setInterval(() => {
     if(i<100.0){
-      setPosition(i+=0.1);
+      setPosition(i+=0.1, i);
     }
-}, 10.0)
+}, 1.0)
+//setInterval(() => {
+//      setPosition((Math.random()*100)+1, (Math.random()*100)+1);
+//}, 1000.0)
+
