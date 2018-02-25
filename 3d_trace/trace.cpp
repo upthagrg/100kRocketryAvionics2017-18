@@ -910,7 +910,7 @@ Display( )
 	else{// in normal mode 
 		glPushMatrix();
 			if(center){ // if centered requested
-				glTranslatef(-apx, 0., -apz);
+				glTranslatef(-apx*10, 0., -apz*10);
 			}
 			glCallList( PathList );
 		glPopMatrix();
