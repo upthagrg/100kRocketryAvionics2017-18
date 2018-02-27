@@ -132,17 +132,17 @@ void gen_data(float freq, float salt, float svel, float slat, float slon){
 		alt = ((-4.9*powf(time, 2)) + (svel*time) + salt); //update alt
 		dec = rand()%2;
 		if(dec){ //update lat
-			lat += 0.001;
+			lat += 0.0001;
 		}
 		else{
-			lat -= 0.001;
+			lat -= 0.0001;
 		}
 		dec = rand()%2;
 		if(dec){ //update lon
-			lon += 0.001;
+			lon += 0.0001;
 		}
 		else{
-			lon -= 0.001;
+			lon -= 0.0001;
 		}
 		if(wind == 1){
 			lon += 0.00001; //east

@@ -910,7 +910,7 @@ Display( )
 	else{// in normal mode 
 		glPushMatrix();
 			if(center){ // if centered requested
-				glTranslatef(-apx, 0., -apz);
+				glTranslatef(-apx*10, 0., -apz*10);
 			}
 			glCallList( PathList );
 		glPopMatrix();
@@ -2123,6 +2123,9 @@ void update_data(){
 	temprd.x = (-(slon - temprd.x) * (cos(slat*(M_PI/180.0))*69.172));
 	temprd.y = temprd.y / 5280.0;
 	temprd.z = ((slat - temprd.z)*69.0);
+	temprd.x *= 10;
+	//temprd.y *= 10;
+	temprd.z *= 10;
 	r_data.push_back(temprd);
 	PathList = glGenLists(1);
 	glNewList(PathList, GL_COMPILE);
