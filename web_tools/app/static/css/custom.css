@@ -2,6 +2,7 @@ body {
     display: flex ;
     min-height: 100vh;
     flex-direction: column;
+    background-color: #E9E9E9;
   }
 
   main {
@@ -12,13 +13,14 @@ body {
   }
 
   nav {
-    background-color: rgba(0, 0, 0, .75)
+    background-color:#6A6A6A;
   }
   nav .brand-logo {
     font-size: 1.5rem !important;
+    color:#fff;
   }
   .page-footer {
-    background-color: rgba(0, 0, 0, .75)
+    background-color:#6A6A6A
   }
   .graph {
     margin-top:50px;

@@ -4,21 +4,52 @@
         color: #336699;
     }
 </style>
-<link rel="stylesheet" type="text/css" href="/static/css/epoch.min.css"> {% endblock %} {% block content %}
+<link type="text/css" rel="stylesheet" href="static/css/c3.css" /> {% endblock %} {% block content %}
+<div class="row" style="margin-bottom:0px;">
+    <div class="col s12">
+        <div class="card">
+            <span class="card-title">Flight Chart</span>
+        
+        <div class="card-content">
+            <div id="chart"></div>
+        </div>
+        </div>
+    </div>
+</div>
+
 <div class="row">
-    <div class="col s10">
-        <div class="graph"></div>
+    <div class="col s12 m12 l4">
+        <div class="card">
+            <span class="card-title">Altitude</span>
+            <div class="card-content">
+                <span id="altitudeGaugeContainer"></span>
+            </div>
+        </div>
     </div>
-    <div class="col s2">
-        <span id="altitudeGaugeContainer"></span>
-        <span id="speedGaugeContainer"></span>
-        <span id="velocityGaugeContainer"></span>
+    <div class="col s12 m12 l4">
+        <div class="card">
+            <span class="card-title">Speed</span>
+            <div class="card-content">
+                <span id="speedGaugeContainer"></span>
+            </div>
+        </div>
     </div>
+    <div class="col s12 m12 l4">
+        <div class="card">
+            <span class="card-title">Velocity</span>
+            <div class="card-content">
+                <span id="velocityGaugeContainer"></span>
+            </div>
+        </div>
+    </div>
+
+
 </div>
 {% endblock %} {%block scripts %}
 <script type="text/javascript" src="static/js/guage.js"></script>
+<script>initChartData();</script>
 <script>
-    $.ajaxSetup({
+  /* $.ajaxSetup({
         cache: false
     });
     (function poll() {
@@ -29,21 +60,23 @@
                 url: "http://0.0.0.0:5000/api/v1.0/telemetry?_=" + (new Date).getTime(),
                 method: 'GET',
                 success: function (data) {
-                    if(data.result=="no data") {
+                    if (data.result == "no data") {
                         poll();
                     } else {
-                    updateGauges(data);
-                    console.log(data); 
-                    poll();
+                        updateGauges(data);
+                        updateFlightChart(data);
+                        //console.log(data);
+                        poll();
                     }
                 }
             });
         }, 1000);
-    })();
+    })(); */
 </script>
+
 <script src="http://d3js.org/d3.v3.min.js"></script>
-<script src="/static/js/chart.js"></script>
-
-
+<script src="/static/js/c3.js"></script>
+<script src="/static/js/flight_chart.js"></script>
+<script>initChartData();</script>
 
 {% endblock %}
