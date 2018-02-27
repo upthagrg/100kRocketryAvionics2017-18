@@ -29,6 +29,8 @@ def get_all_telemetry():
 @app.route('/api/v1.0/telemetry', methods=['GET'])
 def get_telemetry():
     telemetry = db.telemetrydb
+    if telemetry.count() == 0:
+        return jsonify({'result': 'no data'})
     output = []
     cursor = telemetry.find().sort([("_id", pymongo.DESCENDING)])
     output.append({

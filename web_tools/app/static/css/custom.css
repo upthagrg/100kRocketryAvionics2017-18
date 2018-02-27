@@ -20,3 +20,29 @@ body {
   .page-footer {
     background-color: rgba(0, 0, 0, .75)
   }
+  .graph {
+    margin-top:50px;
+  }
+  .graph .axis {
+    stroke-width: 1;
+  }
+
+  .graph .axis .tick line {
+    stroke: black;
+  }
+
+  .graph .axis .tick text {
+    fill: black;
+    font-size: 0.7em;
+  }
+
+  .graph .axis .domain {
+    fill: none;
+    stroke: black;
+  }
+
+  .graph .group {
+    fill: none;
+    stroke: black;
+    stroke-width: 1.5;
+  }
