@@ -22,20 +22,32 @@ void gen_data(float freq, float salt, float svel, float slat, float slon){
 	char buff[256];
 	char* buff2 = NULL;
 	struct telem_data data;
+	struct telem_data data2;
 	data.vel=svel; //initial velocity, no acceleration other than gravity, no jerk
 	data.lat=slat;
 	data.lon=slon;
 	data.alt=salt;
 	data.time=0.0;
 	int dec;
+	buff2 = malloc(sizeof(char)*256);
 	do{
 		memset(buff, '\0', 256);
+		memset(buff2, '\0', 256);
 		//sprintf(buff,"'{\"%s\":\"%f\", \"%s\":\"%f\", \"%s\":\"%f\", \"%s\":\"%f\", \"%s\":\"+%f\"}'", str1,vel,str2,lat,str3,lon,str4,alt,str5,time); //make JSON string
 		sprintf(buff,"%f %f %f %f %f", data.vel,data.lat,data.lon,data.alt,data.time); //make ASCII string
 		if(debug){
 			printf("%s\n", buff); //print JSON string
 		}
 		convert(buff2, &data);
+			printf("%s\n", buff2); //print JSON string
+		data2 = structure(buff2);
+		if(debug){
+			printf("lat: %f\n", data2.lat);
+			printf("lon: %f\n", data2.lon);
+			printf("vel: %f\n", data2.vel);
+			printf("alt: %f\n", data2.alt);
+			printf("time: %f\n", data2.time);
+		}
 		data.time += (1.0/freq); //update time
 		data.alt = ((-4.9*powf(data.time, 2)) + (svel*data.time) + salt); //update alt
 		dec = rand()%2;

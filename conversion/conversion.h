@@ -29,3 +29,62 @@ void convert(char* buff, struct telem_data* in){
 		printf("%s\n", buff);
 	}
 }
+
+struct telem_data structure(char* buff){
+	char* messagecpy;
+	char* token;
+	struct telem_data data;
+
+	printf("in structure\n");
+
+printf("alloc token\n");
+	token = malloc(sizeof(char)*256);
+printf("alloc cpy\n");
+	messagecpy = malloc(sizeof(char)*256);
+printf("memset token\n");
+	memset(token, '\0', 256);
+printf("memset cpy\n");
+	memset(messagecpy, '\0', 256);
+
+printf("cpy\n");
+	strcpy(messagecpy, buff);
+printf("first token\n");
+	token = strtok(messagecpy, ":");
+	printf("%s\n", token);
+//printf("memset token\n");
+//	memset(token, '\0', 256);
+        token = strtok(NULL, ":");
+	printf("%s\n", token);
+//printf("memset token\n");
+//	memset(token, '\0', 256);
+        token = strtok(NULL, "\"");
+	printf("%s\n", token);
+
+        //temprd.z = atof(token);
+//printf("memset token\n");
+//	memset(token, '\0', 256);
+        token = strtok(NULL, ":");
+	printf("%s\n", token);
+//printf("memset token\n");
+//	memset(token, '\0', 256);
+        token = strtok(NULL, "\"");
+	printf("%s\n", token);
+        //temprd.x = atof(token);
+//printf("memset token\n");
+//	memset(token, '\0', 256);
+        token = strtok(NULL, ":");
+	printf("%s\n", token);
+//printf("memset token\n");
+//	memset(token, '\0', 256);
+        token = strtok(NULL, "\"");
+	printf("%s\n", token);
+        //temprd.y = atof(token);
+        //temprd.x = (-(slon - temprd.x) * (cos(slat*(M_PI/180.0))*69.172));
+        //temprd.y = temprd.y / 5280.0;
+        //temprd.z = ((slat - temprd.z)*69.0);
+        //temprd.x *= 10;
+        //temprd.y *= 10;
+        //temprd.z *= 10;
+	printf("leaving structure\n");
+	return data;
+}
