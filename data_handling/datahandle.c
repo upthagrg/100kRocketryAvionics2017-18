@@ -174,6 +174,11 @@ int main(){
 	//start loop
 	while(1){
 		get_data(retrieved_data, size);//get data from hardware
+		//raw log
+		//interpolate
+		//json log
+		//database
+		//trace
 		
 	}
 
