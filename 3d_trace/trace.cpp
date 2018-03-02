@@ -1,11 +1,7 @@
 /*******************************************************
 *Title: trace.cpp
 *Author: Glenn Upthagrove
-<<<<<<< HEAD
-*Date: 01/24/18
-=======
 *Date: 01/30/18
->>>>>>> 5917ef788261dc3584a2093789f54d6ae1e51656
 *Description: A 3D Trace for the flight path of the 
 *rocket for the high altitude rocketry challenge. 
 *******************************************************/
@@ -13,11 +9,8 @@
 #include <stdlib.h>
 #include <ctype.h>
 #include <string.h> //for strcmp
-<<<<<<< HEAD
-=======
 #include <vector>
 #include "../conversion/telemetry.h"
->>>>>>> 5917ef788261dc3584a2093789f54d6ae1e51656
 
 #define _USE_MATH_DEFINES
 #include <math.h>
@@ -35,8 +28,6 @@
 #include <convert.hpp>
 #include <tplane.hpp>
 
-<<<<<<< HEAD
-=======
 
 // multiprocessing includes 
 #include <sys/types.h>
@@ -49,7 +40,6 @@
 #include <pthread.h>
 
 
->>>>>>> 5917ef788261dc3584a2093789f54d6ae1e51656
 //	This is a 3D trace for the flightpath of the rocket of the Oreon State University 
 //	chapter of AIAA high altitude rocketry challenge. Thus uses OpenGL through C++.  
 //
@@ -102,8 +92,6 @@ struct bmih
         int biClrImportant;
 } InfoHeader;
 
-<<<<<<< HEAD
-=======
 //rocket data
 struct rocket_data{
 	float x;
@@ -112,7 +100,6 @@ struct rocket_data{
 };
 
 
->>>>>>> 5917ef788261dc3584a2093789f54d6ae1e51656
 //sphere stuff
 bool	Distort;		// global -- true means to distort the texture
 
@@ -289,26 +276,15 @@ int		WhichColor;				// index into Colors[ ]
 int		WhichProjection;		// ORTHO or PERSP
 int		Xmouse, Ymouse;			// mouse values
 float	Xrot, Yrot;				// rotation angles in degrees
-<<<<<<< HEAD
-unsigned char *skytex1;				// first sky texture
-GLuint skytex;					// current sky texture
-=======
 unsigned char *skytex1;				// sky texture
 unsigned char *maptex1;				// map texture
 GLuint skytex;					// current sky texture
 GLuint maptex;					// current map texture
->>>>>>> 5917ef788261dc3584a2093789f54d6ae1e51656
 int width, height;				// texture details
 char apogeebuff[512];
 bool center;
 float xdist = 0.0;
 float zdist = 0.0;
-<<<<<<< HEAD
-
-
-// function prototypes:
-
-=======
 char* defmap = "./resources/textures/defmap.bmp";
 char* ndefmap = "./resources/textures/map.bmp";
 char* usedmap;
@@ -331,7 +307,6 @@ int track;
 // function prototypes:
 
 bool	detect_internet_connection();
->>>>>>> 5917ef788261dc3584a2093789f54d6ae1e51656
 void	Animate( );
 void	Display( );
 void	DoAxesMenu( int );
@@ -362,12 +337,9 @@ void	HsvRgb( float[3], float [3] );
 struct point * PtsPointer( int lat, int lng );
 void DrawPoint( struct point *p );
 void MjbSphere( float radius, int slices, int stacks );
-<<<<<<< HEAD
-=======
 //thread function
 void* nrt_listen(void*);
 void update_data();
->>>>>>> 5917ef788261dc3584a2093789f54d6ae1e51656
 
 
 // teture functions 
@@ -515,8 +487,6 @@ ReadShort( FILE *fp )
 int
 main( int argc, char *argv[ ] )
 {
-<<<<<<< HEAD
-=======
 	inited = 0;
 	slat = 45.0;
 	slon = 45.0;
@@ -537,7 +507,6 @@ main( int argc, char *argv[ ] )
 	//detect internet
 	bool connected = detect_internet_connection();
 
->>>>>>> 5917ef788261dc3584a2093789f54d6ae1e51656
 	cdebug = false; //initialize conversion debug 
 	center = false; //initialize center bool
 	for(int i=0; i<argc; i++){
@@ -547,47 +516,22 @@ main( int argc, char *argv[ ] )
                 else if(strcmp(argv[i], "-center") == 0){ //debug on?
                         center = true;
                 }
-<<<<<<< HEAD
-=======
                 else if(strcmp(argv[i], "-nrt") == 0){ //near real time mode?
                         nrt = true;
 			cout << "in nrt mode" << endl;
 			fflush(stdout);
                 }
->>>>>>> 5917ef788261dc3584a2093789f54d6ae1e51656
 
 	}
 	// turn on the glut package:
 	// (do this before checking argc and argv since it might
 	// pull some command line arguments out)
-<<<<<<< HEAD
-
-=======
 	cout << "glut init" << endl;
->>>>>>> 5917ef788261dc3584a2093789f54d6ae1e51656
 	glutInit( &argc, argv );
 
 
 	// setup all the graphics stuff:
 
-<<<<<<< HEAD
-	InitGraphics( );
-
-	
-	// create textures
-
-	InitTextures();
-
-	// create the display structures that will not change:
-
-	InitLists( );
-
-	sprintf(apogeebuff, "%s%s ft.", "Apogee: ", apaltbuff);
-
-	// init all the global variables used by Display( ):
-	// this will also post a redisplay
-
-=======
 	cout << "initing graphics" << endl;
 	InitGraphics( );
 
@@ -692,32 +636,23 @@ main( int argc, char *argv[ ] )
 	// init all the global variables used by Display( ):
 	// this will also post a redisplay
 	cout << "reseting" <<endl;
->>>>>>> 5917ef788261dc3584a2093789f54d6ae1e51656
 	Reset( );
 
 
 	// setup all the user interface stuff:
 
-<<<<<<< HEAD
-	InitMenus( );
-=======
 	cout << "calling init menus" <<endl;
 	InitMenus( );
 	cout << "leaving init menus" <<endl;
->>>>>>> 5917ef788261dc3584a2093789f54d6ae1e51656
 
 
 	// draw the scene once and wait for some interaction:
 	// (this will never return)
 
-<<<<<<< HEAD
-	glutSetWindow( MainWindow );
-=======
 	cout << "calling glut set window" <<endl;
 	glutSetWindow( MainWindow );
 	cout << "leaving glut set window" <<endl;
 	cout << "enterting main loop" <<endl;
->>>>>>> 5917ef788261dc3584a2093789f54d6ae1e51656
 	glutMainLoop( );
 
 
@@ -756,8 +691,6 @@ Animate( )
 void
 Display( )
 {
-<<<<<<< HEAD
-=======
 	//get new data or no new data signal
 	//cout << "in display" <<endl;
 	if(nrt && (!over)){//hang until data is recieved
@@ -815,7 +748,6 @@ Display( )
 		}
                 fflush(stdout);
 	}
->>>>>>> 5917ef788261dc3584a2093789f54d6ae1e51656
 	if( DebugOn != 0 )
 	{
 		fprintf( stderr, "Display\n" );
@@ -932,11 +864,7 @@ Display( )
 //	glColor3f(0.3,0.3,0.5);
 //	glColor3f(1.,0.,0.);
 
-<<<<<<< HEAD
-	glEnable( GL_TEXTURE_2D );
-=======
 	glEnable( GL_TEXTURE_2D ); //enable texturing
->>>>>>> 5917ef788261dc3584a2093789f54d6ae1e51656
 	glBindTexture( GL_TEXTURE_2D, skytex ); //bind skytexture
 
 	///draw sky
@@ -948,12 +876,8 @@ Display( )
 		glCallList(SphereList);
 	glPopMatrix();
 
-<<<<<<< HEAD
-	glDisable (GL_TEXTURE_2D);
-=======
 	//glDisable (GL_TEXTURE_2D);
 	glBindTexture( GL_TEXTURE_2D, maptex ); //bind maptexture
->>>>>>> 5917ef788261dc3584a2093789f54d6ae1e51656
 
 	//draw ground
 	glColor3f(0., 0.5, 0.);
@@ -962,20 +886,6 @@ Display( )
 		glCallList(BoardList);
 	glPopMatrix();
 
-<<<<<<< HEAD
-	//draw path
-	glPushMatrix();
-		if(center){ // if centered requested
-			glTranslatef(-apx, 0., -apz);
-		}
-		glCallList( PathList );
-	glPopMatrix();
-	if(center){ // if centered requested
-		DoRasterString( 0., apy+1.0, 0., apogeebuff );
-	}
-	else{
-		DoRasterString( apx, apy+1.0, apz, apogeebuff );
-=======
 	glDisable (GL_TEXTURE_2D); //disable texturing
 
 	//draw path
@@ -1012,7 +922,6 @@ Display( )
 		else{
 			DoRasterString( apx, apy+1.0, apz, apogeebuff );
 		}
->>>>>>> 5917ef788261dc3584a2093789f54d6ae1e51656
 	}
 
 	if( DepthFightingOn != 0 )
@@ -1447,10 +1356,6 @@ InitLists( )
 			Axes( 1. );
 		glLineWidth( 1. );
 	glEndList( );
-<<<<<<< HEAD
-
-	make_trace_list("./log.txt");
-=======
 //	if(nrt){
 //		pathlists[pl_used] = glGenLists( 1 );
 //		glNewList( pathlists[pl_used], GL_COMPILE );
@@ -1463,7 +1368,6 @@ InitLists( )
 //	else{
 		make_trace_list("./log.txt");
 //	}
->>>>>>> 5917ef788261dc3584a2093789f54d6ae1e51656
 	tplane(PLANERES, PLANESIZE);
 }
 
@@ -1884,16 +1788,6 @@ void InitTextures(){
 	
 	// and set its parameters
 	skytex1 = BmpToTexture( "./resources/textures/skytex3.bmp", &width, &height );
-<<<<<<< HEAD
-	glTexParameteri( GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_REPEAT );
-	glTexParameteri( GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_REPEAT ); //extends last pixel past s or t of 1
-	glTexParameteri( GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR );
-	glTexParameteri( GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR); //blended texels
-	glTexEnvf( GL_TEXTURE_ENV, GL_TEXTURE_ENV_MODE, GL_REPLACE ); //replace surface (no material illumination) 
-	//glTexImage2D( GL_TEXTURE_2D, 0, 3, 256, 128, 0, GL_RGB, GL_UNSIGNED_BYTE, TextureArray0 );
-	glTexImage2D( GL_TEXTURE_2D, 0, 3, width, height, 0, GL_RGB, GL_UNSIGNED_BYTE, skytex1 );
-	//end first sky texture
-=======
 	//skytex1 = BmpToTexture( "./resources/textures/map.bmp", &width, &height );
 	glTexParameteri( GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_REPEAT );
 	glTexParameteri( GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_REPEAT ); //repeat if beyond 1 for s or t 
@@ -1918,7 +1812,6 @@ void InitTextures(){
 //	glTexImage2D( GL_TEXTURE_2D, 0, 3, width, height, 0, GL_RGB, GL_UNSIGNED_BYTE, maptex1 ); //make texture
 	gluBuild2DMipmaps( GL_TEXTURE_2D, 3, width, height, GL_RGB, GL_UNSIGNED_BYTE, maptex1 ); //make mipmaps 
 	//end map texture
->>>>>>> 5917ef788261dc3584a2093789f54d6ae1e51656
 }
 
 
@@ -2072,8 +1965,6 @@ MjbSphere( float radius, int slices, int stacks )
 	delete [ ] Pts;
 	Pts = NULL;
 }
-<<<<<<< HEAD
-=======
 
 /***********************************************
 * Title: detect_internet_connection
@@ -2246,4 +2137,3 @@ void update_data(){
 		glEnd();
 	glEndList();
 }
->>>>>>> 5917ef788261dc3584a2093789f54d6ae1e51656

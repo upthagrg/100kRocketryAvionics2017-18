@@ -20,51 +20,32 @@ void tplane(int res, float size){
 			glNormal3f(0., 1., 0.);
 
 			glVertex3f((j / div)*size, 0., (-i / div)*size);
-<<<<<<< HEAD
-			glTexCoord2f((j / div) - 0.0001, (i / div) - 0.0001);
-=======
 			glTexCoord2f((j / div), (i / div));
->>>>>>> 5917ef788261dc3584a2093789f54d6ae1e51656
 			if (j / div > 1.0) {
 				std::cout << "S ERROR" << std::endl;
 			}
 
-<<<<<<< HEAD
-			glVertex3f(((j + 1) / div)*size, 0., (-i / div)*size);
-			glTexCoord2f(((j + 1) / div) - 0.0001, (i / div) - 0.0001);
-=======
 			glNormal3f(0., 1., 0.);
 			glVertex3f(((j + 1) / div)*size, 0., (-i / div)*size);
 			glTexCoord2f(((j+1 ) / div), (i / div));
->>>>>>> 5917ef788261dc3584a2093789f54d6ae1e51656
 			if ((j + 1) / div > 1.0) {
 				std::cout << "S ERROR" << std::endl;
 			}
 
-<<<<<<< HEAD
-			glVertex3f(((j + 1) / div)*size, 0., (-(i + 1) / div)*size);
-			glTexCoord2f(((j + 1) / div) - 0.0001, ((i + 1) / div) - 0.0001);
-=======
 			glNormal3f(0., 1., 0.);
 			glVertex3f(((j + 1) / div)*size, 0., (-(i + 1) / div)*size);
 			glTexCoord2f(((j+1 ) / div), ((i + 1) / div));
 //			if((((j+1)/div) - 1.0) < 0.0001){
 //				std::cout << "hit 1" << std::endl;
 //			}
->>>>>>> 5917ef788261dc3584a2093789f54d6ae1e51656
 			if ((j + 1) / div > 1.0) {
 				std::cout << "S ERROR" << std::endl;
 			}
 
 
-<<<<<<< HEAD
-			glVertex3f((j / div)*size, 0., (-(i + 1) / div)*size);
-			glTexCoord2f((j / div) - 0.0001, ((i + 1) / div) - 0.0001);
-=======
 			glNormal3f(0., 1., 0.);
 			glVertex3f((j / div)*size, 0., (-(i + 1) / div)*size);
 			glTexCoord2f((j / div), ((i + 1) / div));
->>>>>>> 5917ef788261dc3584a2093789f54d6ae1e51656
 			if (j / div > 1.0) {
 				std::cout << "S ERROR" << std::endl;
 			}
