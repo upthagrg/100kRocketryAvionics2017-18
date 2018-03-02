@@ -1,5 +1,6 @@
-import requests, json, time
-r = requests.get('http://localhost:5000/api/v1.0/start_launch')
+import requests, json
+launch = requests.get('http://localhost:5000/api/v1.0/prepare_launch')
+r = requests.get('http://localhost:5000/api/v1.0/start_launch/'+launch.text)
 print r.text
 while 1:
     with open('./commfifo') as fifo:
@@ -12,7 +13,6 @@ while 1:
     fifo.close()
     r = requests.post('http://localhost:5000/api/v1.0/telemetry', json = jdata)
     print r.text
-    time.sleep(1)
     fifo.close()
-r = requests.get('http://localhost:5000/api/v1.0/end_launch')
+r = requests.get('http://localhost:5000/api/v1.0/end_launch/'+launch.text)
 print r.text

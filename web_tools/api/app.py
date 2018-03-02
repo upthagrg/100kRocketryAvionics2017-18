@@ -2,6 +2,7 @@ import os
 from flask import Flask, redirect, url_for, request, render_template, jsonify
 import pymongo
 from pymongo import MongoClient
+from bson import ObjectId
 from flask_cors import CORS
 import json
 from datetime import datetime
@@ -28,7 +29,7 @@ def get_all_telemetry():
         })
     return jsonify({'result': output})
 
-@app.route('/api/v1.0/telemetry', methods=['GET'])
+@app.route('/api/v1.0/telemetry/', methods=['GET'])
 def get_telemetry():
     telemetry = db.telemetry
     if telemetry.count() == 0:
@@ -45,45 +46,47 @@ def get_telemetry():
     return jsonify({'result': output})
 
 
-@app.route('/api/v1.0/start_launch', methods=['GET'])
-def start_launch():
-    start_time = "{'start_time' : '" + datetime.now().strftime(
-        '%Y-%m-%d %H:%M:%S') + "'}"
-    _id = db.launch.insert_one(start_time)
-    return "Launch has started at: " + start_time + " (" + _id + ")"
+@app.route('/api/v1.0/start_launch/<launch_id>', methods=['GET'])
+def start_launch(launch_id):
+    if launch_id == "":
+        return "No launch id provided."
+    start_time = str(datetime.now().strftime("%Y-%m-%d %H:%M:%S"))
+    db.launch.update_one(
+        {"_id": ObjectId(launch_id)},
+        {
+        "$set": {
+            "start_time": start_time
+        }
+        }
+    )
+    return "Launch has started at: " + str(start_time)
 
+@app.route('/api/v1.0/end_launch/<launch_id>', methods=['GET'])
+def end_launch(launch_id):
+    if launch_id == "":
+        return "No launch id provided."
+    end_time = str(datetime.now().strftime("%Y-%m-%d %H:%M:%S"))
+    db.launch.update_one(
+        {"_id": ObjectId(launch_id)},
+        {
+        "$set": {
+            "end_time":end_time
+        }
+        }
+    )
+    return "Launch has ended at: " + str(end_time)
 
-#TODO Fix launch data
-@app.route('/api/v1.0/launch', methods=['GET'])
+@app.route('/api/v1.0/prepare_launch', methods=['GET'])
 def get_launch_data():
-    _launchdata = db.launch
-    if _launchdata.count() == 0:
-        return jsonify({'result': 'no data'})
-    output = []
-    for t in _launchdata.find():
-        output.append({
-            'altitude': t['altitude'],
-            'longitude': t['longitude'],
-            'latitude': t['latitude'],
-            'time': t['time'],
-            'velocity': t['velocity']
-        })
-    return jsonify({'result': output})
-
-
-@app.route('/api/v1.0/end_launch', methods=['GET'])
-def end_launch():
-    end_time = "{'end_time' : '" + datetime.now().strftime(
-        '%Y-%m-%d %H:%M:%S') + "'}"
-    _id = db.launch.insert_one(end_time)
-    return "Launch has ended at: " + end_time +" ("+_id + ")"
-
+    data = {"start_time" : "", "end_time" : ""}
+    _id = db.launch.insert_one(data).inserted_id
+    return str(_id)
 
 @app.route('/api/v1.0/telemetry', methods=['POST'])
 def post_telemetry():
     _telemetry = request.json
-    _id = db.telemetry.insert_one(_telemetry)
-    return "(" + _id + ")"
+    _id = db.telemetry.insert_one(_telemetry).inserted_id
+    return "(" + str(_id) + ")"
 
 
 if __name__ == "__main__":

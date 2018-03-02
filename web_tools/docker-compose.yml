@@ -21,4 +21,6 @@ api:
 db:
   image: mongo:3.0.2
   command: mongod --smallfiles
+  volumes:
+     - ./data/db:/data/db
 

@@ -14,11 +14,12 @@ function initChartData() {
         method: 'GET',
         success: function (data) {
             if (data.result == "no data") {
+                console.log("No data")
                 return
             } else {
                 $.each(data.result, function(index, value) {
                     lt.setSeconds(lt.getSeconds() + parseInt(value.time));
-                    console.log(parseInt(value.time));
+                    //console.log(parseInt(value.time));
                     //console.log(index +" : " + lt.getFullYear()+"-"+lt.getMonth()+"-"+lt.getDate()+" "+lt.getHours()+":"+lt.getMinutes()+":"+lt.getSeconds());
                 });
             }
