@@ -51,7 +51,11 @@ void gen_data(float freq, float salt, float svel, float slat, float slon){
 	do{ //loop until flight is "finished" 
 		total = 0;
 		memset(buff, '\0', 256);
+<<<<<<< HEAD
 		sprintf(buff,"{\"%s\":\"%f\", \"%s\":\"%f\", \"%s\":\"%f\", \"%s\":\"%f\", \"%s\":\"+%f\"}", str1,vel,str2,lat,str3,lon,str4,alt,str5,time); //make JSON string
+=======
+		sprintf(buff,"{\"%s\":\"%f\", \"%s\":\"%f\", \"%s\":\"%f\", \"%s\":\"%f\", \"%s\":\"%f\"}", str1,vel,str2,lat,str3,lon,str4,alt,str5,time); //make JSON string
+>>>>>>> 5917ef788261dc3584a2093789f54d6ae1e51656
 //		sprintf(buff3,"'{\"%s\":\"%f\", \"%s\":\"%f\", \"%s\":\"%f\", \"%s\":\"%f\", \"%s\":\"+%f\"}'", str1,vel,str2,lat,str3,lon,str4,alt,str5,time); //make JSON string
 		//fprintf(files[1], buff); //print JSON string
 		//fprintf(files[1], "\n"); //print newline

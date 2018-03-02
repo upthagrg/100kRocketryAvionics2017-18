@@ -1,7 +1,11 @@
 /*******************************************************
 *Title: trace.cpp
 *Author: Glenn Upthagrove
+<<<<<<< HEAD
 *Date: 01/24/18
+=======
+*Date: 01/30/18
+>>>>>>> 5917ef788261dc3584a2093789f54d6ae1e51656
 *Description: A 3D Trace for the flight path of the 
 *rocket for the high altitude rocketry challenge. 
 *******************************************************/
@@ -9,6 +13,11 @@
 #include <stdlib.h>
 #include <ctype.h>
 #include <string.h> //for strcmp
+<<<<<<< HEAD
+=======
+#include <vector>
+#include "../conversion/telemetry.h"
+>>>>>>> 5917ef788261dc3584a2093789f54d6ae1e51656
 
 #define _USE_MATH_DEFINES
 #include <math.h>
@@ -26,6 +35,21 @@
 #include <convert.hpp>
 #include <tplane.hpp>
 
+<<<<<<< HEAD
+=======
+
+// multiprocessing includes 
+#include <sys/types.h>
+#include <sys/stat.h>
+#include <fcntl.h>
+#include <sys/wait.h>
+#include <unistd.h>
+
+//multithreading include 
+#include <pthread.h>
+
+
+>>>>>>> 5917ef788261dc3584a2093789f54d6ae1e51656
 //	This is a 3D trace for the flightpath of the rocket of the Oreon State University 
 //	chapter of AIAA high altitude rocketry challenge. Thus uses OpenGL through C++.  
 //
@@ -78,6 +102,17 @@ struct bmih
         int biClrImportant;
 } InfoHeader;
 
+<<<<<<< HEAD
+=======
+//rocket data
+struct rocket_data{
+	float x;
+	float y;
+	float z;
+};
+
+
+>>>>>>> 5917ef788261dc3584a2093789f54d6ae1e51656
 //sphere stuff
 bool	Distort;		// global -- true means to distort the texture
 
@@ -254,17 +289,49 @@ int		WhichColor;				// index into Colors[ ]
 int		WhichProjection;		// ORTHO or PERSP
 int		Xmouse, Ymouse;			// mouse values
 float	Xrot, Yrot;				// rotation angles in degrees
+<<<<<<< HEAD
 unsigned char *skytex1;				// first sky texture
 GLuint skytex;					// current sky texture
+=======
+unsigned char *skytex1;				// sky texture
+unsigned char *maptex1;				// map texture
+GLuint skytex;					// current sky texture
+GLuint maptex;					// current map texture
+>>>>>>> 5917ef788261dc3584a2093789f54d6ae1e51656
 int width, height;				// texture details
 char apogeebuff[512];
 bool center;
 float xdist = 0.0;
 float zdist = 0.0;
+<<<<<<< HEAD
 
 
 // function prototypes:
 
+=======
+char* defmap = "./resources/textures/defmap.bmp";
+char* ndefmap = "./resources/textures/map.bmp";
+char* usedmap;
+bool nrt;					//nrt flag
+bool nrt2;					//nrt flag
+vector<struct telem_data>data;
+bool inited;
+char message[256];
+char message2[256];
+char messagecpy[256];
+char buff[10];
+bool over = false;
+int bytes;
+char* end = NULL;
+vector<struct rocket_data> r_data;
+char* token;
+struct rocket_data temprd;
+int track;
+
+// function prototypes:
+
+bool	detect_internet_connection();
+>>>>>>> 5917ef788261dc3584a2093789f54d6ae1e51656
 void	Animate( );
 void	Display( );
 void	DoAxesMenu( int );
@@ -295,6 +362,12 @@ void	HsvRgb( float[3], float [3] );
 struct point * PtsPointer( int lat, int lng );
 void DrawPoint( struct point *p );
 void MjbSphere( float radius, int slices, int stacks );
+<<<<<<< HEAD
+=======
+//thread function
+void* nrt_listen(void*);
+void update_data();
+>>>>>>> 5917ef788261dc3584a2093789f54d6ae1e51656
 
 
 // teture functions 
@@ -442,6 +515,29 @@ ReadShort( FILE *fp )
 int
 main( int argc, char *argv[ ] )
 {
+<<<<<<< HEAD
+=======
+	inited = 0;
+	slat = 45.0;
+	slon = 45.0;
+	nrt = false;
+	nrt2 = false;
+//	pl_used = 0;
+	char buff1[64];
+	char buff2[64];
+	int ret;
+	pid_t childid;
+	int child_exit = -5;
+//	pthread_t pipethread;
+	track = 59;
+
+	memset(buff1, '\0', 64);
+	memset(buff2, '\0', 64);
+
+	//detect internet
+	bool connected = detect_internet_connection();
+
+>>>>>>> 5917ef788261dc3584a2093789f54d6ae1e51656
 	cdebug = false; //initialize conversion debug 
 	center = false; //initialize center bool
 	for(int i=0; i<argc; i++){
@@ -451,17 +547,30 @@ main( int argc, char *argv[ ] )
                 else if(strcmp(argv[i], "-center") == 0){ //debug on?
                         center = true;
                 }
+<<<<<<< HEAD
+=======
+                else if(strcmp(argv[i], "-nrt") == 0){ //near real time mode?
+                        nrt = true;
+			cout << "in nrt mode" << endl;
+			fflush(stdout);
+                }
+>>>>>>> 5917ef788261dc3584a2093789f54d6ae1e51656
 
 	}
 	// turn on the glut package:
 	// (do this before checking argc and argv since it might
 	// pull some command line arguments out)
+<<<<<<< HEAD
 
+=======
+	cout << "glut init" << endl;
+>>>>>>> 5917ef788261dc3584a2093789f54d6ae1e51656
 	glutInit( &argc, argv );
 
 
 	// setup all the graphics stuff:
 
+<<<<<<< HEAD
 	InitGraphics( );
 
 	
@@ -478,18 +587,137 @@ main( int argc, char *argv[ ] )
 	// init all the global variables used by Display( ):
 	// this will also post a redisplay
 
+=======
+	cout << "initing graphics" << endl;
+	InitGraphics( );
+
+	//get slat and slon
+	if(nrt){//hang until data is recieved
+		//read from pipe
+        	memset(message, '\0', 256);
+        	while(strstr(message, "&&") == NULL){
+                        memset(buff, '\0', 10);
+                       	bytes = read(3, buff, 9);
+                       	strcat(message, buff);
+                       	if(bytes == -1){ //error cases
+                     	          printf("READ ERROR IN LOGGER, RETURN OF -1\n");
+                     	          fflush(stdout);
+                     	          exit(4);
+                       	}
+                    	if(bytes == 0){
+                             	  printf("NO READ IN LOGGER, RETURN OF 0\n");
+                                  fflush(stdout);
+                             	  exit(5);
+                        }
+
+                }
+		memset(messagecpy, '\0', 256);
+                //fix the string
+                end = strstr(message, "&&"); //points to first &
+                *end = '\0'; //null terminate
+
+		strcpy(messagecpy, message);
+		token = strtok(messagecpy, ":");
+		token = strtok(NULL, ":");
+		token = strtok(NULL, "\"");
+		temprd.z = atof(token);
+		token = strtok(NULL, ":");
+		token = strtok(NULL, "\"");
+		temprd.x = atof(token);
+		token = strtok(NULL, ":");
+		token = strtok(NULL, "\"");
+		temprd.y = atof(token);
+		slat = temprd.z;
+		slon = temprd.x;
+		temprd.x = (-(slon - temprd.x) * (cos(slat*(M_PI/180.0))*69.172));
+		temprd.y = temprd.y / 5280.0;
+		temprd.z = ((slat - temprd.z)*69.0);
+		r_data.push_back(temprd);
+
+                fflush(stdout);
+	}
+
+//	slat = 45.0;
+//	slon = 45.0;
+	cout << "starting init lists" << endl;
+	InitLists( );
+	cout << "leaving init lists" << endl;
+
+	//start recieving data in nrt
+	//HERE
+	//spawn thread to read data from a pipe
+
+
+	//get map
+        if(connected){
+                //cout << "Internet detected" << endl;
+                //get non-default map
+                childid = fork();
+                switch(childid){
+                        case -1: //error
+                                printf("ERROR SPAWNING CHILD\n");
+                                fflush(stdout);
+                                exit(2);
+
+                        case 0: //child
+				cout << "slat: " << slat << endl;
+				cout << "slon: " << slon << endl;
+				sprintf(buff1, "%f", slat);
+				sprintf(buff2, "%f", slon);
+				chdir("./map");
+                                ret = execlp("python", "python", "./getmap.py", buff1, buff2, NULL);
+                                if(ret == -1){
+                                        printf("ERROR GENERATING MAP\n");
+                                        fflush(stdout);
+                                        exit(1);
+                                }
+                        default: //parent
+                                waitpid(childid, &child_exit, 0); //wait on getmap
+				
+                }
+                usedmap = ndefmap;
+        }
+        else{
+                //cout << "Internet not detected" << endl;
+                usedmap = defmap;
+        }
+
+	// initialize textures
+	InitTextures();
+
+	if(!nrt){
+		sprintf(apogeebuff, "%s%s ft.", "Apogee: ", apaltbuff);
+	}
+
+	// init all the global variables used by Display( ):
+	// this will also post a redisplay
+	cout << "reseting" <<endl;
+>>>>>>> 5917ef788261dc3584a2093789f54d6ae1e51656
 	Reset( );
 
 
 	// setup all the user interface stuff:
 
+<<<<<<< HEAD
 	InitMenus( );
+=======
+	cout << "calling init menus" <<endl;
+	InitMenus( );
+	cout << "leaving init menus" <<endl;
+>>>>>>> 5917ef788261dc3584a2093789f54d6ae1e51656
 
 
 	// draw the scene once and wait for some interaction:
 	// (this will never return)
 
+<<<<<<< HEAD
 	glutSetWindow( MainWindow );
+=======
+	cout << "calling glut set window" <<endl;
+	glutSetWindow( MainWindow );
+	cout << "leaving glut set window" <<endl;
+	cout << "enterting main loop" <<endl;
+>>>>>>> 5917ef788261dc3584a2093789f54d6ae1e51656
 	glutMainLoop( );
 
 
@@ -528,6 +756,66 @@ Animate( )
 void
 Display( )
 {
+<<<<<<< HEAD
+=======
+	//get new data or no new data signal
+	//cout << "in display" <<endl;
+	if(nrt && (!over)){//hang until data is recieved
+		track++;
+		//cout << "in nrt and not over" << endl;
+		//read from pipe
+		//cout << "memsetting message" << endl;
+        	memset(message, '\0', 256);
+		if(message2[0] != '\0'){
+			strcat(message, message2);
+		}
+        	memset(message2, '\0', 256);
+		//cout << "done" << endl;
+		//cout << "memsetting buff" << endl;
+                memset(buff, '\0', 10);
+		//cout << "done" << endl;
+        	while(strstr(message, "&&") == NULL){
+			//cout << "memsetting buff" << endl;
+                        memset(buff, '\0', 10);
+			//cout << "done" << endl;
+			//cout << "reading from pipe" << endl;
+                       	bytes = read(3, buff, 9);
+			//cout << "read from pipe: " << buff << endl;
+                       	strcat(message, buff);
+			//cout << "message is now: " << message << endl;
+                       	if(bytes == -1){ //error cases
+                     	          printf("READ ERROR IN LOGGER, RETURN OF -1\n");
+                     	          fflush(stdout);
+                     	          exit(4);
+                       	}
+                    	if(bytes == 0){
+                             	  printf("NO READ IN LOGGER, RETURN OF 0\n");
+                                  fflush(stdout);
+                             	  exit(5);
+                        }
+			if(strcmp(message, "**&&")==0){
+				over = true;
+			}
+                }
+                //fix the string
+                end = strstr(message, "&&"); //points to first &
+                *end = '\0'; //null terminate
+		if(end+2 != '\0'){
+			strcat(message2, end+2);
+		}
+		if(strcmp(message, "**")==0){
+			over = true;
+			cout << "over signal recieved" << endl;
+		}
+                //cout << "display recieved: " << message << endl;
+		if(track >= 60){
+                	cout << "display recieved: " << message << endl;
+			update_data(); //HERE updates the vector
+			track = 0;
+		}
+                fflush(stdout);
+	}
+>>>>>>> 5917ef788261dc3584a2093789f54d6ae1e51656
 	if( DebugOn != 0 )
 	{
 		fprintf( stderr, "Display\n" );
@@ -644,7 +932,11 @@ Display( )
 //	glColor3f(0.3,0.3,0.5);
 //	glColor3f(1.,0.,0.);
 
+<<<<<<< HEAD
 	glEnable( GL_TEXTURE_2D );
+=======
+	glEnable( GL_TEXTURE_2D ); //enable texturing
+>>>>>>> 5917ef788261dc3584a2093789f54d6ae1e51656
 	glBindTexture( GL_TEXTURE_2D, skytex ); //bind skytexture
 
 	///draw sky
@@ -656,7 +948,12 @@ Display( )
 		glCallList(SphereList);
 	glPopMatrix();
 
+<<<<<<< HEAD
 	glDisable (GL_TEXTURE_2D);
+=======
+	//glDisable (GL_TEXTURE_2D);
+	glBindTexture( GL_TEXTURE_2D, maptex ); //bind maptexture
+>>>>>>> 5917ef788261dc3584a2093789f54d6ae1e51656
 
 	//draw ground
 	glColor3f(0., 0.5, 0.);
@@ -665,6 +962,7 @@ Display( )
 		glCallList(BoardList);
 	glPopMatrix();
 
+<<<<<<< HEAD
 	//draw path
 	glPushMatrix();
 		if(center){ // if centered requested
@@ -677,6 +975,44 @@ Display( )
 	}
 	else{
 		DoRasterString( apx, apy+1.0, apz, apogeebuff );
+=======
+	glDisable (GL_TEXTURE_2D); //disable texturing
+
+	//draw path
+	if(nrt){//in nrt mode
+		glPushMatrix();
+			//glLineWidth(5.);
+			//glBegin(GL_LINE_STRIP);
+
+			glColor3f(1.,0.,0.);
+
+			//cout << "drawing" <<endl;
+			//for(int i=0; i<r_data.size(); i++){
+				//cout << "point: " << r_data[i].x << ", " << r_data[i].y << ", " <<r_data[i].z << endl;
+			//	glVertex3f(r_data[i].x, r_data[i].y, r_data[i].z);
+			//}
+			//cout << "done" <<endl;
+
+			glCallList( PathList );
+
+		glPopMatrix();
+	}
+	else{// in normal mode 
+		glPushMatrix();
+			if(center){ // if centered requested
+				glTranslatef(-apx*10, 0., -apz*10);
+			}
+			glCallList( PathList );
+		glPopMatrix();
+	}
+	if(!nrt){
+		if(center){ // if centered requested
+			DoRasterString( 0., apy+1.0, 0., apogeebuff );
+		}
+		else{
+			DoRasterString( apx, apy+1.0, apz, apogeebuff );
+		}
+>>>>>>> 5917ef788261dc3584a2093789f54d6ae1e51656
 	}
 
 	if( DepthFightingOn != 0 )
@@ -1111,8 +1447,23 @@ InitLists( )
 			Axes( 1. );
 		glLineWidth( 1. );
 	glEndList( );
+<<<<<<< HEAD
 
 	make_trace_list("./log.txt");
+=======
+//	if(nrt){
+//		pathlists[pl_used] = glGenLists( 1 );
+//		glNewList( pathlists[pl_used], GL_COMPILE );
+//			glLineWidth( 1 );
+//				glVertex3f(0.,0.1,0.);
+//				glVertex3f(0.,0.2,0.);
+//			glLineWidth( 1. );
+//		glEndList( );
+//	}
+//	else{
+		make_trace_list("./log.txt");
+//	}
+>>>>>>> 5917ef788261dc3584a2093789f54d6ae1e51656
 	tplane(PLANERES, PLANESIZE);
 }
 
@@ -1533,6 +1884,7 @@ void InitTextures(){
 	
 	// and set its parameters
 	skytex1 = BmpToTexture( "./resources/textures/skytex3.bmp", &width, &height );
+<<<<<<< HEAD
 	glTexParameteri( GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_REPEAT );
 	glTexParameteri( GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_REPEAT ); //extends last pixel past s or t of 1
 	glTexParameteri( GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR );
@@ -1541,6 +1893,32 @@ void InitTextures(){
 	//glTexImage2D( GL_TEXTURE_2D, 0, 3, 256, 128, 0, GL_RGB, GL_UNSIGNED_BYTE, TextureArray0 );
 	glTexImage2D( GL_TEXTURE_2D, 0, 3, width, height, 0, GL_RGB, GL_UNSIGNED_BYTE, skytex1 );
 	//end first sky texture
+=======
+	//skytex1 = BmpToTexture( "./resources/textures/map.bmp", &width, &height );
+	glTexParameteri( GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_REPEAT );
+	glTexParameteri( GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_REPEAT ); //repeat if beyond 1 for s or t 
+	glTexParameteri( GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR );
+	glTexParameteri( GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR); //blended texels
+	glTexEnvf( GL_TEXTURE_ENV, GL_TEXTURE_ENV_MODE, GL_REPLACE ); //replace surface (no material illumination) 
+	glTexImage2D( GL_TEXTURE_2D, 0, 3, width, height, 0, GL_RGB, GL_UNSIGNED_BYTE, skytex1 );
+	//end sky texture
+
+	glPixelStorei( GL_UNPACK_ALIGNMENT, 1 );
+	glGenTextures( 1, &maptex ); // assign binding “handles”
+	glBindTexture( GL_TEXTURE_2D, maptex ); // make maptex texture current
+	
+	// and set its parameters
+	maptex1 = BmpToTexture( usedmap, &width, &height );
+	glTexParameteri( GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_REPEAT );
+	glTexParameteri( GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_REPEAT ); 
+	glTexParameteri( GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_NEAREST ); //repeat if beyond 1 for s or t
+	glTexParameteri( GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_NEAREST); //blended texels
+	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR_MIPMAP_LINEAR); //set linear mip map filter
+	glTexEnvf( GL_TEXTURE_ENV, GL_TEXTURE_ENV_MODE, GL_REPLACE ); //replace surface (no material illumination) 
+//	glTexImage2D( GL_TEXTURE_2D, 0, 3, width, height, 0, GL_RGB, GL_UNSIGNED_BYTE, maptex1 ); //make texture
+	gluBuild2DMipmaps( GL_TEXTURE_2D, 3, width, height, GL_RGB, GL_UNSIGNED_BYTE, maptex1 ); //make mipmaps 
+	//end map texture
+>>>>>>> 5917ef788261dc3584a2093789f54d6ae1e51656
 }
 
 
@@ -1694,3 +2072,178 @@ MjbSphere( float radius, int slices, int stacks )
 	delete [ ] Pts;
 	Pts = NULL;
 }
+<<<<<<< HEAD
+=======
+
+/***********************************************
+* Title: detect_internet_connection
+* Description: Detects if there is an internet 
+* connection present.
+***********************************************/
+bool	detect_internet_connection(){
+	int devnul;
+	pid_t   childid;
+	int child_exit = -5;
+	bool con;
+	int ret;
+
+	devnul = open("/dev/null", O_WRONLY);
+
+	childid = fork();
+
+        switch(childid){
+
+        case -1: //error
+                printf("ERROR SPAWNING CHILD\n");
+                fflush(stdout);
+                exit(2);
+
+        case 0: //child
+                //exec into wget
+		dup2(0, devnul); //duplicate /dev/null to stdin
+		dup2(1, devnul); //duplicate /dev/null to stdout
+		dup2(2, devnul); //duplicate /dev/null to stderr
+                ret = execlp("wget", "wget", "www.google.com", NULL);
+                if(ret == -1){
+			printf("ERROR CHECKING CONNECTION\n");
+			fflush(stdout);
+			exit(1);
+                }
+
+        default: //parent
+                //wait on wget
+                waitpid(childid, &child_exit, 0);
+		if(child_exit == 0){
+			con = true;
+		}
+		else{
+			con = false;
+		}
+        }
+	if(con == true){ //clean up index.html
+		childid = fork();
+		        switch(childid){
+        
+	        case -1: //error
+	                printf("ERROR SPAWNING CHILD\n");
+	                fflush(stdout);
+	                exit(2);
+	        
+	        case 0: //child
+	                //exec into rm
+	                ret = execlp("rm", "rm", "./index.html", "-f", NULL);
+	                if(ret == -1){
+	                        printf("ERROR REMOVING INDEX.HTML\n");
+	                        fflush(stdout);
+	                        exit(1);
+	                }
+		        
+        	default: //parent
+        	        //wait on rm
+        	        waitpid(childid, &child_exit, 0);
+        	}
+	}
+	return con;
+}
+
+void* nrt_listen(void* input){
+//	pthread_mutex_lock(&init_lock);
+	char message[256];
+	char buff[64];
+	bool over = false;
+	int bytes;
+	char* end = NULL;
+	//get lock on inited int
+//	cout << "start of thread" << endl;
+	while(!over){
+//		cout << "start of thread main loop" << endl;
+		//read from pipe
+		memset(message, '\0', 256);
+		while(strstr(buff, "&&") == NULL){
+			memset(buff, '\0', 256);
+			bytes = read(3, buff, 64-1);
+			strcat(message, buff);
+                        if(bytes == -1){ //error cases
+//                                printf("READ ERROR IN LOGGER, RETURN OF -1\n");
+//                                fflush(stdout);
+//                                exit(4);
+                        }
+                        if(bytes == 0){
+//                                printf("NO READ IN LOGGER, RETURN OF 0\n");
+//                                fflush(stdout);
+//                                exit(5);
+                        }
+
+		}
+		//fix the string
+                end = strstr(message, "&&"); //points to first &
+                *end = '\0'; //null terminate
+//		cout << "trace recieved: " << message << endl;
+		fflush(stdout);
+/**************************************WORK NEEDED
+
+		//convert data?
+
+
+
+		//update list not used
+		if(pl_used == 0){
+			//update pathlists[1]
+		}
+		else{
+			//update pathlists[0]
+		}
+		if(!inited){
+			//set slat and slon
+			inited = true;
+			//unlock inited int
+			pthread_mutex_unlock(&init_lock);
+		}
+
+***********************************/
+
+		//get lock on pl_used int
+//		pthread_mutex_lock(&list_lock);
+		//switch it
+//		if(pl_used == 0){
+//			pl_used = 1;
+//		}
+//		else{
+//			pl_used = 0;
+//		}
+		//unlock pl_used int
+//		pthread_mutex_unlock(&list_lock);
+//		cout << "thread unlocked and starting over" << endl;
+	}
+}
+
+void update_data(){
+	strcpy(messagecpy, message);
+	token = strtok(messagecpy, ":");
+	token = strtok(NULL, ":");
+	token = strtok(NULL, "\"");
+	temprd.z = atof(token);
+	token = strtok(NULL, ":");
+	token = strtok(NULL, "\"");
+	temprd.x = atof(token);
+	token = strtok(NULL, ":");
+	token = strtok(NULL, "\"");
+	temprd.y = atof(token);
+	temprd.x = (-(slon - temprd.x) * (cos(slat*(M_PI/180.0))*69.172));
+	temprd.y = temprd.y / 5280.0;
+	temprd.z = ((slat - temprd.z)*69.0);
+	temprd.x *= 10;
+	//temprd.y *= 10;
+	temprd.z *= 10;
+	r_data.push_back(temprd);
+	PathList = glGenLists(1);
+	glNewList(PathList, GL_COMPILE);
+		glLineWidth(5.);
+		glBegin(GL_LINE_STRIP);
+		for(int i=0; i<r_data.size(); i++){
+			glVertex3f(r_data[i].x, r_data[i].y, r_data[i].z);
+		}
+		glEnd();
+	glEndList();
+}
+>>>>>>> 5917ef788261dc3584a2093789f54d6ae1e51656

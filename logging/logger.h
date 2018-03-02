@@ -122,7 +122,11 @@ void logfun(FILE* logfile){
 		end = strstr(message, "&&"); //points to first &
 		*end = '\0'; //null terminate
 		
+<<<<<<< HEAD
 		if(strcmp(message, "**") == 0){ //exit if all data transmitted 
+=======
+		if((strcmp(message, "**") == 0) || (strcmp(message, "**&&") == 0)){ //exit if all data transmitted 
+>>>>>>> 5917ef788261dc3584a2093789f54d6ae1e51656
 			if(debug){
 				printf("logger recieved end of data transmit signal and is exiting\n");
 				fflush(stdout);

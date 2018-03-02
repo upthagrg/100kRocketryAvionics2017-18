@@ -1,0 +1,23 @@
+body {
+    text-align: center;
+    font-family: Sans-serif;
+    margin: 0;
+}
+
+.axis .domain, .axis .tick line {
+    stroke-width: 2px;
+    stroke: DarkSlateGrey;
+}
+
+.axis .tick text {
+    font-size: 15px;
+}
+
+.needle {
+    fill: red;
+}
+
+.label {
+    fill: #AAA;
+    font-size: 18px;
+}

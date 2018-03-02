@@ -90,7 +90,11 @@ vector<struct fpoint>  make_trace_list(char* filename){
 			inited = 1;
 		}
 		// delta miles = ((ending longitude - starting longitude) * (cos(starting latitude * (pi/180)) * 69.172))
+<<<<<<< HEAD
 		temp.x=((slon - atof(numbuff)) * (cos(slat * (M_PI/180.0)) * 69.172)); //HERE
+=======
+		temp.x=(-(slon - atof(numbuff)) * (cos(slat * (M_PI/180.0)) * 69.172)); //HERE
+>>>>>>> 5917ef788261dc3584a2093789f54d6ae1e51656
 //		cout << "slon: " << slon << " lon: " << atof(numbuff) << " slon - lon: " << slon - atof(numbuff) << endl;
 //		cout << "slat: " << slat << " slat*(pi/180): " << slat * (M_PI/180.0) << endl;
 //		cout << "cos(slat*(pi/180)): " << cos(slat*(M_PI/180.0)) << " cos() * 69.172: " << cos(slat*(M_PI/180.0))*69.172 << endl;
@@ -139,7 +143,11 @@ vector<struct fpoint>  make_trace_list(char* filename){
 			if(cdebug){
 				cout << "x: " << vec[i].x << " y: " << vec[i].y << " z: " << vec[i].z << endl;
 			}
+<<<<<<< HEAD
 			glVertex3f(vec[i].x, vec[i].y, vec[i].z);
+=======
+			glVertex3f(vec[i].x*10, vec[i].y, vec[i].z*10);
+>>>>>>> 5917ef788261dc3584a2093789f54d6ae1e51656
 			if(vec[i].y > apalt){
 				apalt = vec[i].y;
 				ref = i;
