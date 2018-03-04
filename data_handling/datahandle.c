@@ -1,3 +1,9 @@
+<<<<<<< HEAD
+#include <conversion.h>
+#include <stdio.h>
+#include <stdlib.h>
+#include <string.h>
+=======
 #define _XOPEN_SOURCE 500 //makes usleep work
 #include <conversion.h>
 #include <stdio.h>
@@ -185,3 +191,4 @@ int main(){
 
 	return 0;
 }
+>>>>>>> 5917ef788261dc3584a2093789f54d6ae1e51656
