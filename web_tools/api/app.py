@@ -5,7 +5,7 @@ from pymongo import MongoClient
 from bson import ObjectId
 from flask_cors import CORS
 import json
-from datetime import datetime
+from datetime import datetime, timedelta
 
 app = Flask(__name__)
 CORS(app)
@@ -13,18 +13,27 @@ client = MongoClient(os.environ['DB_PORT_27017_TCP_ADDR'], 27017)
 db = client.rocketinfodb
 
 
-@app.route('/api/v1.0/telemetry_all', methods=['GET'])
-def get_all_telemetry():
+@app.route('/api/v1.0/telemetry_all/<option>', methods=['GET'])
+def get_all_telemetry(option):
     telemetry = db.telemetry
+    launch = db.launch
     if telemetry.count() == 0:
         return jsonify({'result': 'no data'})
     output = []
     for t in telemetry.find():
+        if option == "timestamp":
+            cursor = launch.find().sort([("_id", pymongo.DESCENDING)])
+            dt = datetime.strptime(cursor[0]['start_time'],
+                                                     '%Y-%m-%d %H:%M:%S')
+            nt = dt + timedelta(seconds=float(t['time']))
+            time = format(nt, '%Y-%m-%d %H:%M:%S')
+        else:
+            time = t['time']
         output.append({
             'altitude': t['altitude'],
             'longitude': t['longitude'],
             'latitude': t['latitude'],
-            'time': t['time'],
+            'time': time,
             'velocity': t['velocity']
         })
     return jsonify({'result': output})
@@ -42,6 +51,20 @@ def get_telemetry():
         'latitude': cursor[0]['latitude'],
         'time': cursor[0]['time'],
         'velocity': cursor[0]['velocity']
+    })
+    return jsonify({'result': output})
+
+
+@app.route('/api/v1.0/launch/', methods=['GET'])
+def get_launch():
+    launch = db.launch
+    if launch.count() == 0:
+        return jsonify({'result': 'no data'})
+    output = []
+    cursor = launch.find().sort([("_id", pymongo.DESCENDING)])
+    output.append({
+        'start_time': cursor[0]['start_time'],
+        'end_time': cursor[0]['end_time']
     })
     return jsonify({'result': output})
 
@@ -90,4 +113,4 @@ def post_telemetry():
 
 
 if __name__ == "__main__":
-    app.run(host='0.0.0.0', debug=True)
+    app.run(host='0.0.0.0', debug=True, threaded=True)

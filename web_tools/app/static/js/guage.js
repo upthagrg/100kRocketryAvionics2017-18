@@ -309,7 +309,30 @@ function updateGauges(data) {
 	gauges["velocity"].redraw(mpsToMph(data['result'][0].velocity));
 }
 
-function initialize() {
-    createGauges();
+function initializeGuages() {
+	createGauges();
+	$.ajaxSetup({
+		cache: false
+	});
+	(function poll() {
+		setTimeout(function () {
+			$.ajax({
+				cache: false,
+				dataType: "json",
+				url: "http://0.0.0.0:5000/api/v1.0/telemetry?_=" + (new Date).getTime(),
+				method: 'GET',
+				success: function (data) {
+					if (data.result == "no data") {
+						poll();
+					} else {
+						updateGauges(data);
+						poll();
+					}
+				}
+			});
+		}, 500);
+	})();
 }
+
+
 
