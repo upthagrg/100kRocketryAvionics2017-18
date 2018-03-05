@@ -3,9 +3,6 @@
 ./.git/hooks/pre-rebase.sample:24:	topic=`git symbolic-ref HEAD` ||
 ./.git/hooks/pre-rebase.sample:25:	exit 0 ;# we do not interrupt rebasing detached HEAD
 ./3d_trace/include/freeglut_ext.h:78:#define  GLUT_WINDOW_HEADER_HEIGHT          0x01FB  /* Docs say it should always have been GLUT_WINDOW_BORDER_HEIGHT, keep this for backward compatibility */
-./data_handling/datahandle.c:1:<<<<<<< HEAD
-./data_handling/generate/datagen.c:54:<<<<<<< HEAD
-./data_handling/handle.py:2:<<<<<<< HEAD
 ./kalman/Makefile:8:HEADERS		= $(TARGET).h matrix.h vector.h
 ./kalman/Makefile:15:$(TARGET): $(SRCS) $(HEADERS)
 ./kalman/Makefile:18:debug: $(SRCS) $(HEADERS)
