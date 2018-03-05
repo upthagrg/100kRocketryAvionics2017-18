@@ -1978,7 +1978,7 @@ bool	detect_internet_connection(){
 	bool con;
 	int ret;
 
-	devnul = open("/dev/null", O_WRONLY);
+	devnul = open("/dev/null", O_RDWR);
 
 	childid = fork();
 
@@ -1991,9 +1991,9 @@ bool	detect_internet_connection(){
 
         case 0: //child
                 //exec into wget
-		dup2(0, devnul); //duplicate /dev/null to stdin
-		dup2(1, devnul); //duplicate /dev/null to stdout
-		dup2(2, devnul); //duplicate /dev/null to stderr
+		dup2(devnul, 0); //duplicate /dev/null to stdin
+		dup2(devnul, 1); //duplicate /dev/null to stdout
+		dup2(devnul, 2); //duplicate /dev/null to stderr
                 ret = execlp("wget", "wget", "www.google.com", NULL);
                 if(ret == -1){
 			printf("ERROR CHECKING CONNECTION\n");
