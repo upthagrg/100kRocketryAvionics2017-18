@@ -134,14 +134,14 @@ void gen_data(float freq, float salt, float svel, float slat, float slon){
 		alt = ((-4.9*powf(time, 2)) + (svel*time) + salt); //update alt
 		dec = rand()%2;
 		if(dec){ //update lat
-			lat += 0.0001;
+			lat += 0.00001;
 		}
 		else{
 			lat -= 0.0001;
 		}
 		dec = rand()%2;
 		if(dec){ //update lon
-			lon += 0.0001;
+			lon += 0.00001;
 		}
 		else{
 			lon -= 0.0001;
@@ -310,6 +310,7 @@ int main(int argc, char** argv){
 				/* remap pipeno fd to the read pipe  and exec*/
                 		close(files[1]); //close write
                 		dup2(pipeno, files[0]); //duplicate read side to pipeno (default 3)
+                		dup2(files[0], pipeno); //duplicate read side to pipeno (default 3)
 				if(debug){
 					printf("starting %s as child process\n", proc_name);
                         		fflush(stdout);

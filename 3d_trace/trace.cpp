@@ -2124,7 +2124,7 @@ void update_data(){
 	temprd.y = temprd.y / 5280.0;
 	temprd.z = ((slat - temprd.z)*69.0);
 	temprd.x *= 10;
-	//temprd.y *= 10;
+	temprd.y *= 10;
 	temprd.z *= 10;
 	r_data.push_back(temprd);
 	PathList = glGenLists(1);
