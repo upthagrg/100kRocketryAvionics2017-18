@@ -15,10 +15,12 @@ void identity_matrix(Matrix *matrix)
 {
 	uint32_t i, j;
 
-	for (i = 0; i < matrix->rows; i++)
-		for (j = 0; j < matrix->cols; j++)
-			if (i == j) matrix->matrix[i][j] = 1;
-			else matrix->matrix[i][j] = 0;
+	for (i = 0; i < matrix->rows; i++) {
+		for (j = 0; j < matrix->cols; j++) {
+			if (i == j) matrix_element(*matrix, i, j) = 1;
+			else matrix_element(*matrix, i, j) = 0;
+		}
+	}
 }
 
 int8_t row_vector(Matrix matrix, uint32_t row, Vector *out)
@@ -27,8 +29,9 @@ int8_t row_vector(Matrix matrix, uint32_t row, Vector *out)
 
 	assert(matrix.cols == out->size);
 
-	for (i = 0; i < matrix.cols; i++)
-		out->vector[i] = matrix.matrix[row][i];
+	for (i = 0; i < matrix.cols; i++) {
+		out->vector[i] = matrix_element(matrix, row, i);
+	}
 
 	return 0;
 }
@@ -39,22 +42,50 @@ int8_t column_vector(Matrix matrix, uint32_t column, Vector *out)
 
 	assert(matrix.rows == out->size);
 
-	for (i = 0; i < matrix.rows; i++)
-		out->vector[i] = matrix.matrix[i][column];
+	for (i = 0; i < matrix.rows; i++) {
+		out->vector[i] = matrix_element(matrix, i, column);
+	}
 
 	return 0;
 }
 
-int8_t matrix_scale(Matrix in, float factor, Matrix *out)
+int8_t matrix_row_add(Matrix in, uint32_t in_row, Matrix *out, uint32_t out_row)
+{
+	uint32_t i;
+
+	assert(in_row < in.rows);
+	assert(out_row < out->rows);
+	assert(in.cols == out->cols);
+
+	for (i = 0; i < in.cols; i++) {
+		matrix_element(*out, out_row, i) += matrix_element(in, in_row, i);
+	}
+
+	return 0;
+}
+
+int8_t matrix_row_scale(Matrix *matrix, uint32_t row, float factor)
+{
+	uint32_t i;
+	
+	assert(row < matrix->rows);
+
+	for (i = 0; i < matrix->cols; i++) {
+		matrix_element(*matrix, row, i) *= factor;
+	}
+
+	return 0;
+}
+
+int8_t matrix_scale(Matrix matrix, float factor)
 {
 	uint32_t i, j;
 
-	assert(in.rows == out->rows);
-	assert(in.cols == out->cols);
-	
-	for (i = 0; i < in.rows; i++)
-		for (j = 0; j < in.cols; j++)
-			out->matrix[i][j] = in.matrix[i][j] * factor;
+	for (i = 0; i < matrix.rows; i++) {
+		for (j = 0; j < matrix.cols; j++) {
+			matrix_element(matrix, i, j) *= factor;
+		}
+	}
 	
 	return 0;
 }
@@ -66,9 +97,11 @@ int8_t matrix_transpose(Matrix in, Matrix *out)
 	assert(in.rows == out->cols);
 	assert(in.cols == out->rows);
 	
-	for (i = 0; i < in.rows; i++)
-		for (j = 0; j < in.cols; j++)
-			out->matrix[j][i] = in.matrix[i][j];
+	for (i = 0; i < in.rows; i++) {
+		for (j = 0; j < in.cols; j++) {
+			matrix_element(*out, j, i) = matrix_element(in, i, j);
+		}
+	}
 
 	return 0;
 }
@@ -80,9 +113,12 @@ int8_t matrix_add(Matrix a, Matrix b, Matrix *out)
 	assert(a.rows == b.rows && a.rows == out->rows);
 	assert(a.cols == b.cols && a.cols == out->cols);
 
-	for (i = 0; i < a.rows; i++)
-		for (j = 0; j < a.cols; j++)
-			out->matrix[i][j] = a.matrix[i][j] + b.matrix[i][j];
+	for (i = 0; i < a.rows; i++) {
+		for (j = 0; j < a.cols; j++) {
+			matrix_element(*out, i, j) =
+				matrix_element(a, i, j) + matrix_element(b, i, j);
+		}
+	}
 
 	return 0;
 }
@@ -108,15 +144,39 @@ int8_t matrix_multiply(Matrix a, Matrix b, Matrix *out)
 			column_vector(b, j, &v);
 			dp = dot_product(u, v);
 			assert(dp != NaN);
-			out->matrix[i][j] = dp;
+			matrix_element(*out, i, j) = dp;
 		}
 	}
 
 	return 0;
 }
 
-int8_t matrix_inverse(Matrix matrix, Matrix *out)
+int8_t matrix_inverse(Matrix in, Matrix *out)
 {
-	/* TODO: Implement */
+	uint32_t i, j;
+	float factor;
+
+	assert(in.rows == out->rows);
+	assert(in.cols == out->cols);
+
+	identity_matrix(out);
+
+	for (i = 0; i < in.rows; i++) {
+		factor = 1 / matrix_element(in, i, i);
+		matrix_row_scale(&in, i, factor);
+		matrix_row_scale(out, i, factor);
+
+		for (j = 0; j < in.rows; j++) {
+			if (i == j) continue;
+			factor = matrix_element(in, j, i) * -1;
+			matrix_row_scale(&in, i, factor);
+			matrix_row_scale(out, i, factor);
+			matrix_row_add(in, i, &in, j);
+			matrix_row_add(*out, i, out, j);
+			matrix_row_scale(&in, i, 1 / factor);
+			matrix_row_scale(out, i, 1 / factor);
+		}
+	}
+
 	return 0;
 }

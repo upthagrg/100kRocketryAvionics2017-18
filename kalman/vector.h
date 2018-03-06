@@ -8,8 +8,14 @@ typedef struct Vector {
 	float *vector;
 } Vector;
 
-void new_vector(Vector *, uint32_t size, float [size]);
+/*
+  Initializes the vector `vector' of size `size' stored in `arr'
+ */
+void new_vector(Vector *vector, uint32_t size, float arr[size]);
 
-float dot_product(Vector, Vector);
+/*
+  Returns the dot product of vectors `u' and `v', or NaN if not possible
+ */
+float dot_product(Vector u, Vector v);
 
 #endif
