@@ -55,7 +55,7 @@ int8_t matrix_row_add(Matrix in, uint32_t in_row, Matrix *out, uint32_t out_row)
 
 	assert(in_row < in.rows);
 	assert(out_row < out->rows);
-	assert(in.cols == out->cols);
+	assert(in.cols >= out->cols);
 
 	for (i = 0; i < in.cols; i++) {
 		matrix_element(*out, out_row, i) += matrix_element(in, in_row, i);
@@ -77,13 +77,13 @@ int8_t matrix_row_scale(Matrix *matrix, uint32_t row, float factor)
 	return 0;
 }
 
-int8_t matrix_scale(Matrix matrix, float factor)
+int8_t matrix_scale(Matrix *matrix, float factor)
 {
 	uint32_t i, j;
 
 	for (i = 0; i < matrix.rows; i++) {
 		for (j = 0; j < matrix.cols; j++) {
-			matrix_element(matrix, i, j) *= factor;
+			matrix_element(*matrix, i, j) *= factor;
 		}
 	}
 	
@@ -158,6 +158,7 @@ int8_t matrix_inverse(Matrix in, Matrix *out)
 
 	assert(in.rows == out->rows);
 	assert(in.cols == out->cols);
+	assert(in.rows == in.cols); // Only square matrices are invertible
 
 	identity_matrix(out);
 
