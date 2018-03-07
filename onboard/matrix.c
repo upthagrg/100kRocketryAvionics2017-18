@@ -81,9 +81,9 @@ int8_t matrix_scale(Matrix matrix, float factor)
 {
 	uint32_t i, j;
 
-	for (i = 0; i < matrix.rows; i++) {
-		for (j = 0; j < matrix.cols; j++) {
-			matrix_element(matrix, i, j) *= factor;
+	for (i = 0; i < matrix->rows; i++) {
+		for (j = 0; j < matrix->cols; j++) {
+			matrix_element(*matrix, i, j) *= factor;
 		}
 	}
 	
@@ -110,8 +110,10 @@ int8_t matrix_add(Matrix a, Matrix b, Matrix *out)
 {
 	uint32_t i, j;
 
-	assert(a.rows == b.rows && a.rows == out->rows);
-	assert(a.cols == b.cols && a.cols == out->cols);
+	assert(a.rows == b.rows);
+	assert(a.rows == out->rows);
+	assert(a.cols == b.cols);
+	assert(a.cols == out->cols);
 
 	for (i = 0; i < a.rows; i++) {
 		for (j = 0; j < a.cols; j++) {
@@ -158,6 +160,7 @@ int8_t matrix_inverse(Matrix in, Matrix *out)
 
 	assert(in.rows == out->rows);
 	assert(in.cols == out->cols);
+	assert(in.rows == in.cols);
 
 	identity_matrix(out);
 
