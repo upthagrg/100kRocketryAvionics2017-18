@@ -50,7 +50,7 @@ int8_t matrix_row_scale(Matrix *matrix, uint32_t row, float factor);
 /*
   Scales the matrix `matrix' by `factor'
  */
-int8_t matrix_scale(Matrix matrix, float factor);
+int8_t matrix_scale(Matrix *matrix, float factor);
 
 /*
   Finds the transpose of the matrix `in' and stores the result in `out'
