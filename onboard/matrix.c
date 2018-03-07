@@ -77,7 +77,7 @@ int8_t matrix_row_scale(Matrix *matrix, uint32_t row, float factor)
 	return 0;
 }
 
-int8_t matrix_scale(Matrix matrix, float factor)
+int8_t matrix_scale(Matrix *matrix, float factor)
 {
 	uint32_t i, j;
 

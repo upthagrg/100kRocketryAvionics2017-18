@@ -10,7 +10,7 @@
 enum sensor_var { LATITUDE, LONGITUDE, ALTITUDE, PRESSURE, ACCELERATION, YAW, PITCH, ROLL, SPEED, JERK };
 
 struct filter {
-	Matrix state, measurement, prediction, prediction_model, observation_model, uncertainty, uncertainty_prediction, weights;
+	Matrix state, measurement, prediction, prediction_model, observation_model, uncertainty, uncertainty_prediction, weights, process_covariance, observation_covariance;
 };
 
 /*
@@ -23,6 +23,8 @@ struct filter {
 int8_t kalman_filter(void);
 
 int8_t kf_init(void);
+
+int8_t kf_main_loop(void);
 
 int8_t kf_predict_state(void);
 
