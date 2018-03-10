@@ -53,7 +53,7 @@ void get_data(char* buff){
 		fflush(stdout);
 	}
 //	do{ //loop until flight is "finished" 
-		sprintf(buff,"{\"%s\":\"%f\", \"%s\":\"%f\", \"%s\":\"%f\", \"%s\":\"%f\", \"%s\":\"%f\"}", str1,vel,str2,lat,str3,lon,str4,alt,str5,mytime); //make JSON string
+		sprintf(buff,"{\"%s\":\"%f\", \"%s\":\"%f\", \"%s\":\"%f\", \"%s\":\"%f\", \"%s\":\"%f\"}&&", str1,vel,str2,lat,str3,lon,str4,alt,str5,mytime); //make JSON string
 		//update variables
 		mytime += (1.0/freq); //update time
 		alt = ((-4.9*powf(mytime, 2)) + (svel*mytime) + salt); //update alt
