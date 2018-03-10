@@ -240,6 +240,7 @@ int main(int argc, char** argv){
 				exit(7);
 			}
 			minus++;
+			minus++;
 		}
 		else if(strcmp(argv[i], "-rate") == 0){ //get update rate in Hz
 			freq = atof(argv[i+1]);
