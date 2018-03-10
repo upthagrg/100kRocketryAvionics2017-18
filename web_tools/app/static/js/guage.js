@@ -282,9 +282,12 @@ function createGauge(name, label, min, max) {
 }
 
 function createGauges() {
-    createGauge("altitude", "Altitude", 0, 50);
-    createGauge("speed", "Speed", 0, 2500);
-    createGauge("velocity", "Velocity", -2500, 2500);
+    createGauge("altitude_booster", "Altitude", 0, 50);
+    createGauge("speed_booster", "Speed", 0, 2500);
+	createGauge("velocity_booster", "Velocity", -2500, 2500);
+	createGauge("altitude_sustainer", "Altitude", 0, 50);
+	createGauge("speed_sustainer", "Speed", 0, 2500);
+	createGauge("velocity_sustainer", "Velocity", -2500, 2500);
 }
 
 function feetToMiles(value) {
@@ -304,9 +307,15 @@ function mpsToMph(value) {
 }
 
 function updateGauges(data) {
-	gauges["altitude"].redraw(metersToMiles(data['result'][0].altitude));
-	gauges["speed"].redraw(mpsToMph(Math.abs(data['result'][0].velocity)));
-	gauges["velocity"].redraw(mpsToMph(data['result'][0].velocity));
+	if (data['result'][0].type == "b") {
+	gauges["altitude_booster"].redraw(metersToMiles(data['result'][0].altitude));
+	gauges["speed_booster"].redraw(mpsToMph(Math.abs(data['result'][0].velocity)));
+	gauges["velocity_booster"].redraw(mpsToMph(data['result'][0].velocity));
+	} else {
+	gauges["altitude_sustainer"].redraw(metersToMiles(data['result'][0].altitude));
+	gauges["speed_sustainer"].redraw(mpsToMph(Math.abs(data['result'][0].velocity)));
+	gauges["velocity_sustainer"].redraw(mpsToMph(data['result'][0].velocity));
+	}
 }
 
 function initializeGuages() {

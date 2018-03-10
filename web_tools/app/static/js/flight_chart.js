@@ -25,10 +25,15 @@ function initChartData() {
 }
 
 function formatData(data) {
-    var formated_data = [['date'],['Staged Intervention']]
+    var formated_data = [['date'], ['Booster'], ['Sustainer']]
     $.each(data.result, function (index, value) {
         formated_data[0].push(value.time)
+        if(value.type=="b") {
         formated_data[1].push(value.altitude)
+        }
+        else {
+        formated_data[2].push(value.altitude)
+        }
     });
     return formated_data
 }
