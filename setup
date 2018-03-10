@@ -5,10 +5,7 @@ echo
 echo "installing apt-file"
 echo
 sudo apt-get install file -y
-<<<<<<< HEAD
-=======
 sudo apt-get install apt-file -y
->>>>>>> 5917ef788261dc3584a2093789f54d6ae1e51656
 echo
 echo "updating apt-file"
 echo
@@ -18,10 +15,7 @@ echo
 echo "installing docker" 
 echo
 sudo apt-get install docker.io -y
-<<<<<<< HEAD
-=======
 sudo apt-get install docker-compose -y
->>>>>>> 5917ef788261dc3584a2093789f54d6ae1e51656
 #C/C++
 echo
 echo "installing gcc" 
@@ -98,13 +92,10 @@ sudo  apt-get install python-pip python-dev build-essential -y
 sudo  pip install --upgrade pip 
 sudo  pip install --upgrade virtualenv 
 echo
-<<<<<<< HEAD
-=======
 echo "installing Pillow module for python"
 echo
 sudo pip install Pillow
 echo
->>>>>>> 5917ef788261dc3584a2093789f54d6ae1e51656
 echo "installing requests module for python"
 echo
 sudo pip install requests 

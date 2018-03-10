@@ -1,9 +1,14 @@
 /*******************************************************************************************
 *Title: conversion.h
 *Author: Glenn Upthagrove
-*Date: 01/05/2018
+*Date: 03/07/2018
 *Description: Converts raw telemetry data into JSON formatted strings. 
 *******************************************************************************************/
+
+#ifndef __CONVERSION
+#define __CONVERSION
+
+
 #define _XOPEN_SOURCE 500 //makes usleep work
 #include <stdio.h>
 #include <stdlib.h>
@@ -58,3 +63,5 @@ struct telem_data structure(char** buff){
 	data.time = atof(token);
 	return data;
 }
+
+#endif

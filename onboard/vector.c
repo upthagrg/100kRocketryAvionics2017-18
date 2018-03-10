@@ -15,8 +15,9 @@ float dot_product(Vector u, Vector v)
 
 	if (u.size != v.size) return NaN;
 	
-	for (i = 0; i < u.size; i++)
+	for (i = 0; i < u.size; i++) {
 		dp += u.vector[i] * v.vector[i];
+	}
 
 	return dp;
 }
