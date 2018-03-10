@@ -31,5 +31,7 @@ while 1:
     	r = requests.post('http://localhost:5000/api/v1.0/telemetry', json = jdata)
     	print r.text
     	fifo2.close()
+    if (flag1 == False) && (flag2 == False):
+	break
 r = requests.get('http://localhost:5000/api/v1.0/end_launch/'+launch.text)
 print r.text
