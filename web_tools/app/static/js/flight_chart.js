@@ -8,7 +8,7 @@ function initChartData() {
             $.ajax({
                 cache: false,
                 dataType: "json",
-                url: "http://0.0.0.0:5000/api/v1.0/telemetry_all/timestamp?_=" + (new Date).getTime(),
+                url: "http://0.0.0.0:5000/api/v1.0/telemetry_all?_=" + (new Date).getTime(),
                 method: 'GET',
                 success: function (data) {
                     if (data.result == "no data") {
@@ -16,6 +16,7 @@ function initChartData() {
                         return
                     } else {
                         initFlightChart(data)
+                        console.log(data)
                         poll();
                     }
                 }
@@ -24,17 +25,18 @@ function initChartData() {
     })();
 }
 
+
+
+
 function formatData(data) {
-    var formated_data = [['date'], ['Booster'], ['Sustainer']]
-    $.each(data.result, function (index, value) {
-        formated_data[0].push(value.time)
-        if(value.type=="b") {
-        formated_data[1].push(value.altitude)
-        }
-        else {
-        formated_data[2].push(value.altitude)
-        }
-    });
+    var formated_data = [['date'], ['Sustainer'], ['Booster']]
+    $.each(data[1].sustainer, function (index, packet) {
+        formated_data[0].push(packet.time)
+        formated_data[1].push(packet.altitude)
+    })
+    $.each(data[0].booster, function (index, packet) {
+        formated_data[2].push(packet.altitude)
+    }) 
     return formated_data
 }
 
