@@ -110,10 +110,8 @@ int8_t matrix_add(Matrix a, Matrix b, Matrix *out)
 {
 	uint32_t i, j;
 
-	assert(a.rows == b.rows);
-	assert(a.rows == out->rows);
-	assert(a.cols == b.cols);
-	assert(a.cols == out->cols);
+	assert(a.rows == b.rows && a.rows == out->rows);
+	assert(a.cols == b.cols && a.cols == out->cols);
 
 	for (i = 0; i < a.rows; i++) {
 		for (j = 0; j < a.cols; j++) {
@@ -160,7 +158,7 @@ int8_t matrix_inverse(Matrix in, Matrix *out)
 
 	assert(in.rows == out->rows);
 	assert(in.cols == out->cols);
-	assert(in.rows == in.cols);
+	assert(in.rows == in.cols); /* Only square matrices are invertible */
 
 	identity_matrix(out);
 

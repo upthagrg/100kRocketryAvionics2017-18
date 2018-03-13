@@ -9,46 +9,46 @@ int main(void)
 	return 0;
 }
 
-void vector_init_test(void)
+int8_t vector_init_test(void)
 {
 	Vector u;
 	float arr[10];
-	int i = 0; // Iteration variable
-	for(i; i < 10; i++)
-		arr[i] = i;
-	
+	uint32_t i = 0; /* Iteration variable */
+	for(i = 0; i < 10; i++){
+		arr[i] = (float) i;
+	}
 	new_vector(&u, 10, arr);
 	
 	assert(u.size == 10);
-	for(i = 0; i < u.size; i++)
+	for(i = 0; i < u.size; i++){
 		assert(u.vector[i] == i);
-	
-	return;
+	}
+	return 0;
 }
 
-void vector_dot_product_test(void)
+int8_t vector_dot_product_test(void)
 {
 	Vector a, b, c;
-	int i = 0; // Iteration variable
-	
-	// Build arrays
+	uint32_t i = 0; /* Iteration variable */
 	float arra[10], arrb[10], arrc[9];
+	
+	/* Build arrays */
 	for(i = 0; i < 9; i++){
-		arra[i] = i;
+		arra[i] = (float) i;
 		arrb[i] = 0;
-		arrc[i] = i + i;
+		arrc[i] = (float) (i + i);
 	}
 	arra[9] = 9;
-	arrb[9] = 81;
+	arrb[9] = 0;
 	
-	// Initialize vectors
+	/* Initialize vectors */
 	new_vector(&a, 10, arra);
 	new_vector(&b, 10, arrb);
 	new_vector(&c,  9, arrc);
 	
-	// Run tests
-	assert(dot_product(a, a) == 285);
-	assert(dot_product(a, b) == 0);
-	assert(dot_product(a, c) == NaN); // Different sized arrays
-	return;
+	/* Run tests */
+	assert(dot_product(a, a) == 285.0);
+	assert(dot_product(a, b) == 0.0);
+	assert(dot_product(a, c) == NaN); /* Different sized arrays */
+	return 0;
 }
