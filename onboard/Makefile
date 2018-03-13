@@ -22,10 +22,10 @@ debug: $(SRCS) $(HEADERS)
 tests: vector_test matrix_test
 
 vector_test: $(SRCS) $(HEADERS) $(TESTS)
-	$(CC) $(DEBUGFLAGS) $(CCFLAGS) vector.c tests/vector_test.c -o $@
+	$(CC) $(CCFLAGS) vector.c tests/vector_test.c -o $@
 
 matrix_test: $(SRCS) $(HEADERS) $(TESTS)
-	$(CC) $(DEBUGFLAGS) $(CCFLAGS) vector.c matrix.c tests/matrix_test.c -o $@
-
+	$(CC) $(CCFLAGS) vector.c matrix.c tests/matrix_test.c -o $@
+	
 clean:
 	rm -f $(TARGET) matrix_test vector_test
