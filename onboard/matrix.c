@@ -160,7 +160,7 @@ int8_t matrix_inverse(Matrix in, Matrix *out)
 
 	assert(in.rows == out->rows);
 	assert(in.cols == out->cols);
-	assert(in.rows == in.cols); /* Only square matrices are invertible */
+	assert(in.rows == in.cols);
 
 	identity_matrix(out);
 

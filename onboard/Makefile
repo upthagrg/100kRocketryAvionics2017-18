@@ -26,6 +26,6 @@ vector_test: $(SRCS) $(HEADERS) $(TESTS)
 
 matrix_test: $(SRCS) $(HEADERS) $(TESTS)
 	$(CC) $(CCFLAGS) vector.c matrix.c tests/matrix_test.c -o $@
-	
+
 clean:
 	rm -f $(TARGET) matrix_test vector_test

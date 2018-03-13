@@ -2,6 +2,7 @@
 #include "../matrix.h"
 #include "matrix_test.h"
 #include <stdio.h>
+
 int main(void)
 {
 	matrix_init_test();
@@ -26,7 +27,7 @@ int8_t matrix_init_test(void)
 	float arr[10][10];
 
 	new_matrix(&m, 10, 10, arr);
-	
+
 	/* Check that all elements were correctly stored */
 	assert((float**) m.matrix == (float**) arr);
 	assert(m.cols == 10);
@@ -42,9 +43,9 @@ int8_t matrix_element_get_test(void)
 	for(i = 0; i < 10; i++)
 		for(j = 0; j < 10; j++)
 			arr[i][j] = (float) (i + j);
-		
+
 	new_matrix(&m, 10, 10, arr);
-	
+
 	/* Check that all elements were correctly stored */
 	for(i = 0; i < 10; i++){
 		for(j = 0; j < 10; j++){
@@ -66,7 +67,7 @@ int8_t matrix_element_set_test(void)
 	}
 	new_matrix(&m, 10, 10, arr);
 	matrix_element(m, 5, 6) = 11;
-	
+
 	/* Check that all elements were correctly stored */
 	for(i = 0; i < 10; i++){
 		for(j = 0; j < 10; j++){
@@ -87,10 +88,10 @@ int8_t matrix_identity_test(void)
 	float arr2[5][3];    	/* Non-square matrix 	*/
 	new_matrix(&m1, 10, 10, arr1);
 	new_matrix(&m2, 5, 3, arr2);
-	
+
 	identity_matrix(&m1);
 	identity_matrix(&m2);
-	
+
 	/* Check that all elements were correctly stored in m1 */
 	for(i = 0; i < 10; i++){
 		for(j = 0; j < 10; j++){
@@ -101,7 +102,7 @@ int8_t matrix_identity_test(void)
 			}
 		}
 	}
-	
+
 	/* Check that all elements were correctly stored in m2 */
 	for(i = 0; i < 5; i++){
 		for(j = 0; j < 3; j++){
@@ -111,7 +112,7 @@ int8_t matrix_identity_test(void)
 				assert(matrix_element(m2, i, j) == 0);
 		}
 	}
-	
+
 	return 0;
 }
 
@@ -123,7 +124,7 @@ int8_t matrix_row_vector_test(void)
 	float arrm1[10][10];/* Input 			 		  	*/
 	float arrm2[5][3];	/* Error-case 		   		*/
 	float arrv[10];			/* Output 					*/
-	
+
 	for(i = 0; i < 10; i++){
 		for(j = 0; j < 10; j++){
 			arrm1[i][j] = (float) (i + j);
@@ -134,20 +135,20 @@ int8_t matrix_row_vector_test(void)
 			arrm2[i][j] = (float) (i + j);
 		}
 	}
-	
+
 	new_matrix(&m1, 10, 10, arrm1);
 	new_matrix(&m2, 5, 3, arrm2);
 	new_vector(&v, 10, arrv);
-	
+
 	assert(row_vector(m2, 2, &v)  < 0);	/* Different size 	*/
 	assert(row_vector(m1, 12, &v)  < 0);	/* Out of bounds */
 	assert(row_vector(m1, 8, &v) == 0); 	/* Correct usage */
-	
+
 	/* Test output */
 	for(i = 0; i < 10; i++){
 		assert(v.vector[i] == matrix_element(m1, 8, i));
 	}
-	
+
 	return 0;
 }
 
@@ -169,20 +170,20 @@ int8_t matrix_column_vector_test(void)
 			arrm2[i][j] = (float) (i + j);
 		}
 	}
-	
+
 	new_matrix(&m1, 10, 10, arrm1);
 	new_matrix(&m2, 5, 3, arrm2);
 	new_vector(&v, 10, arrv);
-	
+
 	assert(column_vector(m2, 2, &v)  < 0);  		/* Different sizes */
 	assert(column_vector(m1, 12, &v)  < 0); 	/* Out of bounds */
 	assert(column_vector(m1, 8, &v) == 0);  	/* Correct usage */
-	
+
 	/* Test output */
 	for(i = 0; i < 10; i++){
 		assert(v.vector[i] == matrix_element(m1, i, 8));
 	}
-	
+
 	return 0;
 }
 
@@ -192,7 +193,7 @@ int8_t matrix_row_add_test(void)
 	int i, j;						/* Iteration variables */
 	float arra[10][10]; 	/* Input 					  */
 	float arrc[5][5];   		/* Input/output 		  */
-	
+
 	for(i = 0; i < 10; i++){
 		for(j = 0; j < 10; j++){
 			arra[i][j] = (float) (i + j);
@@ -206,19 +207,19 @@ int8_t matrix_row_add_test(void)
 	new_matrix(&a, 10, 10, arra);
 	new_matrix(&b, 10, 10, arra);
 	new_matrix(&c, 5, 5, arrc);
-	
+
 	/* Test the operation */
 	assert(matrix_row_add(a, 5, &c, 3) < 0);	/* Input is larger than output 		*/
 	assert(matrix_row_add(a, 12, &b, 3) < 0);	/* Out-of-bounds on input 			*/
 	assert(matrix_row_add(a, 8, &b, 12) < 0);	/* Out-of-bounds on output 		*/
 	assert(matrix_row_add(c, 3, &a, 5) < 0);	/* Input is smaller than output 	*/
 	assert(matrix_row_add(a, 8, &b, 8) == 0);	/* Correct operation					*/
-	
+
 	/* Test the results */
 	for(i = 0; i < 10; i++){
 		assert(matrix_element(b, 8, i) == 2 * (i + 8));
 	}
-	
+
 	return 0;
 }
 
@@ -233,11 +234,11 @@ int8_t matrix_row_scale_test(void)
 		}
 	}
 	new_matrix(&m, 10, 10, arr);
-	
+
 	/* Test function */
 	assert(matrix_row_scale(&m, 12, 2) < 0);	/* Out-of-bounds 	 */
 	assert(matrix_row_scale(&m, 8, 2) == 0);	/* Correct operation */
-	
+
 	/* Test output */
 	for(i = 0; i < 10; i++){
 		assert(matrix_element(m, 8, i) == 2 * (i + 8));
@@ -256,10 +257,10 @@ int8_t matrix_scale_test(void)
 		}
 	}
 	new_matrix(&m, 10, 10, arr);
-	
+
 	/* Test function */
 	assert(matrix_scale(&m, 2) == 0); /* Correct operation */
-	
+
 	/* Test output */
 	for(i = 0; i < 10; i++){
 		for(j = 0; j < 10; j++){
@@ -276,7 +277,7 @@ int8_t matrix_transpose_test(void)
 	float arra[10][10];	/* Input 					 */
 	float arrb[10][10];	/* Output 				 */
 	float arrc[5][5]; 		/* Error-case output */
-	
+
 	for(i = 0; i < 10; i++){
 		for(j = 0; j < 10; j++){
 			arra[i][j] = (float) (i + j);
@@ -285,11 +286,11 @@ int8_t matrix_transpose_test(void)
 	new_matrix(&a, 10, 10, arra);
 	new_matrix(&b, 10, 10, arrb);
 	new_matrix(&c, 5, 5, arrc);
-	
+
 	/* Test function */
 	assert(matrix_transpose(a, &c) < 0); 		/* Sizing mis-match   */
 	assert(matrix_transpose(a, &b) == 0); 	/* Correct operation */
-	
+
 	/* Test output */
 	for(i = 0; i < 10; i++){
 		for(j = 0; j < 10; j++){
@@ -307,24 +308,24 @@ int8_t matrix_add_test(void)
 	float arrb[10][10]; /* Input					   */
 	float arrc[5][5];   	  /* Error-case output */
 	float arrd[10][10]; /* Output 				   */
-	
+
 	for(i = 0; i < 10; i++){
 		for(j = 0; j < 10; j++){
 			arra[i][j] = (float) (i + j);
 			arrb[i][j] = (float) (i - j);
 		}
 	}
-	
+
 	new_matrix(&a, 10, 10, arra);
 	new_matrix(&b, 10, 10, arrb);
 	new_matrix(&c, 5, 5, arrc);
 	new_matrix(&d, 10, 10, arrd);
-	
+
 	/* Test function */
 	assert(matrix_add(a, b, &c) < 0); 	/* Output size is different 	*/
 	assert(matrix_add(a, c, &b) < 0); 	/* Inputs are different size 	*/
 	assert(matrix_add(a, b, &d) == 0);	/* Successful operation 		*/
-	
+
 	/* Test output */
 	for(i = 0; i < 10; i++){
 		for(j = 0; j < 10; j++){
@@ -345,13 +346,13 @@ int8_t matrix_multiply_test(void)
 	float arrf[5][5]; 	/* Output comparison 	*/
 	float arrg[3][3];	/* Output comparison 	*/
 	int i, j;
-	
+
 	/* Fill inputs */
 	/***********
 	If you add more tests, you'll need to either add specific output arrays
 	Or a section that recomputes the dot-products for comparison
 	Because the arrays I've written here are small, it's simpler to check directly against the output
-	Than to fiddle with vectors for the dot product 
+	Than to fiddle with vectors for the dot product
 	***********/
 	for(i = 0; i < 5; i++){
 		for(j = 0; j < 3; j++){
@@ -359,7 +360,7 @@ int8_t matrix_multiply_test(void)
 			arrb[j][i] = (float) (i + j);
 		}
 	}
-	
+
 	/* Fill the first output comparison 							*/
 	/* Formula determined by hand by computing a*b */
 	for(i = 0; i < 5; i++){
@@ -381,13 +382,13 @@ int8_t matrix_multiply_test(void)
 	new_matrix(&e, 3, 3, arre);
 	new_matrix(&f, 5, 5, arrf);
 	new_matrix(&g, 3, 3, arrg);
-	
+
 	/* Test functions */
 	assert(matrix_multiply(a, b, &d) < 0); 	/* Output is improperly sized 		 */
 	assert(matrix_multiply(a, b, &c) == 0);	/* Correct operation, fills matrix c */
 	assert(matrix_multiply(c, b, &c) < 0); 		/* Input is improperly sized 		 */
 	assert(matrix_multiply(b, a, &e) == 0);	/* Correct operation 					 */
-	
+
 	/* Test outputs */
 	for(i = 0; i < 5; i++){
 		for(j = 0; j < 5; j++){
@@ -413,31 +414,31 @@ int8_t matrix_inverse_test(void)
 	float arre[5][5]; /* Large Input						*/
 	float arrf[5][5];  /* Large Output						*/
 	float arrg[5][5]; /* Large Output comparison	*/
-	
+
 	/* Hand-fill the arrays, since it's so small */
 	arra[0][0] = 0;
 	arra[0][1] = 1;
 	arra[1][0] = 1;
 	arra[1][1] = 2;
-	
+
 	/* Small-array comparison, easily hand-computable */
 	arrd[0][0] = -2;
 	arrd[0][1] = 1;
 	arrd[1][0] = 1;
 	arrd[1][1] = 0;
-	
+
 	for(i = 0; i < 3; i++){
 		for(j = 0; j < 4; j++){
 			arrb[i][j] = (float) (i + j);
 		}
 	}
-	
+
 	for(i = 0; i < 5; i++){
 		for(j = 0; j < 5; j++){
 			arre[i][j] = (float) (i + j);
 		}
 	}
-	
+
 	/* Fills the large output comparison*/
 	/*****************************
 	The inverted matrix was computed by wolfram alpha
@@ -456,21 +457,21 @@ int8_t matrix_inverse_test(void)
 			arrg[i][j] = (float) ((i+j)-(4+4*(2-j)*(2-i)))/50;
 		}
 	}
-	
+
 	new_matrix(&a, 2, 2, arra);
 	new_matrix(&b, 3, 4, arrb);
 	new_matrix(&c, 2, 2, arrc);
 	new_matrix(&d, 2, 2, arrd);
 	new_matrix(&e, 5, 5, arre);
 	new_matrix(&f, 5, 5, arrf);
-	new_matrix(&g, 5, 5, arrg);	
-	
+	new_matrix(&g, 5, 5, arrg);
+
 	/* Test operation */
 	assert(matrix_inverse(a, &b) < 0);	 /* Size mis-match							   	*/
 	assert(matrix_inverse(b, &b) < 0);   /* Non-square matrix 					   	*/
 	assert(matrix_inverse(a, &c) == 0); /* Correct operation on small matrix 	*/
 	assert(matrix_inverse(e, &f) == 0); /* Correct operation on large matrix 	*/
-	
+
 	/* Test result   */
 	/* Small matrix */
 	for(i = 0; i < 2; i++){
@@ -478,13 +479,13 @@ int8_t matrix_inverse_test(void)
 			assert(matrix_element(c, i, j) == matrix_element(d, i, j));
 		}
 	}
-	
+
 	/* Large matrix */
 	for(i = 0; i < 5; i++){
 		for(j = 0; j < 5; j++){
 			assert(matrix_element(f, i, j) == matrix_element(g, i, j));
 		}
 	}
-	
+
 	return 0;
 }
