@@ -266,7 +266,7 @@ var gauges = [];
 function createGauge(name, label, min, max) {
     var config =
         {
-            size: 300,
+            size: 150,
             label: label,
             min: undefined != min ? min : 0,
             max: undefined != max ? max : 100,
@@ -282,9 +282,10 @@ function createGauge(name, label, min, max) {
 }
 
 function createGauges() {
-    createGauge("altitude", "Altitude", 0, 50);
-    createGauge("speed", "Speed", 0, 2500);
-    createGauge("velocity", "Velocity", -2500, 2500);
+    createGauge("altitude_booster", "Altitude", 0, 50);
+    createGauge("speed_booster", "Speed", 0, 2500);
+	createGauge("altitude_sustainer", "Altitude", 0, 50);
+	createGauge("speed_sustainer", "Speed", 0, 2500);
 }
 
 function feetToMiles(value) {
@@ -303,35 +304,42 @@ function mpsToMph(value) {
 	return metersToMiles((value * 60 * 60));
 }
 
-function updateGauges(data) {
-	gauges["altitude"].redraw(metersToMiles(data['result'][0].altitude));
-	gauges["speed"].redraw(mpsToMph(Math.abs(data['result'][0].velocity)));
-	gauges["velocity"].redraw(mpsToMph(data['result'][0].velocity));
+function updateGauges(type,data) {
+	if(type=="b") {
+	gauges["altitude_booster"].redraw(metersToMiles(data['result'][0].altitude));
+	gauges["speed_booster"].redraw(mpsToMph(Math.abs(data['result'][0].velocity)));
+	} else {
+	gauges["altitude_sustainer"].redraw(metersToMiles(data['result'][0].altitude));
+	gauges["speed_sustainer"].redraw(mpsToMph(Math.abs(data['result'][0].velocity)));
+	}
 }
 
 function initializeGuages() {
-	createGauges();
 	$.ajaxSetup({
 		cache: false
 	});
-	(function poll() {
+	function poll(type) {
 		setTimeout(function () {
 			$.ajax({
 				cache: false,
 				dataType: "json",
-				url: "http://0.0.0.0:5000/api/v1.0/telemetry?_=" + (new Date).getTime(),
+				url: "http://0.0.0.0:5000/api/v1.0/telemetry/"+type+"?_=" + (new Date).getTime(),
 				method: 'GET',
 				success: function (data) {
 					if (data.result == "no data") {
-						poll();
+						poll(type);
 					} else {
-						updateGauges(data);
-						poll();
+						updateGauges(type,data);
+						poll(type);
 					}
 				}
 			});
 		}, 500);
-	})();
+	}
+	createGauges();
+	poll("b");
+	poll("s");
+	
 }
 
 

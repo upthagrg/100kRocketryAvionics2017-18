@@ -110,8 +110,10 @@ int8_t matrix_add(Matrix a, Matrix b, Matrix *out)
 {
 	uint32_t i, j;
 
-	assert(a.rows == b.rows && a.rows == out->rows);
-	assert(a.cols == b.cols && a.cols == out->cols);
+	assert(a.rows == b.rows);
+	assert(a.rows == out->rows);
+	assert(a.cols == b.cols);
+	assert(a.cols == out->cols);
 
 	for (i = 0; i < a.rows; i++) {
 		for (j = 0; j < a.cols; j++) {
@@ -126,8 +128,8 @@ int8_t matrix_add(Matrix a, Matrix b, Matrix *out)
 int8_t matrix_multiply(Matrix a, Matrix b, Matrix *out)
 {
 	uint32_t i, j;
-	float r[a.rows];
-	float c[b.cols];
+	float r[a.cols];
+	float c[b.rows];
 	Vector u, v;
 	float dp;
 	
@@ -135,7 +137,7 @@ int8_t matrix_multiply(Matrix a, Matrix b, Matrix *out)
 	assert(a.rows == out->rows);
 	assert(b.cols == out->cols);
 
-	new_vector(&u, a.rows, r);
+	new_vector(&u, a.cols, r);
 	new_vector(&v, b.rows, c);
 	
 	for (i = 0; i < a.cols; i++) {

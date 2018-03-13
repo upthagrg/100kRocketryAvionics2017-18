@@ -6,7 +6,7 @@
 </style>
 <link type="text/css" rel="stylesheet" href="static/css/c3.css" /> {% endblock %} {% block content %}
 <div class="row" style="margin-bottom:0px;">
-    <div class="col s12">
+    <div class="col s8">
         <div class="card">
             <span class="card-title">Flight Chart</span>
 
@@ -15,48 +15,41 @@
             </div>
         </div>
     </div>
+    <div class="col s4">
+        <div class="card">
+            <span class="card-title">Stage 1</span>
+            <div class="card-content">
+                <h3>T+ 00:00:00</h3>
+            </div>
+        </div>
+        <div class="card">
+            <span class="card-title">Booster</span>
+            <div class="card-content">
+                <span id="speed_boosterGaugeContainer"></span>
+                <span id="altitude_boosterGaugeContainer"></span>
+            </div>
+        </div>
+        <div class="card">
+            <span class="card-title">Sustainer</span>
+            <div class="card-content">
+                <span id="speed_sustainerGaugeContainer"></span>
+                <span id="altitude_sustainerGaugeContainer"></span>
+                
+            </div>
+        </div>
+    </div>
 </div>
+    {% endblock %} {%block scripts %}
+    <script type="text/javascript" src="static/js/guage.js"></script>
+    <script>
+    </script>
 
-<div class="row">
-    <div class="col s12 m12 l4">
-        <div class="card">
-            <span class="card-title">Altitude</span>
-            <div class="card-content">
-                <span id="altitudeGaugeContainer"></span>
-            </div>
-        </div>
-    </div>
-    <div class="col s12 m12 l4">
-        <div class="card">
-            <span class="card-title">Speed</span>
-            <div class="card-content">
-                <span id="speedGaugeContainer"></span>
-            </div>
-        </div>
-    </div>
-    <div class="col s12 m12 l4">
-        <div class="card">
-            <span class="card-title">Velocity</span>
-            <div class="card-content">
-                <span id="velocityGaugeContainer"></span>
-            </div>
-        </div>
-    </div>
+    <script src="http://d3js.org/d3.v3.min.js"></script>
+    <script src="/static/js/c3.js"></script>
+    <script src="/static/js/flight_chart.js"></script>
+    <script src="/static/js/main.js"></script>
+    <script>
+        start()
+    </script>
 
-
-</div>
-{% endblock %} {%block scripts %}
-<script type="text/javascript" src="static/js/guage.js"></script>
-<script>
-
-</script>
-
-<script src="http://d3js.org/d3.v3.min.js"></script>
-<script src="/static/js/c3.js"></script>
-<script src="/static/js/flight_chart.js"></script>
-<script src="/static/js/main.js"></script>
-<script>
-    start()
-</script>
-
-{% endblock %}
+    {% endblock %}

@@ -4,29 +4,40 @@
 #include <stdint.h>
 #include "matrix.h"
 
-#define NUM_INPUTS 7
-#define NUM_VARS 9
+#define NUM_INPUTS 5
+#define NUM_VARS 10
 
-enum sensor_vars {TIME, LATITUDE, LONGITUDE, ALTITUDE, PRESSURE, ACCELERATION, VELOCITY};
+enum sensor_var { LATITUDE, LONGITUDE, ALTITUDE, PRESSURE, ACCELERATION, YAW, PITCH, ROLL, SPEED, JERK };
 
 struct filter {
-	Matrix state, measurement, prediction, prediction_model, observation_model, uncertainty, uncertainty_prediction, weights;
+	Matrix state, measurement, prediction, prediction_model, observation_model, uncertainty, uncertainty_prediction, weights, process_covariance, observation_covariance;
 };
+
+/*
+  Macros to access the state or measurement variable `v'
+  Can be used to get or set the value
+ */
+#define kfstate(v) ((float (*)[kf.state.cols])kf.state.matrix)[v][0]
+#define kfmeasurement(v) ((float (*)[kf.measurement.cols])kf.measurement.matrix)[v][0]
 
 int8_t kalman_filter(void);
 
-void kf_init(struct filter *);
+int8_t kf_init(void);
 
-void kf_predict_state(struct filter *);
+int8_t kf_main_loop(void);
 
-void kf_predict_uncertainty(struct filter *);
+int8_t kf_predict_state(void);
 
-void kf_measure(struct filter *);
+int8_t kf_predict_uncertainty(void);
 
-void kf_calculate_weights(struct filter *);
+int8_t kf_measure(void);
 
-void kf_update_state(struct filter *);
+int8_t kf_calculate_weights(void);
 
-void kf_update_uncertainty(struct filter *);
+int8_t kf_update_state(void);
+
+int8_t kf_update_uncertainty(void);
+
+float kf_get_value(enum sensor_var);
 
 #endif

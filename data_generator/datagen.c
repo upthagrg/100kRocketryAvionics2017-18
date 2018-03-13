@@ -30,18 +30,22 @@ int fifo;
 int mypipe;
 int files[2];
 int fifo_file;
-char* fifoname = "./commfifo";
+char* fifoname1 = "./commfifo1";
+char* fifoname2 = "./commfifo2";
+char* fifoname;
 int debug;
 char* name;
 int pipeno;
 int myfile;
 int wind;
+char type = 's';
 void gen_data(float freq, float salt, float svel, float slat, float slon){
 	char str1[9] = "velocity";
 	char str2[9] = "latitude";
 	char str3[10] = "longitude";
 	char str4[9] = "altitude";
 	char str5[5] = "time";
+	char str6[5] = "type";
 	char buff[256];
 	char buff3[256];
 	char* buff2;
@@ -65,13 +69,13 @@ void gen_data(float freq, float salt, float svel, float slat, float slon){
 			if(debug){
 				printf("PIPE DETECTED\n");
 			}
-			sprintf(buff,"{\"%s\":\"%f\", \"%s\":\"%f\", \"%s\":\"%f\", \"%s\":\"%f\", \"%s\":\"%f\"}&&", str1,vel,str2,lat,str3,lon,str4,alt,str5,time); //make JSON string
+			sprintf(buff,"{\"%s\":\"%f\", \"%s\":\"%f\", \"%s\":\"%f\", \"%s\":\"%f\", \"%s\":\"%f\", \"%s\":\"%c\"}&&", str1,vel,str2,lat,str3,lon,str4,alt,str5,time, str6, type); //make JSON string
 		}
 		else{
 			if(debug){
 				printf("PIPE NOT DETECTED\n");
 			}
-			sprintf(buff,"{\"%s\":\"%f\", \"%s\":\"%f\", \"%s\":\"%f\", \"%s\":\"%f\", \"%s\":\"%f\"}", str1,vel,str2,lat,str3,lon,str4,alt,str5,time); //make JSON string
+			sprintf(buff,"{\"%s\":\"%f\", \"%s\":\"%f\", \"%s\":\"%f\", \"%s\":\"%f\", \"%s\":\"%f\", \"%s\":\"%c\"}", str1,vel,str2,lat,str3,lon,str4,alt,str5,time, str6, type); //make JSON string
 		}
 		//fprintf(files[1], buff); //print JSON string
 		//fprintf(files[1], "\n"); //print newline
@@ -134,17 +138,17 @@ void gen_data(float freq, float salt, float svel, float slat, float slon){
 		alt = ((-4.9*powf(time, 2)) + (svel*time) + salt); //update alt
 		dec = rand()%2;
 		if(dec){ //update lat
-			lat += 0.00001;
+			lat += 0.0001;
 		}
 		else{
 			lat -= 0.0001;
 		}
 		dec = rand()%2;
 		if(dec){ //update lon
-			lon += 0.00001;
+			lon += 0.00017;
 		}
 		else{
-			lon -= 0.0001;
+			lon -= 0.00017;
 		}
 		if(wind == 1){
 			lon += 0.00001; //east
@@ -229,6 +233,15 @@ int main(int argc, char** argv){
 			wind = 1; //east
 			minus++;
 		}
+		else if(strcmp(argv[i], "-type") == 0){ //get type (booster or sustainer)
+			type = argv[i+1][0];
+			if((type != 'b') && (type != 's')){
+				printf("ERROR, BAD TYPE\n");
+				exit(7);
+			}
+			minus++;
+			minus++;
+		}
 		else if(strcmp(argv[i], "-rate") == 0){ //get update rate in Hz
 			freq = atof(argv[i+1]);
 			minus++;
@@ -270,6 +283,16 @@ int main(int argc, char** argv){
 			pos = i+1;
 			break;
 		}
+	}
+	if(type == 'b'){
+		fifoname = fifoname1;
+	}
+	else if(type == 's'){
+		fifoname = fifoname2;
+	}
+	else{
+		printf("FIFONAME ERROR\n");
+		exit(8);
 	}
 	if(mypipe || fifo){
 		//get args for execvp

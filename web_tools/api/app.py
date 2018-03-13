@@ -13,44 +13,54 @@ client = MongoClient(os.environ['DB_PORT_27017_TCP_ADDR'], 27017)
 db = client.rocketinfodb
 
 
-@app.route('/api/v1.0/telemetry_all/<option>', methods=['GET'])
-def get_all_telemetry(option):
+@app.route('/api/v1.0/telemetry_all', methods=['GET'])
+def get_all_telemetry():
     telemetry = db.telemetry
     launch = db.launch
     if telemetry.count() == 0:
         return jsonify({'result': 'no data'})
-    output = []
+    booster = []
+    sustainer = []
     for t in telemetry.find():
-        if option == "timestamp":
-            cursor = launch.find().sort([("_id", pymongo.DESCENDING)])
-            dt = datetime.strptime(cursor[0]['start_time'],
-                                                     '%Y-%m-%d %H:%M:%S')
-            nt = dt + timedelta(seconds=float(t['time']))
-            time = format(nt, '%Y-%m-%d %H:%M:%S')
+        cursor = launch.find().sort([("_id", pymongo.DESCENDING)])
+        dt = datetime.strptime(cursor[0]['start_time'],
+                                                '%Y-%m-%d %H:%M:%S')
+        nt = dt + timedelta(seconds=float(t['time']))
+        time = format(nt, '%Y-%m-%d %H:%M:%S')
+        if t['type'] == "b":
+            booster.append({
+                'altitude': t['altitude'],
+                'longitude': t['longitude'],
+                'latitude': t['latitude'],
+                'time': time,
+                'velocity': t['velocity'],
+                'type': t['type']
+            })
         else:
-            time = t['time']
-        output.append({
-            'altitude': t['altitude'],
-            'longitude': t['longitude'],
-            'latitude': t['latitude'],
-            'time': time,
-            'velocity': t['velocity']
-        })
-    return jsonify({'result': output})
+            sustainer.append({
+                'altitude': t['altitude'],
+                'longitude': t['longitude'],
+                'latitude': t['latitude'],
+                'time': time,
+                'velocity': t['velocity'],
+                'type': t['type']
+            })
+    return jsonify({'booster': booster},{'sustainer':sustainer})
 
-@app.route('/api/v1.0/telemetry/', methods=['GET'])
-def get_telemetry():
+@app.route('/api/v1.0/telemetry/<t_type>', methods=['GET'])
+def get_telemetry(t_type):
     telemetry = db.telemetry
     if telemetry.count() == 0:
         return jsonify({'result': 'no data'})
     output = []
-    cursor = telemetry.find().sort([("_id", pymongo.DESCENDING)])
+    cursor = telemetry.find({"type": t_type}).sort([("_id", pymongo.DESCENDING)])
     output.append({
         'altitude': cursor[0]['altitude'],
         'longitude': cursor[0]['longitude'],
         'latitude': cursor[0]['latitude'],
         'time': cursor[0]['time'],
-        'velocity': cursor[0]['velocity']
+        'velocity': cursor[0]['velocity'],
+        'type': cursor[0]['type']
     })
     return jsonify({'result': output})
 
