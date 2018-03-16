@@ -18,12 +18,17 @@ int files1_2[2];
 int files2_1[2];
 int files2_2[2];
 int fifo;
-pid_t children[3];
+pid_t children[5];
 int childcnt=0;
 
-void get_data2(char* input, int size){
+void remove_fifo(int);
+
+void get_data2(char* input, char* input2, int size){
 	memset(input, '\0', size);
+	memset(input2, '\0', size);
 	get_data(input);
+	get_data_2(input2);
+	//strcpy(input2, input);
 	
 }
 
@@ -36,6 +41,8 @@ int spawn_raw_log(int in){
 	switch(idret){
 		case -1: //error
 			printf("ERROR SPAWNING RAW LOG\n");
+			remove_fifo(1);
+			remove_fifo(2);
 			exit(1);
 			break;
 		case 0: //child
@@ -49,7 +56,9 @@ int spawn_raw_log(int in){
 				dup2(files1_2[0], 3); //remap pipe read to file 3
 			}
 			else{
-				printf("Error, invalid pipe\n");
+				printf("Error, invalid pipe instance:1, input: %d\n",in);
+				remove_fifo(1);
+				remove_fifo(2);
 				exit(8);
 			}
 			if(debug){
@@ -70,6 +79,8 @@ int spawn_raw_log(int in){
 			}
                         if(execret == -1){//exec error
                                 printf("ERROR LAUNCHING %s", "RAW LOGGER");
+				remove_fifo(1);
+				remove_fifo(2);
                         	exit(3);
                         }
 			break;
@@ -100,6 +111,8 @@ int spawn_json_log(int in){
         switch(idret){
                 case -1: //error
                         printf("ERROR SPAWNING JSON LOG\n");
+			remove_fifo(1);
+			remove_fifo(2);
                         exit(1);
                         break;
                 case 0: //child
@@ -130,6 +143,8 @@ int spawn_json_log(int in){
 			}
                         if(execret == -1){//exec error
                                 printf("ERROR LAUNCHING %s", "JSON LOGGER");
+				remove_fifo(1);
+				remove_fifo(2);
                                 exit(3);
                         }
                         break;
@@ -161,6 +176,8 @@ int spawn_api_handle(){
         switch(idret){
                 case -1: //error
                         printf("ERROR SPAWNING RAW LOG\n");
+			remove_fifo(1);
+			remove_fifo(2);
                         exit(1);
                         break;
                 case 0: //child
@@ -170,6 +187,8 @@ int spawn_api_handle(){
                         execret = execlp("python", "python", "./handle.py",(char*)NULL);
                         if(execret == -1){//exec error
                                 printf("ERROR LAUNCHING %s", "RAW LOGGER");
+				remove_fifo(1);
+				remove_fifo(2);
                                 exit(3);
                         }
                         break;
@@ -230,15 +249,18 @@ void write_to_raw_log(char* input, int output){
 		if(debug){
 			printf("Datahandle writing to raw: %s\n", tmp);
 		}
-		switch(output){
-			case 1:
+			if(output == 1){
 				wret = write(files1_1[1], tmp, (strlen(tmp))); //write packet
-			case 2:
+			}
+			else if(output == 2){
 				wret = write(files1_2[1], tmp, (strlen(tmp))); //write packet
-			default:
-				printf("Error, invalid pipe\n");
+			}
+			else{
+				printf("Error, invalid pipe, instance:2 input: %d\n", output);
+				remove_fifo(1);
+				remove_fifo(2);
 				exit(8);
-		}
+			}
 		tmp += wret; //shorten message accordingly 
 		total += wret; //track total written 
 	}
@@ -253,15 +275,18 @@ void write_to_json_log(char* input, int output){
 		if(debug){
 			printf("Datahandle writing to json: %s\n", tmp);
 		}
-		switch(output){
-			case 1:
+			if(output == 1){
 				wret = write(files2_1[1], tmp, (strlen(tmp))); //write packet
-			case 2:
+			}
+			else if(output == 2){
 				wret = write(files2_2[1], tmp, (strlen(tmp))); //write packet
-			default:
-				printf("Error, invalid pipe\n");
+			}
+			else{
+				printf("Error, invalid pipe instance:3, input: %d\n", output);
+				remove_fifo(1);
+				remove_fifo(2);
 				exit(8);
-		}
+			}
 		tmp += wret; //shorten message accordingly 
 		total += wret; //track total written 
 	}
@@ -275,7 +300,8 @@ int main(int argc, char** argv){
 	int fiforet; //fifo return
 	int execret; //exec return
 	int size = 256; 
-	char retrieved_data[size]; //data string
+	char retrieved_data1[size]; //data string
+	char retrieved_data2[size]; //data string
         int i=0; //common iterator variable 
         char* buffsize = NULL;
         int ret; //return from exec
@@ -288,15 +314,19 @@ int main(int argc, char** argv){
         for(i; i<argc; i++){
                 if(strcmp(argv[i], "-vel") == 0){ //get starting velocity
                         vel = atof(argv[i+1]);
+                        vel2 = atof(argv[i+1]);
                 }
                 else if(strcmp(argv[i], "-alt") == 0){ //get starting altitude
                         alt = atof(argv[i+1]);
+                        alt2 = atof(argv[i+1]);
                 }
                 else if(strcmp(argv[i], "-lat") == 0){ //get starting latitude
                         lat = atof(argv[i+1]);
+                        lat2 = atof(argv[i+1]);
                 }
                 else if(strcmp(argv[i], "-lon") == 0){ //get starting longitude
                         lon = atof(argv[i+1]);
+                        lon2 = atof(argv[i+1]);
                 }
                 else if(strcmp(argv[i], "-wind") == 0){ //get starting longitude
                         wind = 1; //east
@@ -391,25 +421,35 @@ int main(int argc, char** argv){
 			printf("In main, data is: %s\n", retrieved_data2);
 		}
 		//raw log
-		write_to_raw_log(retrieved_data1, 1);
-		write_to_raw_log(retrieved_data2, 2);
+		if(retrieved_data1[0] != 'E'){
+			write_to_raw_log(retrieved_data1, 1);
+		}
+		if(retrieved_data2[0] != 'E'){
+			write_to_raw_log(retrieved_data2, 2);
+		}
 		//convert to json
 		//interpolate
 		//json log
-		write_to_json_log(retrieved_data1, 1);
-		write_to_json_log(retrieved_data2, 2);
+		if(retrieved_data1[0] != 'E'){
+			write_to_json_log(retrieved_data1, 1);
+		}
+		if(retrieved_data2[0] != 'E'){
+			write_to_json_log(retrieved_data2, 2);
+		}
 		//database
 		//trace
-		
-	}while(alt > salt);
+	//	printf("alt: %f, alt2: %f\n", alt, alt2);
+	}while(alt2 > salt);
 	if(debug){
 		//inform user that loop has ended, aka end of transmit	
 		printf("Out of loop\n");
 	}
 //	}
 	usleep(1000); //sleep fpr a little while
-	write_to_raw_log(end);
-	write_to_json_log(end);
+	write_to_raw_log(end,1);
+	write_to_raw_log(end,2);
+	write_to_json_log(end,1);
+	write_to_json_log(end,2);
 
 	printf("Waiting on children...\n");
 	i=0;

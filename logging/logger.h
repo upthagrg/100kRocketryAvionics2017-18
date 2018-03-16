@@ -113,10 +113,10 @@ void logfun(FILE* logfile){
 				fflush(stdout);
 				exit(5);
 			}
-			//if(debug){
+			if(debug){
 				printf("logger Buffer: %s logger Message: %s\n`", buff, message);
 				fflush(stdout);
-			//}
+			}
 		}
 		//fix the string
 		end = strstr(message, "&&"); //points to first &

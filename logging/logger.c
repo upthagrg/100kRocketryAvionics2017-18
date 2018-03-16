@@ -66,15 +66,15 @@ int main(int argc, char** argv){
                         fname = "./log.txt";
                 }
         }
-	printf("\n\n\nLOGGER SPAWNED\n\n\n");
+	printf("\n\nLOGGER SPAWNED\n\n");
 	//open log file
-	printf("opening file\n");
+	printf("Opening file...\n");
         logfile = fopen(fname, "w+");
-	printf("opened file\n");
+	printf("Opened file\n");
 	//log to log file
-	printf("logging\n");
+	printf("Logging...\n");
         logfun(logfile);
-	printf("done logging\n");
+	printf("Done logging\n");
 	//close log file
         fclose(logfile);
 
