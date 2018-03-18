@@ -8,9 +8,11 @@ while 1:
     if flag1 == True:
       with open('./commfifo1') as fifo1: # booster data
           data1 = fifo1.read()
+	  print(data1)
     if flag2 == True:
       with open('./commfifo2') as fifo2: # sustainer data
           data2 = fifo2.read()
+	  print(data2)
     if data1 == "**&&":
         print "End of booster transmission"
 	flag1 = False

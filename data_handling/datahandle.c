@@ -17,7 +17,8 @@ int files1_1[2];
 int files1_2[2];
 int files2_1[2];
 int files2_2[2];
-int fifo;
+int fifo1;
+int fifo2;
 pid_t children[5];
 int childcnt=0;
 
@@ -30,6 +31,27 @@ void get_data2(char* input, char* input2, int size){
 	get_data_2(input2);
 	//strcpy(input2, input);
 	
+}
+
+int start_docker(){
+	pid_t idret = -5; //id return 
+	int execret = -5; //return from exec
+	int child_exit;
+	idret = fork();
+	switch(idret){
+		case -1: //error
+			printf("ERROR SPAWNING RAW LOG\n");
+			remove_fifo(1);
+			remove_fifo(2);
+			exit(1);
+			break;
+		case 0:
+                        execret = execlp("./start_docker.sh", "./start_docker.sh", (char*)NULL);
+		default:
+			waitpid(idret, &child_exit, 0);
+			break;
+	}
+	return idret;
 }
 
 int spawn_raw_log(int in){
@@ -292,6 +314,44 @@ void write_to_json_log(char* input, int output){
 	}
 }
 
+void write_to_api(char* input, int output){
+        int total = 0;
+        int wret = 0;
+        char* tmp;
+        tmp = input;
+        while(total < strlen(input)){ //while not finished writing
+		if(output == 1){
+			fifo1 = open("./commfifo1",  O_WRONLY);
+		}
+		else{
+			fifo2 = open("./commfifo2",  O_WRONLY);
+		}
+                if(debug){
+                        printf("Datahandle writing to api: %s\n", tmp);
+                }
+                        if(output == 1){
+                                wret = write(fifo1, tmp, (strlen(tmp))); //write packet
+                        }
+                        else if(output == 2){
+                                wret = write(fifo2, tmp, (strlen(tmp))); //write packet
+                        }
+                        else{
+                                printf("Error, invalid pipe instance:3, input: %d\n", output);
+                                remove_fifo(1);
+                                remove_fifo(2);
+                                exit(8);
+                        }
+                tmp += wret; //shorten message accordingly 
+                total += wret; //track total written 
+		if(output == 1){
+			close(fifo1);
+		}
+		else{
+			close(fifo2);
+		}
+        }
+}
+
 int main(int argc, char** argv){
 	pid_t raw_logid1, json_logid1, raw_logid2, json_logid2, api_handleid, traceid; //process id's
 	int child_exit = -5; //child exit status bucket
@@ -346,6 +406,11 @@ int main(int argc, char** argv){
                         fflush(stdout);
                 }
         }
+
+
+	printf("\n\nstarting docker...\n\n");
+	start_docker();
+	printf("\n\ndocker up\n\n");
 	
 	salt = alt; //remember initial params
 	svel = vel;
@@ -436,7 +501,13 @@ int main(int argc, char** argv){
 		if(retrieved_data2[0] != 'E'){
 			write_to_json_log(retrieved_data2, 2);
 		}
-		//database
+		//write to API, leading to database
+		if(retrieved_data1[0] != 'E'){
+			//write_to_api(retrieved_data1, 1);
+		}
+		if(retrieved_data2[0] != 'E'){
+			//write_to_api(retrieved_data2, 2);
+		}
 		//trace
 	//	printf("alt: %f, alt2: %f\n", alt, alt2);
 	}while(alt2 > salt);
@@ -450,6 +521,8 @@ int main(int argc, char** argv){
 	write_to_raw_log(end,2);
 	write_to_json_log(end,1);
 	write_to_json_log(end,2);
+//	write_to_api(end, 1);
+//	write_to_api(end, 2);
 
 	printf("Waiting on children...\n");
 	i=0;
