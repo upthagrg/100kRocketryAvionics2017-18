@@ -21,6 +21,7 @@ int fifo1;
 int fifo2;
 pid_t children[5];
 int childcnt=0;
+int debug2=0;
 
 void remove_fifo(int);
 
@@ -326,7 +327,7 @@ void write_to_api(char* input, int output){
 		else{
 			fifo2 = open("./commfifo2",  O_WRONLY);
 		}
-                if(debug){
+                if(debug2){
                         printf("Datahandle writing to api: %s\n", tmp);
                 }
                         if(output == 1){
@@ -405,6 +406,11 @@ int main(int argc, char** argv){
                         printf("data_gen debug: on\n");
                         fflush(stdout);
                 }
+                else if(strcmp(argv[i], "-debug2") == 0){ //get update rate in Hz
+                        debug2 = 1;
+                        printf("data_gen debug: on\n");
+                        fflush(stdout);
+                }
         }
 
 
@@ -469,7 +475,7 @@ int main(int argc, char** argv){
 	raw_logid2 = spawn_raw_log(2);
 	json_logid1 = spawn_json_log(1);
 	json_logid2 = spawn_json_log(2);
-	//api_handleid = spawn_api_handle();
+	api_handleid = spawn_api_handle();
 	//traceid = spawn_trace();
 	
 	//start loop
@@ -503,10 +509,14 @@ int main(int argc, char** argv){
 		}
 		//write to API, leading to database
 		if(retrieved_data1[0] != 'E'){
-			//write_to_api(retrieved_data1, 1);
+			printf("writing to api1\n");
+			write_to_api(retrieved_data1, 1);
+			printf("finished writing to api1\n");
 		}
 		if(retrieved_data2[0] != 'E'){
-			//write_to_api(retrieved_data2, 2);
+			printf("writing to api2\n");
+			write_to_api(retrieved_data2, 2);
+			printf("finished writing to api2\n");
 		}
 		//trace
 	//	printf("alt: %f, alt2: %f\n", alt, alt2);
@@ -521,8 +531,8 @@ int main(int argc, char** argv){
 	write_to_raw_log(end,2);
 	write_to_json_log(end,1);
 	write_to_json_log(end,2);
-//	write_to_api(end, 1);
-//	write_to_api(end, 2);
+	write_to_api(end, 1);
+	write_to_api(end, 2);
 
 	printf("Waiting on children...\n");
 	i=0;
