@@ -320,7 +320,7 @@ void write_to_api(char* input, int output){
         int wret = 0;
         char* tmp;
         tmp = input;
-        while(total < strlen(input)){ //while not finished writing
+        while(total < strlen(input)-2){ //while not finished writing
 		if(output == 1){
 			fifo1 = open("./commfifo1",  O_WRONLY);
 		}
@@ -331,10 +331,10 @@ void write_to_api(char* input, int output){
                         printf("Datahandle writing to api: %s\n", tmp);
                 }
                         if(output == 1){
-                                wret = write(fifo1, tmp, (strlen(tmp))); //write packet
+                                wret = write(fifo1, tmp, (strlen(tmp)-2)); //write packet
                         }
                         else if(output == 2){
-                                wret = write(fifo2, tmp, (strlen(tmp))); //write packet
+                                wret = write(fifo2, tmp, (strlen(tmp)-2)); //write packet
                         }
                         else{
                                 printf("Error, invalid pipe instance:3, input: %d\n", output);
@@ -414,9 +414,9 @@ int main(int argc, char** argv){
         }
 
 
-	//printf("\n\nstarting docker...\n\n");
-	//start_docker();
-	//printf("\n\ndocker up\n\n");
+	printf("\n\nstarting docker...\n\n");
+	start_docker();
+	printf("\n\ndocker up\n\n");
 	
 	salt = alt; //remember initial params
 	svel = vel;
@@ -475,7 +475,7 @@ int main(int argc, char** argv){
 	raw_logid2 = spawn_raw_log(2);
 	json_logid1 = spawn_json_log(1);
 	json_logid2 = spawn_json_log(2);
-	//api_handleid = spawn_api_handle();
+	api_handleid = spawn_api_handle();
 	//traceid = spawn_trace();
 	
 	//start loop
@@ -509,14 +509,14 @@ int main(int argc, char** argv){
 		}
 		//write to API, leading to database
 		if(retrieved_data1[0] != 'E'){
-//			printf("writing to api1\n");
-			//write_to_api(retrieved_data1, 1);
-//			printf("finished writing to api1\n");
+			printf("writing to api1\n");
+			write_to_api(retrieved_data1, 1);
+			printf("finished writing to api1\n");
 		}
 		if(retrieved_data2[0] != 'E'){
-//			printf("writing to api2\n");
-			//write_to_api(retrieved_data2, 2);
-//			printf("finished writing to api2\n");
+			printf("writing to api2\n");
+			write_to_api(retrieved_data2, 2);
+			printf("finished writing to api2\n");
 		}
 		//trace
 	//	printf("alt: %f, alt2: %f\n", alt, alt2);
@@ -531,8 +531,8 @@ int main(int argc, char** argv){
 	write_to_raw_log(end,2);
 	write_to_json_log(end,1);
 	write_to_json_log(end,2);
-	//write_to_api(end, 1);
-	//write_to_api(end, 2);
+	write_to_api(end, 1);
+	write_to_api(end, 2);
 
 	printf("Waiting on children...\n");
 	i=0;
