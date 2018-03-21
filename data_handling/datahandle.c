@@ -368,6 +368,8 @@ int main(int argc, char** argv){
         int ret; //return from exec
 	int j = 0; //another iterator
 	char end[5] = "**&&";
+	int ended1 = 0;
+	int ended2 = 0;
         wind = -5;
         debug = 0; //default debug off
         name = NULL;
@@ -509,14 +511,30 @@ int main(int argc, char** argv){
 		}
 		//write to API, leading to database
 		if(retrieved_data1[0] != 'E'){
-			printf("writing to api1\n");
+			printf("writing to api1: %s\n", retrieved_data1);
 			write_to_api(retrieved_data1, 1);
 			printf("finished writing to api1\n");
 		}
+		else{
+			if(ended1 == 0){
+				printf("writing EOT to api1\n");
+				write_to_api(end, 1);
+				printf("done\n");
+				ended1 = 1;
+			}
+		}
 		if(retrieved_data2[0] != 'E'){
-			printf("writing to api2\n");
+			printf("writing to api2: %s\n", retrieved_data2);
 			write_to_api(retrieved_data2, 2);
 			printf("finished writing to api2\n");
+		}
+		else{
+			if(ended2 == 0){
+				printf("writing EOT to api2\n");
+				write_to_api(end, 2);
+				printf("done\n");
+				ended2 = 1;
+			}
 		}
 		//trace
 	//	printf("alt: %f, alt2: %f\n", alt, alt2);
@@ -531,8 +549,12 @@ int main(int argc, char** argv){
 	write_to_raw_log(end,2);
 	write_to_json_log(end,1);
 	write_to_json_log(end,2);
-	write_to_api(end, 1);
-	write_to_api(end, 2);
+	if(ended1 == 0){
+		write_to_api(end, 1);
+	}
+	if(ended2 == 0){
+		write_to_api(end, 2);
+	}
 
 	printf("Waiting on children...\n");
 	i=0;

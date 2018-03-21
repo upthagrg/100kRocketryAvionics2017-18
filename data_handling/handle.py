@@ -13,11 +13,11 @@ while 1:
       with open('./commfifo2') as fifo2: # sustainer data
           data2 = fifo2.read()
 	  print(data2)
-    if data1 == "**&&":
+    if data1 == "**&&" or data1 == "**":
         print "End of booster transmission"
 	flag1 = False
         #break
-    if data2 == "**&&":
+    if data2 == "**&&" or data2 == "**":
         print "End of sustainer transmission"
 	flag2 = False
         #break
