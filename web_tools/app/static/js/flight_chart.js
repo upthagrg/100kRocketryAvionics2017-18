@@ -59,6 +59,7 @@ function renderChart(fomarted_data) {
                 type: "timeseries",
                 fit: true,
                 tick: {
+                    count: 10,
                     format: '%Y-%m-%d %H:%M:%S'
                 },
                 localtime: false,

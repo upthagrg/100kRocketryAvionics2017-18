@@ -122,5 +122,14 @@ def post_telemetry():
     return "(" + str(_id) + ")"
 
 
+@app.route('/api/v1.0/cleardata', methods=['GET'])
+def remove_all_data():
+    telemetry = db.telemetry
+    launch = db.launch
+    launch.remove({})
+    telemetry.remove({})
+    return "Removed Data."
+
+
 if __name__ == "__main__":
     app.run(host='0.0.0.0', debug=True, threaded=True)
