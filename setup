@@ -100,6 +100,10 @@ echo "installing requests module for python"
 echo
 sudo pip install requests 
 echo
+echo "installing pyUSB"
+echo
+sudo pip install pyusb
+echo
 echo "updating"
 echo
 #update and upgrade
