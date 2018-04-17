@@ -186,7 +186,7 @@ void convert_gps(char* packet){
 }
 
 int main(){
-	char packet[256] = "TELEM 224f01080b05765e00701f1a1bbeb8d7b60b070605140c000600000000000000003fa988";
+	char packet[256] = "TELEM 224f01080b05765e00701f1a1bbeb8d7b60b070605140c000600000000000000003fa988"; //this is an example GPS packet
 	char sizebyte[3];
 	char buff[256];
 	int ret;
