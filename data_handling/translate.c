@@ -181,8 +181,15 @@ void convert_imu(char* packet){
 	memset(buff, '\0', 256);
 }
 
-void convert_gps(char* packet){
-	printf("GPS converter under construction\n");
+void convert_gps(char* packet)
+{
+	packet = packet + 8;
+	uint16_t altitude  = convert_hex(packet + 12, 4);
+	int32_t latitude  = convert_hex(packet + 16, 8);
+	int32_t longitude = convert_hex(packet + 24, 8);
+	printf("altitude: %d\n",  altitude);
+	printf("latitude: %d\n",  latitude);
+	printf("longitude: %d\n", longitude);
 }
 
 int main(){
