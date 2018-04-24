@@ -1,0 +1,7 @@
+[Desktop Entry]
+Name=HART GUI
+Comment=Start the GUI for the HART telemetry software
+Exec=/home/glenn/100k11/100kRocketryAvionics2017-18/3d_trace/trace
+Terminal=false
+Type=Application
+Categories=Game;

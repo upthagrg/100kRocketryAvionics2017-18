@@ -1366,7 +1366,7 @@ InitLists( )
 //		glEndList( );
 //	}
 //	else{
-		make_trace_list("./log.txt");
+		make_trace_list("./log.txt"); //OPEN TRACE HERE
 //	}
 	tplane(PLANERES, PLANESIZE);
 }

@@ -115,3 +115,11 @@ sudo apt-get upgrade -y
 echo
 echo "Done"
 echo
+#make desktop icon
+echo
+echo "making desktop icon"
+echo
+cp ./HART.desktop ~/Desktop
+echo
+echo "Done"
+echo
