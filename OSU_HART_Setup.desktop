@@ -1,0 +1,7 @@
+[Desktop Entry]
+Name=HART Avionics Setup
+Comment=Start the setup script for the avionics software 
+Exec=bash ~/Desktop/OSU_HART_Setup.sh
+Terminal=true
+Type=Application
+Categories=Game;
