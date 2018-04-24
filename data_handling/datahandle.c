@@ -10,6 +10,7 @@
 #include <sys/stat.h>
 #include <fcntl.h>
 #include <sys/wait.h>
+#include <pthread.h>
 #include "datagen.h"
 
 //communication globals
@@ -22,6 +23,10 @@ int fifo2;
 pid_t children[5];
 int childcnt=0;
 int debug2=0;
+//globals for threading
+char latest_packet[256];
+pthread_mutex_t lock = PTHREAD_MUTEX_INITIALIZER;
+int run = 0;
 
 void remove_fifo(int);
 
@@ -353,6 +358,19 @@ void write_to_api(char* input, int output){
         }
 }
 
+void* _trace_update(){
+	while(run == 0){
+		continue;
+	}
+	while(run == 1){	
+		pthread_mutex_lock(&lock);
+		printf("TRACE THREAD HAS: %s\n", latest_packet);
+		fflush(stdout);
+		pthread_mutex_unlock(&lock);
+		usleep(1000000/1);	
+	}
+}
+
 int main(int argc, char** argv){
 	pid_t raw_logid1, json_logid1, raw_logid2, json_logid2, api_handleid, traceid; //process id's
 	int child_exit = -5; //child exit status bucket
@@ -370,10 +388,12 @@ int main(int argc, char** argv){
 	char end[5] = "**&&";
 	int ended1 = 0;
 	int ended2 = 0;
+	pthread_t trace_com;
         wind = -5;
         debug = 0; //default debug off
         name = NULL;
         srand(time(NULL)); //seed random
+	//lock = PTHREAD_MUTEX_INITIALIZER; //initialize lock
         for(i; i<argc; i++){
                 if(strcmp(argv[i], "-vel") == 0){ //get starting velocity
                         vel = atof(argv[i+1]);
@@ -480,6 +500,9 @@ int main(int argc, char** argv){
 	api_handleid = spawn_api_handle();
 	//traceid = spawn_trace();
 	
+	//create thread to talk to trace
+//	pthread_create(&trace_com, NULL, _trace_update, NULL);
+
 	//start loop
 //	while(1){
 	do{
@@ -488,6 +511,13 @@ int main(int argc, char** argv){
 			printf("In loop\n");
 		}
 		get_data2(retrieved_data1, retrieved_data2, size);//get data from hardware
+		run = 1;
+		//update latest_packet
+		pthread_mutex_lock(&lock);
+		memset(latest_packet, '\0', 256);
+		strcpy(latest_packet, retrieved_data1);
+		printf("latest packet: %s\n", latest_packet);
+		pthread_mutex_unlock(&lock);
 		if(debug){
 			//print out retrived data
 			printf("In main, data is: %s\n", retrieved_data1);
@@ -566,6 +596,9 @@ int main(int argc, char** argv){
 		waitpid(children[i], &child_exit, 0);
 	}
 	printf("Finished waiting\n");
+	printf("Joining threads...\n");
+//	pthread_join(trace_com, NULL);
+	printf("Threads joined\n");
 	printf("Removing FIFOs...\n");
 	remove_fifo(1);
 	remove_fifo(2);
