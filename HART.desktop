@@ -1,7 +1,7 @@
 [Desktop Entry]
 Name=HART GUI
 Comment=Start the GUI for the HART telemetry software
-Exec=/home/glenn/100k11/100kRocketryAvionics2017-18/3d_trace/trace
+Exec=python /home/glenn/100kspring1/100kRocketryAvionics2017-18/GUI.py
 Terminal=false
 Type=Application
 Categories=Game;

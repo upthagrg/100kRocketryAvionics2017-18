@@ -80,7 +80,7 @@ echo
 echo "installing libglew 1.5 dev"
 echo
 sudo apt-get install libglew1.5-dev libglm-dev -y
-#Python, PIP, modules
+#Python and required modules
 echo
 echo "installing python"
 echo
