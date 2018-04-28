@@ -487,6 +487,7 @@ ReadShort( FILE *fp )
 int
 main( int argc, char *argv[ ] )
 {
+	XSCALE = YSCALE = ZSCALE = 1;
 	inited = 0;
 	slat = 45.0;
 	slon = 45.0;
@@ -910,7 +911,7 @@ Display( )
 	else{// in normal mode 
 		glPushMatrix();
 			if(center){ // if centered requested
-				glTranslatef(-apx*10, 0., -apz*10);
+				glTranslatef(-apx*XSCALE, 0., -apz*YSCALE);
 			}
 			glCallList( PathList );
 		glPopMatrix();

@@ -13,7 +13,7 @@
 #include <cmath>
 #include "./fpoint.h"
 using namespace std;
-
+int XSCALE, YSCALE, ZSCALE;
 float slat;
 float slon;
 float apx;

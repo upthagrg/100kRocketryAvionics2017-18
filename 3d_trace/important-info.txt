@@ -1,3 +1,4 @@
+Some code in this section of the repository was written by Dr. Mike Bailey, and is being used with his express permission
 if you get this messsage "GL/gl.h: No such file or directory",
 read this: https://askubuntu.com/questions/306703/compile-opengl-program-missing-gl-gl-h
 combine the second and third answers.
