@@ -55,8 +55,8 @@ struct telem_data structure(char** buff){
 	struct telem_data data;
 
 
-	token = malloc(sizeof(char)*256);
-	messagecpy = malloc(sizeof(char)*256);
+	token = (char*)malloc(sizeof(char)*256);
+	messagecpy = (char*)malloc(sizeof(char)*256);
 	memset(token, '\0', 256);
 	memset(messagecpy, '\0', 256);
 	strcpy(messagecpy, *buff);

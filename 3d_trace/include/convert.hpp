@@ -9,10 +9,15 @@
 #include <cstdlib>
 #include <fstream>
 #include <iostream>
+#include <string>
 #include <vector>
 #include <cmath>
 #include "./fpoint.h"
+#include "../../conversion/telemetry.h"
+#include "../../conversion/conversion.h"
+
 using namespace std;
+
 int XSCALE, YSCALE, ZSCALE;
 float slat;
 float slon;
@@ -24,22 +29,16 @@ char apaltbuff[256];
 bool cdebug;
 
 GLuint PathList;
-/*
-struct fpoint{
-	float x;
-	float y;
-	float z;
-};
-*/
 vector<struct fpoint>  make_trace_list(char* filename){
 	vector<struct fpoint> vec;
+	char* str;
 	int i;
 	int inited = 0;
 	int ref = 0;
-	//float lat;
 	struct fpoint temp;
-	char buff[256];
+	string buff;
 	char numbuff[256];
+	struct telem_data line;
 	ifstream in;
 	memset(apaltbuff, '\0', 256);
 	in.open(filename);
@@ -47,93 +46,45 @@ vector<struct fpoint>  make_trace_list(char* filename){
 		cout << "ERROR OPENING: " << filename << endl;
 		exit(7);
 	}
+	str = new char[256];
 	while(1){
 		if(in.eof()){
 			break;
 		}
 		//velocity
-		memset(buff, '\0', 256);
-		in >> buff;
-		//latitude
-		memset(buff, '\0', 256);
-		memset(numbuff, '\0', 256);
-		in >> buff;
-		//cout << "lat:" <<buff << endl;
-		strcpy(numbuff, buff+12);
-		i=0;
-		for(i;i<256;i++){
-			if(numbuff[i]=='"'){
-				break;
-			}
+		memset(str, '\0', 256);
+		getline(in, buff);
+		strcpy(str, buff.c_str());
+		if(strcmp(str, "**&&") == 0){
+			break;
 		}
-		numbuff[i] = '\0';
-		if(inited == 0){
-			slat = atof(numbuff);
-		}
-		temp.z=((slat - atof(numbuff)) * 69.0); //HERE
-		//lat=atof(numbuff); //HERE
+		line = structure(&str);
+		cout <<"getting z"<<endl;
+		temp.z=((slat - line.lat) * 69.0); //HERE
+		cout <<"got z: "<< temp.z<<endl;
 		//longitude
-		memset(buff, '\0', 256);
-		memset(numbuff, '\0', 256);
-		in >> buff;
-		//cout << "lon:" <<buff << endl;
-		strcpy(numbuff, buff+13);
-		i=0;
-		for(i;i<256;i++){
-			if(numbuff[i]=='"'){
-				break;
-			}
-		}
-		numbuff[i] = '\0';
-		if(inited == 0){
-			slon = atof(numbuff);
-			inited = 1;
-		}
-		// delta miles = ((ending longitude - starting longitude) * (cos(starting latitude * (pi/180)) * 69.172))
-		temp.x=(-(slon - atof(numbuff)) * (cos(slat * (M_PI/180.0)) * 69.172)); //HERE
-//		cout << "slon: " << slon << " lon: " << atof(numbuff) << " slon - lon: " << slon - atof(numbuff) << endl;
-//		cout << "slat: " << slat << " slat*(pi/180): " << slat * (M_PI/180.0) << endl;
-//		cout << "cos(slat*(pi/180)): " << cos(slat*(M_PI/180.0)) << " cos() * 69.172: " << cos(slat*(M_PI/180.0))*69.172 << endl;
-//		cout << "result: " << (slon - atof(numbuff)) * cos(slat*(M_PI/180.0))*69.172 << endl;
+		cout <<"getting x"<<endl;
+		temp.x=(-(slon - line.lon) * (cos(slat * (M_PI/180.0)) * 69.172)); //HERE
+		cout <<"got x: "<< temp.x<<endl;
 		//altitude
-		memset(buff, '\0', 256);
-		memset(numbuff, '\0', 256);
-		in >> buff;
-		//cout << "alt:" <<buff << endl;
-		strcpy(numbuff, buff+12);
-		i=0;
-		for(i;i<256;i++){
-			if(numbuff[i]=='"'){
-				break;
-			}
-		}
-		numbuff[i] = '\0';
-		temp.y=(atof(numbuff)); 
+		cout <<"getting y"<<endl;
+		temp.y=(line.alt/5280); //conver to miles
 		if(temp.y > apalt){
 			apalt = temp.y;
 			memset(apaltbuff, '\0', 256);
-			strcpy(apaltbuff, numbuff);
+			sprintf(apaltbuff, "%f", line.alt);
 		}
-		temp.y=(atof(numbuff)/5280); //conver to miles
-		//temp.y=(atof(numbuff)); 
-		//time
-		memset(buff, '\0', 256);
-		in >> buff;
-		//add struct
+		cout <<"got y: "<< temp.y<<endl;
 		vec.push_back(temp);
 	}
 	in.close();
 	vec.pop_back();
-//	slat = vec[0].z;
-//	slon = vec[0].x;
 	apalt = 0;
         PathList = glGenLists( 1 );
         glNewList( PathList, GL_COMPILE );
 	        glLineWidth( 5. );
 	        glBegin( GL_LINE_STRIP );
 	        glColor3f( 1., 0., 0. ); //red
-	//      glNormal3f( 0., 0.,  1. );
-	//      glVertex3f( -dx, -dy,  dz );
 		i=0;
 		for(i; i<vec.size(); i++){
 			if(cdebug){
@@ -156,11 +107,6 @@ vector<struct fpoint>  make_trace_list(char* filename){
 	if((vec[0].x != 0.) || (vec[0].y !=0.) || (vec[0].z != 0.)){
 		exit(1);
 	}
+	cout <<"finished conversion" <<endl;
 	return vec;
 }
-/*
-int main(){
-	make_trace_list("log.txt");
-	return 0;
-}
-*/
