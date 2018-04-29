@@ -19,6 +19,7 @@ void gen_data(float freq, float salt, float svel, float slat, float slon){
 	char str3[10] = "longitude";
 	char str4[9] = "altitude";
 	char str5[5] = "time";
+	char str6[5] = "type";
 	char buff[256];
 	char* buff2 = NULL;
 	struct telem_data data;
@@ -27,13 +28,14 @@ void gen_data(float freq, float salt, float svel, float slat, float slon){
 	data.lat=slat;
 	data.lon=slon;
 	data.alt=salt;
+	data.type='b';
 	data.time=0.0;
 	int dec;
 	buff2 = malloc(sizeof(char)*256);
 	do{
 		memset(buff, '\0', 256);
 		memset(buff2, '\0', 256);
-		sprintf(buff,"%f %f %f %f %f", data.vel,data.lat,data.lon,data.alt,data.time); //make ASCII string
+		sprintf(buff,"%f %f %f %f %f %c", data.vel,data.lat,data.lon,data.alt,data.time, data.type); //make ASCII string
 		if(debug){
 			printf("%s\n", buff); //print JSON string
 		}
@@ -49,6 +51,7 @@ void gen_data(float freq, float salt, float svel, float slat, float slon){
 			printf("vel: %f\n", data2.vel);
 			printf("alt: %f\n", data2.alt);
 			printf("time: %f\n", data2.time);
+			printf("type: %c\n", data2.type);
 		}
 		data.time += (1.0/freq); //update time
 		data.alt = ((-4.9*powf(data.time, 2)) + (svel*data.time) + salt); //update alt

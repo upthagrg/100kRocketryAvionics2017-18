@@ -13,5 +13,6 @@ struct telem_data{
 	float lat;
 	float lon;
 	float time;
+	char type;
 };
 #endif
