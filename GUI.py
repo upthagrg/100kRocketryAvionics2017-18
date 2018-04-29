@@ -4,6 +4,7 @@ import tkMessageBox as tkm
 	
 from PIL import ImageTk,Image
 import sys
+import os
 
 
 #print current Python Version
@@ -17,8 +18,21 @@ def monitorccallback():
 	tkm.showinfo("Monitor Flight", "Monitor Flight Goes Here")
 #define Logging callback function
 def logscallback():
-	tkm.showinfo("View Logs", "View Logs Goes Here")
-
+	#tkm.showinfo("View Logs", "View Logs Goes Here")
+	root2 = tk.Tk()
+	root2.title("View Logs")
+	root2.minsize(width=480, height=480)
+	root2.maxsize(width=1920, height=1080)
+	root2.resizable(width=True, height=True)
+	text1 = tk.Text(root2)
+	for filename in os.listdir("./logs"):
+		text1.insert('end', filename)
+		text1.insert('end', '\n')
+		myfile = open("./logs/"+filename, 'r')
+		string = myfile.read()
+		text1.insert('end', string)
+	text1.pack()
+	root2.mainloop()
 
 #define gui
 root = tk.Tk()

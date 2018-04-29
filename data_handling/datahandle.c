@@ -388,6 +388,7 @@ int main(int argc, char** argv){
 	char end[5] = "**&&";
 	int ended1 = 0;
 	int ended2 = 0;
+	int sim = 0;
 	pthread_t trace_com;
         wind = -5;
         debug = 0; //default debug off
@@ -420,8 +421,11 @@ int main(int argc, char** argv){
                 else if(strcmp(argv[i], "-buff") == 0){ //get read buffer size for logger
                         buffsize = argv[i+1];
                 }
-                else if(strcmp(argv[i], "-test") == 0){ //get read buffer size for logger
+                else if(strcmp(argv[i], "-test") == 0){ //get determinisitc test
                         srand(5); //seed random
+                }
+                else if(strcmp(argv[i], "-sim") == 0){ //get sim option
+                        sim = 1;
                 }
                 else if(strcmp(argv[i], "-debug") == 0){ //get update rate in Hz
                         debug = 1;
@@ -510,7 +514,12 @@ int main(int argc, char** argv){
 			//inform user that control flow is at top of loop
 			printf("In loop\n");
 		}
-		get_data2(retrieved_data1, retrieved_data2, size);//get data from hardware
+		if(sim){//if sim selected, use gendata
+			get_data2(retrieved_data1, retrieved_data2, size);//get data from hardware
+		}
+		else{
+			get_data2(retrieved_data1, retrieved_data2, size);//get data from hardware
+		}
 		run = 1;
 		//update latest_packet
 		//pthread_mutex_lock(&lock);
