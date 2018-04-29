@@ -155,18 +155,18 @@ int spawn_json_log(int in){
 			}
 			if(debug){
 				if(in == 1){
-                        		execret = execlp("../logging/logger", "../logging/logger", "-out", "jsonlog1.txt", "-debug",  (char*)NULL);
+                        		execret = execlp("../logging/logger", "../logging/logger", "-out", "../logs/jsonlog1.txt", "-debug",  (char*)NULL);
 				}
 				else if(in == 2){
-                        		execret = execlp("../logging/logger", "../logging/logger", "-out", "jsonlog2.txt", "-debug",  (char*)NULL);
+                        		execret = execlp("../logging/logger", "../logging/logger", "-out", "../logs/jsonlog2.txt", "-debug",  (char*)NULL);
 				}
 			}
 			else{
 				if(in == 1){
-                        		execret = execlp("../logging/logger", "../logging/logger", "-out", "jsonlog1.txt", (char*)NULL);
+                        		execret = execlp("../logging/logger", "../logging/logger", "-out", "../logs/jsonlog1.txt", (char*)NULL);
 				}
 				else if(in == 2){
-                        		execret = execlp("../logging/logger", "../logging/logger", "-out", "jsonlog2.txt", (char*)NULL);
+                        		execret = execlp("../logging/logger", "../logging/logger", "-out", "../logs/jsonlog2.txt", (char*)NULL);
 				}
 			}
                         if(execret == -1){//exec error

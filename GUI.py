@@ -34,6 +34,13 @@ def logscallback():
 	text1.pack()
 	root2.mainloop()
 
+#change directory
+dirfile = open('/HART_DIR.txt', 'r')
+string1 = dirfile.read()
+string2 = string1[:-1]
+print string1
+print string2
+os.chdir(string2)
 #define gui
 root = tk.Tk()
 root.title("HART Avionics")

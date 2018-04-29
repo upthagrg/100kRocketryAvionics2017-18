@@ -123,3 +123,11 @@ cp ./HART.desktop ~/Desktop
 echo
 echo "Done"
 echo
+echo
+echo "Creating Directory File"
+echo
+pwd > HART_DIR.txt
+sudo mv HART_DIR.txt /HART_DIR.txt
+echo
+echo "Done"
+echo
