@@ -5,17 +5,21 @@ import tkMessageBox as tkm
 from PIL import ImageTk,Image
 import sys
 import os
-
+import subprocess
 
 #print current Python Version
 print(sys.version)
 
 #define sim flight callback function
 def simcallback():
-	tkm.showinfo("Sim Flight", "Sim Flight Goes Here")
+	#tkm.showinfo("Sim Flight", "Sim Flight Goes Here")
+	os.chdir('./data_handling')
+	subprocess.call(['./datahandle'])
 #define Tracking callback function
 def monitorccallback():
-	tkm.showinfo("Monitor Flight", "Monitor Flight Goes Here")
+	#tkm.showinfo("Monitor Flight", "Monitor Flight Goes Here")
+	os.chdir('./data_handling')
+	subprocess.call(['./datahandle'])
 #define Logging callback function
 def logscallback():
 	#tkm.showinfo("View Logs", "View Logs Goes Here")
@@ -38,8 +42,6 @@ def logscallback():
 dirfile = open('/HART_DIR.txt', 'r')
 string1 = dirfile.read()
 string2 = string1[:-1]
-print string1
-print string2
 os.chdir(string2)
 #define gui
 root = tk.Tk()
