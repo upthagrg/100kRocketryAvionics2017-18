@@ -505,7 +505,7 @@ int main(int argc, char** argv){
 	//traceid = spawn_trace();
 	
 	//create thread to talk to trace
-//	pthread_create(&trace_com, NULL, _trace_update, NULL);
+	pthread_create(&trace_com, NULL, _trace_update, NULL);
 
 	//start loop
 //	while(1){
@@ -522,11 +522,11 @@ int main(int argc, char** argv){
 		}
 		run = 1;
 		//update latest_packet
-		//pthread_mutex_lock(&lock);
-		//memset(latest_packet, '\0', 256);
-		//strcpy(latest_packet, retrieved_data1);
-		//printf("latest packet: %s\n", latest_packet);
-		//pthread_mutex_unlock(&lock);
+		pthread_mutex_lock(&lock);
+		memset(latest_packet, '\0', 256);
+		strcpy(latest_packet, retrieved_data1);
+		printf("latest packet in main thread: %s\n", latest_packet);
+		pthread_mutex_unlock(&lock);
 		if(debug){
 			//print out retrived data
 			printf("In main, data is: %s\n", retrieved_data1);
