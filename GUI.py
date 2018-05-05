@@ -7,6 +7,7 @@ import sys
 import os
 import subprocess
 
+
 #print current Python Version
 print(sys.version)
 
@@ -23,6 +24,11 @@ def monitorccallback():
 #define Logging callback function
 def logscallback():
 	#tkm.showinfo("View Logs", "View Logs Goes Here")
+	#change directory
+	dirfile = open('/HART_DIR.txt', 'r')
+	string1 = dirfile.read()
+	string2 = string1[:-1]
+	os.chdir(string2)
 	root2 = tk.Tk()
 	root2.title("View Logs")
 	root2.minsize(width=480, height=480)

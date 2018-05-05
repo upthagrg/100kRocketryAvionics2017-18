@@ -441,7 +441,7 @@ int main(int argc, char** argv){
 
 
 	printf("\n\nstarting docker...\n\n");
-//	start_docker();
+	start_docker();
 	printf("\n\ndocker up\n\n");
 	
 	salt = alt; //remember initial params

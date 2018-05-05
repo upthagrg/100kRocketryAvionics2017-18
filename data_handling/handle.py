@@ -1,10 +1,12 @@
-print "HI1"
+print "start"
 import requests, json
-print "HI2"
-launch = requests.get('http://localhost:5000/api/v1.0/prepare_launch')
-print "HI3"
-r = requests.get('http://localhost:5000/api/v1.0/start_launch/'+launch.text)
-print "HI4"
+print "making request"
+launch = requests.get('http://172.17.0.4:5000/api/v1.0/prepare_launch')
+print "request finished"
+print launch.text
+print "end of print"
+r = requests.get('http://172.17.0.4:5000/api/v1.0/start_launch/'+launch.text)
+print "continueing"
 print r.text
 flag1 = True;
 flag2 = True;
@@ -33,16 +35,16 @@ while 1:
     if flag1 == True:
     	jdata = json.loads(data1)
     	print jdata
-    	r = requests.post('http://localhost:5000/api/v1.0/telemetry', json = jdata)
+    	r = requests.post('http://172.17.0.4:5000/api/v1.0/telemetry', json = jdata)
     	print r.text
     	fifo1.close()
     if flag2 == True:
     	jdata = json.loads(data2)
     	print jdata
-    	r = requests.post('http://localhost:5000/api/v1.0/telemetry', json = jdata)
+    	r = requests.post('http://172.17.0.4:5000/api/v1.0/telemetry', json = jdata)
     	print r.text
     	fifo2.close()
     if ((flag1 == False) and (flag2 == False)):
 	break
-r = requests.get('http://localhost:5000/api/v1.0/end_launch/'+launch.text)
+r = requests.get('http://172.17.0.4:5000/api/v1.0/end_launch/'+launch.text)
 print r.text
