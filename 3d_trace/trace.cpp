@@ -697,27 +697,27 @@ Display( )
 	//cout << "in display" <<endl;
 	if(nrt && (!over)){//hang until data is recieved
 		track++;
-		//cout << "in nrt and not over" << endl;
+		cout << "in nrt and not over" << endl;
 		//read from pipe
-		//cout << "memsetting message" << endl;
+		cout << "memsetting message" << endl;
         	memset(message, '\0', 256);
 		if(message2[0] != '\0'){
 			strcat(message, message2);
 		}
         	memset(message2, '\0', 256);
-		//cout << "done" << endl;
-		//cout << "memsetting buff" << endl;
+		cout << "done" << endl;
+		cout << "memsetting buff" << endl;
                 memset(buff, '\0', 10);
-		//cout << "done" << endl;
+		cout << "done" << endl;
         	while(strstr(message, "&&") == NULL){
-			//cout << "memsetting buff" << endl;
+			cout << "memsetting buff" << endl;
                         memset(buff, '\0', 10);
-			//cout << "done" << endl;
-			//cout << "reading from pipe" << endl;
+			cout << "done" << endl;
+			cout << "reading from pipe" << endl;
                        	bytes = read(3, buff, 9);
-			//cout << "read from pipe: " << buff << endl;
+			cout << "read from pipe: " << buff << endl;
                        	strcat(message, buff);
-			//cout << "message is now: " << message << endl;
+			cout << "message is now: " << message << endl;
                        	if(bytes == -1){ //error cases
                      	          printf("READ ERROR IN LOGGER, RETURN OF -1\n");
                      	          fflush(stdout);
@@ -745,7 +745,9 @@ Display( )
                 //cout << "display recieved: " << message << endl;
 		if(track >= 60){
                 	cout << "display recieved: " << message << endl;
+			cout << " calling update_data()" << endl;
 			update_data(); //HERE updates the vector
+			cout << "finished call to update_data()" << endl;
 			track = 0;
 		}
                 fflush(stdout);
@@ -2123,15 +2125,22 @@ void update_data(){
 	token = strtok(NULL, ":");
 	token = strtok(NULL, "\"");
 */
+	cout << "in update_data()" << endl;
 	memset(messagecpy, '\0', 256);
 	struct telem_data tmp;
 	strcpy(messagecpy, message);
+	cout << "messagecpy: " << messagecpy << endl;
+	cout << "structuring" << endl;
 	tmp = structure(&messagecpy);
+	cout << "structuing done" << endl;
 	//temprd.y = atof(token);
 
 	temprd.y = tmp.alt;
 	temprd.x = tmp.lon;
 	temprd.z = tmp.lat;
+	cout << "X: " << temprd.x << endl;
+	cout << "y: " << temprd.y << endl;
+	cout << "z: " << temprd.z << endl;
 
 	temprd.x = (-(slon - temprd.x) * (cos(slat*(M_PI/180.0))*69.172));
 	temprd.y = temprd.y / 5280.0;
