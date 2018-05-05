@@ -294,7 +294,7 @@ vector<struct telem_data>data;
 bool inited;
 char message[256];
 char message2[256];
-char messagecpy[256];
+char* messagecpy;
 char buff[10];
 bool over = false;
 int bytes;
@@ -487,6 +487,7 @@ ReadShort( FILE *fp )
 int
 main( int argc, char *argv[ ] )
 {
+	messagecpy = new char[256];
 	XSCALE = YSCALE = ZSCALE = 1;
 	inited = 0;
 	slat = 45.0;
@@ -2110,6 +2111,7 @@ void* nrt_listen(void* input){
 }
 
 void update_data(){
+/*
 	strcpy(messagecpy, message);
 	token = strtok(messagecpy, ":");
 	token = strtok(NULL, ":");
@@ -2120,7 +2122,17 @@ void update_data(){
 	temprd.x = atof(token);
 	token = strtok(NULL, ":");
 	token = strtok(NULL, "\"");
-	temprd.y = atof(token);
+*/
+	memset(messagecpy, '\0', 256);
+	struct telem_data tmp;
+	strcpy(messagecpy, message);
+	tmp = structure(&messagecpy);
+	//temprd.y = atof(token);
+
+	temprd.y = tmp.alt;
+	temprd.x = tmp.lon;
+	temprd.z = tmp.lat;
+
 	temprd.x = (-(slon - temprd.x) * (cos(slat*(M_PI/180.0))*69.172));
 	temprd.y = temprd.y / 5280.0;
 	temprd.z = ((slat - temprd.z)*69.0);
