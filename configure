@@ -115,6 +115,27 @@ sudo apt-get upgrade -y
 echo
 echo "Done"
 echo
+#make
+echo
+echo "Making programs"
+echo
+cd 3d_trace
+make
+cd ..
+cd logging
+make
+cd data_handling
+make
+cd ..
+cd data_generator
+make
+cd ..
+cd conversion
+make
+cd ..
+echo
+echo "done"
+echo
 #make desktop icon
 echo
 echo "making desktop icon"

@@ -90,7 +90,7 @@ vector<struct fpoint>  make_trace_list(char* filename){
 			if(cdebug){
 				cout << "x: " << vec[i].x << " y: " << vec[i].y << " z: " << vec[i].z << endl;
 			}
-			glVertex3f(vec[i].x, vec[i].y, vec[i].z);//SCALE
+			glVertex3f(vec[i].x*XSCALE, vec[i].y*YSCALE, vec[i].z*ZSCALE);//SCALE
 			if(vec[i].y > apalt){
 				apalt = vec[i].y;
 				ref = i;

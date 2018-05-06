@@ -518,6 +518,15 @@ main( int argc, char *argv[ ] )
                 else if(strcmp(argv[i], "-center") == 0){ //debug on?
                         center = true;
                 }
+                else if(strcmp(argv[i], "-x") == 0){ //scale
+                        XSCALE = atoi(argv[i+1]);
+                }
+                else if(strcmp(argv[i], "-y") == 0){ //scale
+                        YSCALE = atoi(argv[i+1]);
+                }
+                else if(strcmp(argv[i], "-z") == 0){ //scale
+                        ZSCALE = atoi(argv[i+1]);
+                }
                 else if(strcmp(argv[i], "-nrt") == 0){ //near real time mode?
                         nrt = true;
 			cout << "in nrt mode" << endl;
@@ -2145,9 +2154,9 @@ void update_data(){
 	temprd.x = (-(slon - temprd.x) * (cos(slat*(M_PI/180.0))*69.172));
 	temprd.y = temprd.y / 5280.0;
 	temprd.z = ((slat - temprd.z)*69.0);
-	temprd.x *= 10;
-	temprd.y *= 10;
-	temprd.z *= 10;
+	temprd.x *= static_cast<float>(XSCALE);
+	temprd.y *= static_cast<float>(YSCALE);
+	temprd.z *= static_cast<float>(ZSCALE);
 	r_data.push_back(temprd);
 	PathList = glGenLists(1);
 	glNewList(PathList, GL_COMPILE);

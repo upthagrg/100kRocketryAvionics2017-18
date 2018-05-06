@@ -86,11 +86,11 @@ void logfun(FILE* logfile){
 		if(debug){
 			cnt++;
 		}
-		if(cnt >= 100){
-			printf("failsafe breaking\n");
-			fflush(stdout);
-			break;
-		}
+	//	if(cnt >= 100){
+	//		printf("failsafe breaking\n");
+	//		fflush(stdout);
+	//		break;
+	//	}
 		//gen_data(str, svel, salt, slon, slat);
 		while(strstr(message, "&&") == NULL){
 			//memset(buff, '\0', sizeof(buff));
