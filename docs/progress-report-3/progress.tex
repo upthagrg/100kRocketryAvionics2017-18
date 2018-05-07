@@ -84,8 +84,64 @@
 
 % 8. now you write!
 \section {Purpose and Goals}
-The Spaceport America 100k rocketry challenge is a contest in which the Oregon State University chapter of the American Institute of Aeronautics and Astronautics (AIAA) is competing. The rocket is being designed and created by an interdisciplinary team of engineering seniors, from both the School of Mechanical Industrial and Manufacturing Engineering and the School of Electrical Engineering and Computer Science. The 18 person team contains engineering students from various disciplines, combining their skills to create, launch and track a high altitude rocket. The goal is for the rocket to exceed 100,000 feet in altitude. The specific goal of the computer science sub\-team is to develop software to effectively track the rocket, successfully recover it, and to visualize its flight path. \par 
-Each member of the computer science sub\-team promised to take ownership of specific parts of the system in Fall term, to be completed to at least a beta level by the end of Winter term. Glenn Upthagrove promised to create a 3D trace of the flight path, data logging functionality, and a data handling system. Within all reason Glenn Upthagrove has completed these goals over the past term of work. \par 
+The purpose of the project is to design and build recovery and
+telemetry systems for a rocket that will reach a target altitude of
+100,000 feet.
+The team has created telemetry interfaces for tramsmitting and receiving
+data and avionics for the recovery of the rocket.
+The goal of the project was to design a means of collecting,
+interpreting, and transmitting data on the rocket, in addition to
+receiving, interpreting, and displaying data on the ground.
+The team also needs to have a safe recovery of the rocket after it has
+completed its flight and come to rest.
+This software suite is intended to give reliable tracking of a rocket
+in flight, and graphically represent this data to the user.
+This is necessary as the rocket will go well outside of visible range,
+and the use of automated tracking will be essential to the recovery of
+the rocket.\\
+The purpose of the Kalman filter is to remove the noise from the
+readings from the sensors, since the team will need to collect and utilize
+the data the team receives from the sensors even though it may be inaccurate.
+The goal of the Kalman filter is to get accurate enough readings to
+correctly judge the altitude of the rocket at apogee, as well as
+correctly time the deployment of the parachutes.
+Since our system is used in parallel with the Telemega system, the team will
+be able to compare our results with those from the professionally made
+board.
+The safe recovery of the rocket is also dependent on the effectiveness
+of the Kalman filter, for if the filter doesn't work properly, the
+accuracy of the reported location will suffer.\\
+The purpose of the transmission code is to transmit the readings from
+the Kalman filter down to the ground station despite unfavourable
+conditions.
+This is especially important for meeting our goal of safe recovery of
+the rocket, since the GPS data sent from the rocket to the ground
+station will be used to locate it.
+The goal for the transmission code is to be able to get live updating
+speed and position data from the rocket.
+If the team can get live updates from the rocket as it reaches landmarks in
+its flight, our protocol works as intended.
+The purpose of the packet processing and interpolation code on the
+ground station is to supplement the transmission code and perform
+corrections.
+Another goal of the transmission code is to minimize the number of
+corrections and interpolations that the ground station has to make.
+The team aims to have as few dropped and corrupt packets as possible.
+The team also aims to be able to easily determine if a packet is corrupt, so
+as not to accidentally rely on corrupt data.
+Another goal of the transmission code is to minimize the impact of
+communication on the CPU so that the CPU time can be used for more
+important functionality.
+This means that a corollary goal for the transmission code is to
+minimize the packet size.\\
+The goal of the packet processing and interpolation code is to ensure
+that all of the data received over the radio is correct.
+The other goal is to provide accurate estimations in between packets
+as well as predictions for the future.
+If our goal is successful, the visualizations will have a much easier
+time using the data provided.
+It will also minimize the potential impact of poor transmission
+performance on the other components of the ground station.
 \section {Retrospective}
 \begin {center}
  \begin {tabular} { | p{5cm} | p{5cm} | p{5cm} | }
@@ -97,7 +153,56 @@ Each member of the computer science sub\-team promised to take ownership of spec
  \end {tabular}
 \end {center} 
 \section {Michael Elliott} 
+\subsection{Goals for Michael Elliott}
+Michael Elliott was the author of the Kalman filter and interpolation. 
 \subsection {Current Progress For Michael Elliott} 
+The current status of the Kalman filter is that it is working as
+expected with a simplified prediction model for testing.
+The Kalman filter is already able to filter out randomly generated
+noise in testing.
+In the testing we have been using a simplified prediction model with
+static covariance in the inputs, so we still have more testing to do.
+We are currently waiting on the simulation data in order to base our
+prediction model on that.
+We are also waiting on the hardware so we can test the Kalman filter
+on the final host system.
+The filter is programmed as flexibly as possible in generic C without
+the use of any external libraries or system calls, so as long as there
+is a working C compiler for the processor the filter should run well.
+Ultimately the success of the Kalman filter is partially dependent on
+the hardware and the firmware, but as soon as that is complete we will
+just need to do more testing.\\
+The transmission code worked as of the last test on the old hardware.
+The new hardware is going to use the same radio, so the code should
+not be much different (if at all) on the new board.
+We are waiting on the hardware to do further testing.
+Since the architecture is going to be different on the new hardware,
+the communication between the Kalman filter and the radio may need to
+be updated.
+This is mostly dependent on firmware.\\
+The interpolation python code can successfully interface with the C
+program used to read in from the radio on the ground station and
+verifies the checksum on each packet.
+It can also successfully generate a best fit curve to match the data received.
+There is still a bit of work to be done to allow the other modules to
+interface with it more easily.\\
+\subsection {Unfinished Components for Michael Elliott}
+For the Kalman Filter we need the final prediction model as well as
+the hardware in order to proceed with testing.
+Since the host system will have less random noise in the inputs as
+well as dynamic covariance of the inputs, we will need to do more
+rigorous testing once we have the hardware.
+Also the filter may require some slight modifications in order to make
+it more modular in case we wish to change the prediction model more
+easily in the future.
+This would be nice if we get updated simulation data and wish to
+update the filter to reflect the new simulation.\\
+For the transmission code we are just waiting on hardware in order to finish it.
+We still need to test it with the new board, but hopefully it works
+similarly to the old one since the radios are the same.\\
+For the interpolation code we still have a bit of work to do to make
+it play nicely with the other modules in the system, but besides that
+it is done. 
 \section {Samuel Hudson} 
 \subsection{Goals for Samuel Hudson}
 Samuel Hudson was primary developer for the data base, API, and web application. 
@@ -172,7 +277,7 @@ def get_launch():
 \end{lstlisting}
 GPS data for both the sustainer and the booster have also been added to the web application to make determining the location of the rocket trivial. This data is extracted from an existing poll telemetry function and displayed on the main page of the application. 
 \subsection{Unfinished Components for Samuel Hudson}
-The usability study is currently in progress. We are currently in the process of interviewing different members of the class. The aim of the usability study is to determine whether the rocket tracker application is to the standard we expect, and information is easily interpretable. Some of the questions include “How easy was it to determine the state of the rocket at one point in time?”, “Can you find the altitude of the booster and sustainer?”, “Can you find the velocity of the booster and sustainer?” and “How is your overall user experience?”. The team is hoping to receive responses to these questions by May 11th. 
+The usability study is currently in progress. We are currently in the process of interviewing different members of the class. The aim of the usability study is to determine whether the rocket tracker application is to the standard the team expects, and information is easily interpretable. Some of the questions include “How easy was it to determine the state of the rocket at one point in time?”, “Can you find the altitude of the booster and sustainer?”, “Can you find the velocity of the booster and sustainer?” and “How is your overall user experience?”. The team is hoping to receive responses to these questions by May 11th. 
 
 \section {Glenn Upthagrove} 
 \subsection {Goals For Glenn Upthagrove}
@@ -548,10 +653,25 @@ struct telem_data structure(char** buff){
 
 #endif
 \end{lstlisting}
-
+\section {Problems and Solutions}
+The biggest problem the tema has encountered so far this term is with the avionics hardware.
+The processor was changed on us just last week, so the team basically has
+to restart the process of integrating with the hardware again.
+This also means teh team has more work to do for the firmware for the bord
+which, although not the responsibility of this team, this team has found
+itself assisting with quite frequently.
+As stated earlier, there is still some work to be done with making the
+interpolation code work nicely with the rest of the system, but it
+should be a relatively easy fix and the module it is not actually a
+part of the requirements but rather a quality of life improvement.
 \section {Detailed Development}
 \subsection {Week 1}
-
+\subsubsection{Michael Elliott}
+\begin {itemize}
+ \item \textbf{Summary: }Had three meetings with the entire team, with the ECE subteam, and
+within our own subteam to discuss progress over spring break and plans
+for this term.
+\end{itemize}
 \subsubsection{Samuel Hudson}
 \begin {itemize}
  \item \textbf{Plans: }This was the first week back from Spring break. This week consisted of mapping out what work was left to do.   
@@ -568,6 +688,15 @@ struct telem_data structure(char** buff){
 \end {itemize}
 
 \section{Week 2}
+\subsubsection{Michael Elliott}
+\begin {itemize}
+ \item \textbf{Summary: }Met with the entire team to discuss progress from the past week and
+plans for the coming week.
+Worked on firmware with the ECE team.
+Met with the Aero and Recovery team to discuss the rocket simulations
+and incorporating the data into the Kalman filter
+Had our subteam meeting to talk about plans.
+\end{itemize}
 \subsubsection{Samuel Hudson}
 \begin {itemize}
  \item \textbf{Plans: }This week we were determining which team members are responsible for developing firmware code. 
@@ -584,6 +713,16 @@ struct telem_data structure(char** buff){
 \end {itemize}
 
 \section{Week 3}
+\subsubsection{Michael Elliott}
+\begin {itemize}
+ \item \textbf{Summary: }Met with the entire team to discuss progress from the past week and
+plans for the coming week.
+Work on the Kalman filter to more easily accept the data from the simulations.
+Met again with Aero and Recovery to go over the simulations and figure
+out how to most easily extract the necessary data from them
+Talked to my interviewee about his project for my WIRED! style article
+Met with our subteam to talk about the expo poster.
+\end{itemize}
 \subsubsection{Samuel Hudson}
 \begin {itemize}
  \item \textbf{Plans: }This week we were determining what else has to been done to improve the web application and firmware. 
@@ -600,6 +739,14 @@ struct telem_data structure(char** buff){
 \end {itemize}
 
 \section{Week 4}
+\subsubsection{Michael Elliott}
+\begin {itemize}
+ \item \textbf{Summary: }Met with the entire team to discuss progress from the past week and
+plans for the coming week.
+Finished my article
+Worked on the poster for the expo
+Talked with the ECE team about their plan to roll out new hardware.
+\end{itemize}
 \subsubsection{Samuel Hudson}
 \begin {itemize}
  \item \textbf{Plans: }This week we were planning out what question would be useful to ask our class members to improve the overall user experience of the web application. 
@@ -616,6 +763,15 @@ struct telem_data structure(char** buff){
 \end {itemize}
 
 \section{Week 5}
+\subsubsection{Michael Elliott}
+\begin {itemize}
+ \item \textbf{Summary: }All team meeting
+Final touches on the expo poster; sent the poster off for printing.
+Work on the progress presentation
+Work on the progress report
+Met with our subteam a few times to discuss the expo etc.
+Made a few tweaks to the interpolation code.
+\end{itemize}
 \subsubsection{Samuel Hudson}
 \begin {itemize}
  \item \textbf{Plans: }We determined different areas to work on for the development of the firmware for the new board. 
