@@ -1,0 +1,638 @@
+\documentclass[onecolumn, draftclsnofoot,10pt, compsoc]{IEEEtran}
+\usepackage{graphicx}
+\usepackage{subcaption}
+\usepackage{url}
+\usepackage{setspace}
+%\usepackage{hyperref}
+\usepackage{array}
+\usepackage{listings}
+
+\usepackage{geometry}
+\geometry{textheight=9.5in, textwidth=7in}
+
+% 1. Fill in these details
+\def \CapstoneTeamName{		100k Challenge CS}
+\def \CapstoneTeamNumber{		42}
+\def \GroupMemberOne{			Michael Elliott}
+\def \GroupMemberTwo{		 	Sam Hudson}
+\def \GroupMemberThree{			Glenn Upthagrove}
+\def \CapstoneProjectName{		100K Spaceport America Demonstration Rocket Project }
+\def \CapstoneSponsorCompany{	School of MIME}
+\def \CapstoneSponsorPerson{		Nancy Squires}
+
+% 2. Uncomment the appropriate line below so that the document type works
+\def \DocType{		%Technology Review
+				%Requirements Document
+				%Technology Review
+				%Design Document
+				Progress Report
+				}
+			
+\newcommand{\NameSigPair}[1]{\par
+\makebox[2.75in][r]{#1} \hfil 	\makebox[3.25in]{\makebox[2.25in]{\hrulefill} \hfill		\makebox[.75in]{\hrulefill}}
+\par\vspace{-12pt} \textit{\tiny\noindent
+\makebox[2.75in]{} \hfil		\makebox[3.25in]{\makebox[2.25in][r]{Signature} \hfill	\makebox[.75in][r]{Date}}}}
+% 3. If the document is not to be signed, uncomment the RENEWcommand below
+\renewcommand{\NameSigPair}[1]{#1}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\begin{document}
+\begin{titlepage}
+    \pagenumbering{gobble}
+    \begin{singlespace}
+    	\includegraphics[height=4cm]{coe_v_spot1} %HERE
+        \hfill 
+        % 4. If you have a logo, use this includegraphics command to put it on the coversheet.
+        %\includegraphics[height=4cm]{CompanyLogo}   
+        \par\vspace{.2in}
+        \centering
+        \scshape{
+            \huge CS Capstone \DocType \par
+            {\large\today}\par
+            \vspace{.5in}
+            \textbf{\Huge\CapstoneProjectName}\par
+            \vfill
+            {\large Prepared for}\par
+            \Huge \CapstoneSponsorCompany\par
+            \vspace{5pt}
+            {\Large\NameSigPair{\CapstoneSponsorPerson}\par}
+            {\large Prepared by }\par
+            Group\CapstoneTeamNumber\par
+            % 5. comment out the line below this one if you do not wish to name your team
+            %\CapstoneTeamName\par 
+            \vspace{5pt}
+            {\Large
+                \NameSigPair{\GroupMemberOne}\par
+                \NameSigPair{\GroupMemberTwo}\par
+                \NameSigPair{\GroupMemberThree}\par
+            }
+            \vspace{20pt}
+        }
+        \begin{abstract}
+        % 6. Fill in your abstract    
+	The following descries the progress of the OSU HART Computer Science team from the beginning of the academic year. Since the beggining of the academic year, the team has created a suite of software tools for tracking a rocket in flight. THe system has been feature complete since the end of the winter term. The first half of the spring term has been spent on testing, bug fixes, improvements to usability, and aid to other teams.    
+        \end{abstract}     
+    \end{singlespace}
+\end{titlepage}
+\newpage
+\pagenumbering{arabic}
+\tableofcontents
+% 7. uncomment this (if applicable). Consider adding a page break.
+%\listoffigures
+%\listoftables
+\clearpage
+
+% 8. now you write!
+\section {Purpose and Goals}
+The Spaceport America 100k rocketry challenge is a contest in which the Oregon State University chapter of the American Institute of Aeronautics and Astronautics (AIAA) is competing. The rocket is being designed and created by an interdisciplinary team of engineering seniors, from both the School of Mechanical Industrial and Manufacturing Engineering and the School of Electrical Engineering and Computer Science. The 18 person team contains engineering students from various disciplines, combining their skills to create, launch and track a high altitude rocket. The goal is for the rocket to exceed 100,000 feet in altitude. The specific goal of the computer science sub\-team is to develop software to effectively track the rocket, successfully recover it, and to visualize its flight path. \par 
+Each member of the computer science sub\-team promised to take ownership of specific parts of the system in Fall term, to be completed to at least a beta level by the end of Winter term. Glenn Upthagrove promised to create a 3D trace of the flight path, data logging functionality, and a data handling system. Within all reason Glenn Upthagrove has completed these goals over the past term of work. \par 
+\section {Retrospective}
+\begin {center}
+ \begin {tabular} { | p{5cm} | p{5cm} | p{5cm} | }
+ \hline
+ Positives & Deltas & Actions \\
+ \hline
+ There have been no merge conflicts this entire term, and team coordination has been much better. The team has stopped having regular team meetings, but meet more often now than in the past terms.  & The team still could better coordinate work efforts, and have more solid weekly plans of action.  & The team will reassess the Github issues still pending, and add more to them. We will then take the remaining weeks and divide them as evenly as possible and work on them week by week. \\
+ \hline
+ \end {tabular}
+\end {center} 
+\section {Michael Elliott} 
+\subsection {Current Progress For Michael Elliott} 
+\section {Samuel Hudson} 
+\subsection{Goals for Samuel Hudson}
+Samuel Hudson was primary developer for the data base, API, and web application. 
+\subsection {Current Progress For Samuel Hudson} 
+This term has mainly been focused around supporting the electrical engineering team with the design and implementation of the firmware. One thing specifically that Sam has worked on is the extraction of GPS and altitude telemetry from NMEA data. For this Sam has written a parser in C. The parser reads from an input stream and adds to structures for storage in the EPROM and for transmission over the radio frequency to the ground station. Included below is the gps\_data\_extract\_nmea function that is responsible for carrying out said functionality.
+\begin{lstlisting}
+struct gps_data extract_nmea(char data[])
+{
+    const char s1[2] = "\r";
+    const char s2[2] = ",";
+    char *token1, *token2;
+    char *saveptr1, *saveptr2;
+    token1 = strtok_r(data, s1, &saveptr1);
+    char des[80];
+    struct gps_data r;
+    while (token1 != NULL)
+    {
+      strcpy(des, token1);
+      token2 = strtok_r(des, s2, &saveptr2);
+      const char *t[15];
+      int i = 0;
+      if (strncmp(token2, "$GNRMC", 7) == 0)
+      {
+        while (token2)
+        {
+          t[i] = token2;
+          token2 = strtok_r(NULL, s2, &saveptr2);
+          i++;
+        }
+        i = 0;
+        if (strncmp(t[2], "A", 2) == 0)
+        {
+          r.lat = atof(t[3]);
+          r.lon = atof(t[5]);
+        }
+        else
+        {
+          r.lat = 0.0;
+          r.lon = 0.0;
+        }
+      }
+      else if (strncmp(token2, "$GNGGA", 7) == 0)
+      {
+        while (token2)
+        {
+          t[i] = token2;
+          token2 = strtok_r(NULL, s2, &saveptr2);
+          i++;
+        }
+        i = 0;
+        r.alt = atof(t[9]);
+      }
+      token1 = strtok_r(NULL, s1, &saveptr1);
+    }
+    return r;
+}
+\end{lstlisting}
+In addition to developments to firmware Sam has made improvements to the API. The timer that exists on the application was having issues syncing with launch time. Now the clock uses the launch time set by the start\_launch function defined in the API as the source of truth for the time value rather than the application start up time. The code below shows the improved launch data get function that returns start\_time and end\_time. 
+\begin{lstlisting}
+@app.route('/api/v1.0/launch/', methods=['GET'])
+def get_launch():
+    launch = db.launch
+    if launch.count() == 0:
+        return jsonify({'result': 'no data'})
+    output = []
+    cursor = launch.find().sort([("_id", pymongo.DESCENDING)])
+    output.append({
+        'start_time': cursor[0]['start_time'],
+        'end_time': cursor[0]['end_time']
+    })
+    return jsonify({'result': output})
+\end{lstlisting}
+GPS data for both the sustainer and the booster have also been added to the web application to make determining the location of the rocket trivial. This data is extracted from an existing poll telemetry function and displayed on the main page of the application. 
+\subsection{Unfinished Components for Samuel Hudson}
+The usability study is currently in progress. We are currently in the process of interviewing different members of the class. The aim of the usability study is to determine whether the rocket tracker application is to the standard we expect, and information is easily interpretable. Some of the questions include “How easy was it to determine the state of the rocket at one point in time?”, “Can you find the altitude of the booster and sustainer?”, “Can you find the velocity of the booster and sustainer?” and “How is your overall user experience?”. The team is hoping to receive responses to these questions by May 11th. 
+
+\section {Glenn Upthagrove} 
+\subsection {Goals For Glenn Upthagrove}
+Glenn Upthagrove claimed primary responsibilty for several pieces of the pipeline. His main responsibiites were data logging, 3D trace, and most of data handling. This team member has also become the author of the test data generator, the graphical user interface, and has become primary architect of interprocess communication.
+\subsection {Current Progress For Glenn Upthagrove} 
+As of the end of winter term, the computer science team is feature complete on all required features listed in earlier documents. There are some features that were implemented that were beyond the requirements listed before. The data that is received can be formatted into JSON strings, and logged to text files. The data can be stored in a database and then read by the web application and presented to the user in a clean 2D representation from the work of Samuel Hudson. . The data can also be read from a text file and presented in a 3D space. The 3D trace is also capable of doing this in near real time, and given an Internet connection can get a map to texture the ground plane with centered at any point on the globe via the Google Static Maps API. The several pieces are all held together by a data handler that will spawn all necessary parts and link them together. These links are inter-process communication allowed by pipes and FIFOs. There is a data generator that allows for the data to be faked for both testing and simulation purposes. The configuration scripts also has been improved over this past term to make the installation of the software suite far easier for the average user. A graphical user interface, or GUI, was also written using Python’s tkinter module. The GUI makes the software more accessible to the average user, who may find command line arguments complicated, especially with many arguments. The majority of this term has been spent, however, working alongside the electrical engineering team to write firmware for the backup avionics board. 
+\subsection {Unfinished Components for Glenn Upthagrove}
+The only part that is technically incomplete for Glenn Upthagrove is to receive data from hardware. This is however outside the control of the computer science team. The avionics board has been the responsibility of the electrical engineering team, and different boards differ in result with the same code. This alongside firmware that has yet to yield results has caused the electrical engineering team to move to whole new processor on a new board. These hardware issues and the recent change in hardware has made data retrieval impossible, as there is no functional hardware to retrieve data from. Aiding in the development of working firmware is the highest priority for the coming weeks. There is also always room for more testing of code, though it still has yet to fail under synthetic loads which are expected to be much more difficult than real ones. There is also always room for improvement on usability, and thusly the GUI, trace, and configuration scripts can be polished as time permits. 
+\subsection {Importnat Code}
+The following are piecs of importnat code that were written by Glenn Upthagrove. 
+\subsubsection {Configuration Script}
+Below is the BASH script that configures a machine running Linux to run the HART software suite.
+\begin{lstlisting}
+echo "installing apt-file"
+echo
+sudo apt-get install file -y
+sudo apt-get install apt-file -y
+echo
+echo "updating apt-file"
+echo
+sudo apt-file update -y
+#docker
+echo
+echo "installing docker" 
+echo
+sudo apt-get install docker.io -y
+sudo apt-get install docker-compose -y
+#C/C++
+echo
+echo "installing gcc" 
+echo
+sudo apt-get install gcc -y
+echo
+echo "installing g++" 
+echo
+sudo apt-get install g++ -y
+#Make/CMake
+echo
+echo "installing make" 
+echo
+sudo apt-get install make -y
+echo
+echo "installing cmake" 
+echo
+sudo apt-get install g++ cmake -y
+#OpenGL
+echo
+echo "updating" 
+echo
+sudo apt-get update -y
+echo
+echo "upgrading"
+echo
+sudo apt-get upgrade -y
+echo
+echo "installing mesa-utils" 
+echo
+sudo apt-get install mesa-utils -y
+echo
+echo "installing mesa-common-dev"
+echo
+sudo apt install mesa-common-dev -y
+echo
+echo "installing freeglut"
+echo
+sudo apt-get install freeglut3 -y
+sudo apt-get install freeglut3-dev -y
+sudo apt install libglu1-mesa-dev freeglut3-dev -y
+echo
+echo "copying libglut.so to /usr/lib64"
+echo
+sudo mkdir /usr/lib64
+sudo cp ./3d_trace/libglut.so /usr/lib64/
+sudo chmod o=rwx /usr/lib64/libglut.so
+sudo chmod u=rwx /usr/lib64/libglut.so
+echo
+echo "installing binutils-gold"
+echo
+sudo apt-get install binutils-gold -y
+echo
+echo "installing libglew"
+echo
+sudo apt-get install libglew-dev -y
+echo
+echo "installing build-esssential"
+echo
+sudo apt-get install build-essential -y
+echo
+echo "installing libglew 1.5 dev"
+echo
+sudo apt-get install libglew1.5-dev libglm-dev -y
+#Python and required modules
+echo
+echo "installing python"
+echo
+sudo apt-get install python -y
+echo
+echo "installing pip" 
+echo 
+sudo  apt-get install python-pip python-dev build-essential -y 
+sudo  pip install --upgrade pip 
+sudo  pip install --upgrade virtualenv 
+echo
+echo "installing Pillow module for python"
+echo
+sudo pip install Pillow
+echo
+echo "installing requests module for python"
+echo
+sudo pip install requests 
+echo
+echo "installing pyUSB"
+echo
+sudo pip install pyusb
+echo
+echo "updating"
+echo
+#update and upgrade
+sudo apt-get update -y
+echo
+echo "upgrading"
+echo
+sudo apt-get upgrade -y
+echo
+echo "Done"
+echo
+#make
+echo
+echo "Making programs"
+echo
+cd 3d_trace
+make
+cd ..
+cd logging
+make
+cd data_handling
+make
+cd ..
+cd data_generator
+make
+cd ..
+cd conversion
+make
+cd ..
+echo
+echo "done"
+echo
+#make desktop icon
+echo
+echo "making desktop icon"
+echo
+cp ./HART.desktop ~/Desktop
+echo
+echo "Done"
+echo
+echo
+echo "Creating Directory File"
+echo
+pwd > HART_DIR.txt
+sudo mv HART_DIR.txt /HART_DIR.txt
+echo
+echo "Done"
+echo
+
+\end{lstlisting}
+\subsubsection {Graphical user Interface}
+Below is the code for Grpahical User Interface for the end user to interact with. this code is written for Python 2 using the Tkinter module. 
+\begin{lstlisting}
+# for Python2
+
+import Tkinter as tk   ## notice capitalized T in Tkinter 
+
+import tkMessageBox as tkm
+
+from PIL import ImageTk,Image
+
+import sys
+
+import os
+
+import subprocess
+
+
+#print current Python Version
+
+print(sys.version)
+
+
+#define sim flight callback function
+
+def simcallback():
+
+	os.chdir('./data_handling')
+
+	subprocess.call(['./datahandle', '-sim'])
+
+#define Tracking callback function
+
+def monitorccallback():
+
+	os.chdir('./data_handling')
+
+	subprocess.call(['./datahandle'])
+
+#define Logging callback function
+
+def logscallback():
+
+	dirfile = open('/HART_DIR.txt', 'r')
+
+	string1 = dirfile.read()
+
+	string2 = string1[:-1]
+
+	os.chdir(string2)
+
+	root2 = tk.Tk()
+
+	root2.title("View Logs")
+
+	root2.minsize(width=480, height=480)
+
+	root2.maxsize(width=1920, height=1080)
+
+	root2.resizable(width=True, height=True)
+
+	text1 = tk.Text(root2)
+
+	for filename in os.listdir("./logs"):
+
+		text1.insert('end', filename)
+
+		text1.insert('end', '\n')
+
+		myfile = open("./logs/"+filename, 'r')
+
+		string = myfile.read()
+
+		text1.insert('end', string)
+
+	text1.pack()
+
+	root2.mainloop()
+
+#change directory
+
+dirfile = open('/HART_DIR.txt', 'r')
+
+string1 = dirfile.read()
+
+string2 = string1[:-1]
+
+os.chdir(string2)
+
+#define gui
+
+root = tk.Tk()
+
+root.title("HART Avionics")
+
+root.minsize(width=480, height=480)
+
+root.maxsize(width=1920, height=1080)
+
+root.resizable(width=True, height=True)
+
+#sim button
+
+simbtn = tk.Button(root, text="Sim Flight", command=simcallback, bd=4)
+
+simbtn.pack()
+
+simbtn.place(relx=0.5, rely=0.4, width=128, x=-64)
+
+#monitor button
+
+monbtn = tk.Button(root, text="Monitor Flight", command=monitorccallback, bd=4)
+
+monbtn.pack()
+
+monbtn.place(relx=0.5, rely=0.5, width=128, x=-64)
+
+#view logs
+
+logbtn = tk.Button(root, text="View logs", command=logscallback, bd=4)
+
+logbtn.pack()
+
+logbtn.place(relx=0.5, rely=0.6, width=128, x=-64)
+
+#start main UI loop
+
+root.mainloop()
+\end{lstlisting}
+\subsubsection{Conversion}
+Below is a header file for C code that can convert a struct telem\_data into a JSON string and visa versa. 
+\begin{lstlisting}
+#ifndef __CONVERSION
+#define __CONVERSION
+
+
+#define _XOPEN_SOURCE 500 //makes usleep work
+#include <stdio.h>
+#include <stdlib.h>
+#include <unistd.h>
+#include <string.h>
+#include <time.h>
+#include <math.h>
+#include "./telemetry.h"
+int debug;
+//void convert(char* buff, float vel, float lat, float lon, float alt, float time){
+
+/***********************************************
+*Title: convert
+*Params: a string pointer, a telem_data*
+*Description: Converts a telem_data struct into 
+*a JSON packet
+***********************************************/
+void convert(char** buff, struct telem_data* in){
+	char str1[9] = "velocity";
+	char str2[9] = "latitude";
+	char str3[10] = "longitude";
+	char str4[9] = "altitude";
+	char str5[5] = "time";
+	char str6[5] = "type";
+	if(buff == NULL){
+		*buff = (char*)malloc(256);
+	}
+	memset(*buff, '\0', 256);
+	sprintf(*buff,"'{\"%s\":\"%f\", \"%s\":\"%f\", \"%s\":\"%f\", \"%s\":\"%f\", \"%s\":\"%f\", \"%s\":\"%c\"}'", str1,in->vel,str2,in->lat,str3,in->lon,str4,in->alt,str5,in->time, str6, in->type); //make JSON string
+	if(debug){
+		printf("%s\n", *buff);
+	}
+}
+
+/***********************************************
+*Title: structure
+*Params: a string pointer
+*Description: Converts a JSON packet into a 
+*telem_data structure
+***********************************************/
+struct telem_data structure(char** buff){
+	char* messagecpy;
+	char* token;
+	struct telem_data data;
+
+
+	token = (char*)malloc(sizeof(char)*256);
+	messagecpy = (char*)malloc(sizeof(char)*256);
+	memset(token, '\0', 256);
+	memset(messagecpy, '\0', 256);
+	strcpy(messagecpy, *buff);
+	token = strtok(messagecpy, ":");
+	token = strtok(NULL, "\"");
+	data.vel = atof(token);
+        token = strtok(NULL, ":");
+        token = strtok(NULL, "\"");
+	data.lat = atof(token);
+        token = strtok(NULL, ":");
+        token = strtok(NULL, "\"");
+	data.lon = atof(token);
+        token = strtok(NULL, ":");
+        token = strtok(NULL, "\"");
+	data.alt = atof(token);
+        token = strtok(NULL, ":");
+        token = strtok(NULL, "\"");
+	data.time = atof(token);
+        token = strtok(NULL, ":");
+        token = strtok(NULL, "\"");
+	data.type = token[0];
+	return data;
+}
+
+#endif
+\end{lstlisting}
+
+\section {Detailed Development}
+\subsection {Week 1}
+
+\subsubsection{Samuel Hudson}
+\begin {itemize}
+ \item \textbf{Plans: }This was the first week back from Spring break. This week consisted of mapping out what work was left to do.   
+ \item \textbf{Problems: }Getting an understanding of where everyone was after break.
+ \item \textbf{Progress: }We were able to make a plan and determine how to taken the work for the rest of the term.
+ \item \textbf{Summary: }This week we made a concrete plan as to how to tackle the remaining work of the term. We have a better understanding of how we can progress and everyone seems to have made reasonable progress over the spring break.  
+\end {itemize}
+\subsubsection{Glenn Upthagrove}
+\begin {itemize}
+ \item \textbf{Plans: }Get back in touch with the groups and form a plan.   
+ \item \textbf{Problems: }Catching up and figuring out what we have all been done takes time.  
+ \item \textbf{Progress: }I missed a meeting, but got back in touch with everyone as time permitted. 
+ \item \textbf{Summary: }This week I focused on getting the rest of the term in motion. I missed the AIAA meeting due to travel delays, but I met with everyone who was in town at a later time in the week. Sam is in Europe still and will not be available to work for a week or more.  
+\end {itemize}
+
+\section{Week 2}
+\subsubsection{Samuel Hudson}
+\begin {itemize}
+ \item \textbf{Plans: }This week we were determining which team members are responsible for developing firmware code. 
+ \item \textbf{Problems: }The ECE were having issues getting the board to work correctly. Making debugging difficult. 
+ \item \textbf{Progress: }By the end of the week we were able to get the LEDs to work on the board to signify some operations. 
+ \item \textbf{Summary: }This week we started allocating work for the firmware development portion of the project. I was assigned the task of making improvements to Baro and building a parser to extract NMEA data from the data stream.
+\end {itemize}
+\subsubsection{Glenn Upthagrove}
+\begin {itemize}
+ \item \textbf{Plans: }Get to work on pyUSB and firmware. 
+ \item \textbf{Problems: }pyUSB is not well known to anyone I have contact with. Firmware still has trouble loading. 
+ \item \textbf{Progress: }I have started with pyUSB, but have much to do. The firmware can now be loaded and we have gotten blinking lights.  
+ \item \textbf{Summary: }This week the ECE team found how to flash the board correctly and how to set LED lights so we can begin doing real development and testing of firmware. I have a Telemega and Teledongle so I can work on interfacing with that as well.  
+\end {itemize}
+
+\section{Week 3}
+\subsubsection{Samuel Hudson}
+\begin {itemize}
+ \item \textbf{Plans: }This week we were determining what else has to been done to improve the web application and firmware. 
+ \item \textbf{Problems: }The data handle init script is having issue starting docker.
+ \item \textbf{Progress: }We fixed issues with docker start script and also I made some progress on the parser.
+ \item \textbf{Summary: }This week I was able to write some more code to support the development of the NMEA parser. Also an issue with the docker start script has been resolved.
+\end {itemize}
+\subsubsection{Glenn Upthagrove}
+\begin {itemize}
+ \item \textbf{Plans: }Firmware and usability study.  
+ \item \textbf{Problems: }Sam has not started his usability study and firmware constantly gives a BUSY signal over SPI and I2C channels.  
+ \item \textbf{Progress: }I fixed the BUSY issue because we were using the wrong handles, but data is still no good, no word on Sam's study as of yet.  
+ \item \textbf{Summary: }This week and next week are all firmware. I want to start getting data in. We can blink LEDs and we can transmit data over the radio, so there is a start, but we need actual data. The SPI interface to the barometer was giving BUSY all the time, same with the MPU over I2C, but I found that issue, and I fixed read and write by replacing our old quick read and writes with the HAL functions that are more robust. The data is still all garbage though and I have only just reached that point so at this stage there are any number of things it could be.   
+\end {itemize}
+
+\section{Week 4}
+\subsubsection{Samuel Hudson}
+\begin {itemize}
+ \item \textbf{Plans: }This week we were planning out what question would be useful to ask our class members to improve the overall user experience of the web application. 
+ \item \textbf{Problems: }It was hard to find times for peers to carry out interview for the usability study. 
+ \item \textbf{Progress: }We finally found that we could have a complete usability by the end of week 6.
+ \item \textbf{Summary: }The week I completed the development of the NMEA parser and tested it with the ECE team and we also planned out the usability study and found times to work carry out interviews.
+\end {itemize}
+\subsubsection{Glenn Upthagrove}
+\begin {itemize}
+ \item \textbf{Plans: }Firmware.
+ \item \textbf{Problems: }We are still having many issues with the board from ECE.    
+ \item \textbf{Progress: }none on firmware. We have discovered differing results from different boards, indicating hardware issuers.    
+ \item \textbf{Summary: }This week I gave helped with firmware again, though we have had no success. I had a long conversation with Dr. Winters, to ensure we will be safe if the board still has issues in the future. We flashed the second board, and discovered that the same code on different boards causes different results, indicating that perhaps the boards have been improperly manufactured.    
+\end {itemize}
+
+\section{Week 5}
+\subsubsection{Samuel Hudson}
+\begin {itemize}
+ \item \textbf{Plans: }We determined different areas to work on for the development of the firmware for the new board. 
+ \item \textbf{Problems: }This week we found out that the ECE team have decided to change board which effects our development process. 
+ \item \textbf{Progress: }We were able to meet up a few times to discuss the development of the board.
+ \item \textbf{Summary: }This week we determined that the ECE are changing the board and that we have to make significant contributions to support their development efforts.
+\end {itemize}
+\subsubsection{Glenn Upthagrove}
+\begin {itemize}
+ \item \textbf{Plans: }Quality of life and progress report. 
+ \item \textbf{Problems: }We have a progress report to write, which is hard considering so much time has been devoted to firmware this term.    
+ \item \textbf{Progress: }I have completed a lot of the quality of life goals, and we have a plan for doing the report this weekend. 
+ \item \textbf{Summary: }This week we have a report to do. This will be difficult as almost all our time has been on firmware. We also have not done our usability study, but we can present the plan. I have done some important maintenance to the repository of late, and fixed a bug with my Docker instance. I also made a few improvements to the usability of the software, by adding the GUI officially, as well as better installation scripts and a script that downloads for the user, and a desktop icon that opens the GUI.     
+\end {itemize}
+
+%\bibliographystyle{IEEEtran}
+%\bibliography{bibliography}
+
+
+\end{document}
