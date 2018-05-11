@@ -104,6 +104,10 @@ echo "installing pyUSB"
 echo
 sudo pip install pyusb
 echo
+echo "Installing Putty"
+echo
+sudo apt-get install putty -y
+echo
 echo "updating"
 echo
 #update and upgrade
