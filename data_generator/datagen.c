@@ -75,7 +75,7 @@ void gen_data(float freq, float salt, float svel, float slat, float slon){
 			if(debug){
 				printf("PIPE NOT DETECTED\n");
 			}
-			sprintf(buff,"{\"%s\":\"%f\", \"%s\":\"%f\", \"%s\":\"%f\", \"%s\":\"%f\", \"%s\":\"%f\", \"%s\":\"%c\"}", str1,vel,str2,lat,str3,lon,str4,alt,str5,time, str6, type); //make JSON string
+			sprintf(buff,"{\"%s\":\"%f\", \"%s\":\"%f\", \"%s\":\"%f\", \"%s\":\"%f\", \"%s\":\"%f\", \"%s\":\"%c\"}&&", str1,vel,str2,lat,str3,lon,str4,alt,str5,time, str6, type); //make JSON string
 		}
 		//fprintf(files[1], buff); //print JSON string
 		//fprintf(files[1], "\n"); //print newline
