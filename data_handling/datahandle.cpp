@@ -605,6 +605,10 @@ int main(int argc, char** argv){
 			if(!ended1){
 				read_b_data(&boosters);
 				if(boosters[0] == '*'){
+					printf("writing EOT to api1\n");
+					write_to_api(end, 1);
+					printf("done\n");
+					printf("ended1 set to 1\n");
 					ended1 = 1;
 				}
 				strcpy(retrieved_data1, boosters.c_str());
@@ -615,11 +619,18 @@ int main(int argc, char** argv){
 			if(!ended2){
 				read_s_data(&sustainers);
 				if(sustainers[0] == '*'){
+					printf("writing EOT to api2\n");
+					write_to_api(end, 2);
+					printf("done\n");
+					printf("ended2 set to 2\n");
 					ended2 = 1;
+					break;
 				}
-				strcpy(retrieved_data2, sustainers.c_str());
-				printf("retrieved_data2: %s\n", retrieved_data2);
-				t_data = structure(&retrieved_data2);
+				else{
+					strcpy(retrieved_data2, sustainers.c_str());
+					printf("retrieved_data2: %s\n", retrieved_data2);
+					t_data = structure(&retrieved_data2);
+				}
 			}
 			printf("done getting data from fifos\n");
 			if(times == 1){
@@ -632,38 +643,48 @@ int main(int argc, char** argv){
 			get_data2(retrieved_data1, retrieved_data2, size);//get data from hardware
 		}
 		run = 1;
+		//ignoring, this was a stretch goal
 		//update latest_packet
-		pthread_mutex_lock(&lock);
-		memset(latest_packet, '\0', 256);
-		strcpy(latest_packet, retrieved_data1);
-		printf("latest packet in main thread: %s\n", latest_packet);
-		pthread_mutex_unlock(&lock);
+		//pthread_mutex_lock(&lock);
+		//memset(latest_packet, '\0', 256);
+		//strcpy(latest_packet, retrieved_data1);
+		//printf("latest packet in main thread: %s\n", latest_packet);
+		//pthread_mutex_unlock(&lock);
 		if(debug){
 			//print out retrived data
 			printf("In main, data is: %s\n", retrieved_data1);
 			printf("In main, data is: %s\n", retrieved_data2);
 		}
+		//not currently neccessary as no data will be raw
 		//raw log
 		if(retrieved_data1[0] != 'E'){
-			write_to_raw_log(retrieved_data1, 1);
+			if(ended1 == 0){
+				write_to_raw_log(retrieved_data1, 1);
+			}
 		}
 		if(retrieved_data2[0] != 'E'){
-			write_to_raw_log(retrieved_data2, 2);
+			if(ended2 == 0){
+				write_to_raw_log(retrieved_data2, 2);
+			}
 		}
-		//convert to json
-		//interpolate
-		//json log
 		if(retrieved_data1[0] != 'E'){
-			write_to_json_log(retrieved_data1, 1);
+			if(ended1 == 0){
+				write_to_json_log(retrieved_data1, 1);
+			}
 		}
 		if(retrieved_data2[0] != 'E'){
-			write_to_json_log(retrieved_data2, 2);
+			if(ended2 == 0){
+				write_to_json_log(retrieved_data2, 2);
+			}
 		}
 		//write to API, leading to database
+		printf("ended1 == %d\n", ended1);
 		if(retrieved_data1[0] != 'E'){
-			printf("writing to api1: %s\n", retrieved_data1);
-			write_to_api(retrieved_data1, 1);
-			printf("finished writing to api1\n");
+			if(ended1 == 0){
+				printf("writing to api1: %s\n", retrieved_data1);
+				write_to_api(retrieved_data1, 1);
+				printf("finished writing to api1\n");
+			}
 		}
 		else if(retrieved_data1[strlen(retrieved_data1-3)] == '*'){
 				printf("writing EOT to api1\n");
@@ -679,10 +700,13 @@ int main(int argc, char** argv){
 				ended1 = 1;
 			}
 		}
+		printf("ended2 == %d\n", ended2);
 		if(retrieved_data2[0] != 'E'){
-			printf("writing to api2: %s\n", retrieved_data2);
-			write_to_api(retrieved_data2, 2);
-			printf("finished writing to api2\n");
+			if(ended2 == 0){
+				printf("writing to api2: %s\n", retrieved_data2);
+				write_to_api(retrieved_data2, 2);
+				printf("finished writing to api2\n");
+			}
 		}
 		else if(retrieved_data2[strlen(retrieved_data2-3)] == '*'){
 				printf("writing EOT to api2\n");

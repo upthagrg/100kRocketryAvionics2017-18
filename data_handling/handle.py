@@ -27,11 +27,11 @@ while 1:
 	  print "Python got from commfifo2:";
 	  print(data2)
     if data1 == "**&&" or data1 == "**":
-        print "End of booster transmission"
+        print "PYTHON End of booster transmission"
 	flag1 = False
         #break
     if data2 == "**&&" or data2 == "**":
-        print "End of sustainer transmission"
+        print "PYTHON End of sustainer transmission"
 	flag2 = False
         #break
     if flag1 == True:

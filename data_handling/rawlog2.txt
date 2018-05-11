@@ -1,0 +1,11 @@
+{"velocity":"500.000000", "latitude":"45.000000", "longitude":"45.000000", "altitude":"0.000000", "time":"0.000000", "type":"s"}
+{"velocity":"402.000000", "latitude":"45.000099", "longitude":"45.000172", "altitude":"4510.000000", "time":"10.000000", "type":"s"}
+{"velocity":"304.000000", "latitude":"45.000000", "longitude":"45.000000", "altitude":"8040.000000", "time":"20.000000", "type":"s"}
+{"velocity":"206.000000", "latitude":"45.000099", "longitude":"45.000172", "altitude":"10590.000000", "time":"30.000000", "type":"s"}
+{"velocity":"108.000000", "latitude":"45.000000", "longitude":"45.000000", "altitude":"12160.000000", "time":"40.000000", "type":"s"}
+{"velocity":"10.000000", "latitude":"44.999901", "longitude":"45.000172", "altitude":"12750.000000", "time":"50.000000", "type":"s"}
+{"velocity":"-88.000000", "latitude":"44.999802", "longitude":"45.000000", "altitude":"12360.000000", "time":"60.000000", "type":"s"}
+{"velocity":"-186.000000", "latitude":"44.999901", "longitude":"44.999828", "altitude":"10990.000000", "time":"70.000000", "type":"s"}
+{"velocity":"-284.000000", "latitude":"45.000000", "longitude":"45.000000", "altitude":"8640.000000", "time":"80.000000", "type":"s"}
+{"velocity":"-382.000000", "latitude":"44.999901", "longitude":"44.999828", "altitude":"5310.000000", "time":"90.000000", "type":"s"}
+{"velocity":"-480.000000", "latitude":"44.999802", "longitude":"45.000000", "altitude":"1000.000000", "time":"100.000000", "type":"s"}
