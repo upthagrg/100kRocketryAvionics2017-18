@@ -1,0 +1,5 @@
+#!/bin/bash
+rm s_data_fifo
+rm b_data_fifo
+rm commfifo1
+rm commfifo2

@@ -235,7 +235,7 @@ int spawn_api_handle(){
         return idret;
 
 }
-
+//ignoring, this was a stretch goal anyway
 int spawn_trace(){
 
 }
@@ -397,6 +397,7 @@ void read_s_data(std::string* out){
 
 
 
+//ignoring, this was a stretch goal anyway
 void* _trace_update(){
 	while(run == 0){
 		continue;
@@ -599,13 +600,23 @@ int main(int argc, char** argv){
 			printf("main using fifos for data\n");
 			memset(retrieved_data1, '\0', 256);
 			memset(retrieved_data2, '\0', 256);
+			fflush(stdout);
+			printf("ended1: %d\n", ended1);
 			if(!ended1){
 				read_b_data(&boosters);
+				if(boosters[0] == '*'){
+					ended1 = 1;
+				}
 				strcpy(retrieved_data1, boosters.c_str());
 				printf("retrieved_data1: %s\n", retrieved_data1);
 			}
+			fflush(stdout);
+			printf("ended2: %d\n", ended2);
 			if(!ended2){
 				read_s_data(&sustainers);
+				if(sustainers[0] == '*'){
+					ended2 = 1;
+				}
 				strcpy(retrieved_data2, sustainers.c_str());
 				printf("retrieved_data2: %s\n", retrieved_data2);
 				t_data = structure(&retrieved_data2);
