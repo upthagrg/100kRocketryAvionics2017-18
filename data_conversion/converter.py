@@ -54,8 +54,8 @@ with open(args.file, 'r') as f:
                 data["time"] = (ntime - ptime).total_seconds()
             data["type"] = args.type
             json_data = json.dumps(data)
-            print json_data
-
+            print json_data + "&&"
+print "**&&"
 
 
 
