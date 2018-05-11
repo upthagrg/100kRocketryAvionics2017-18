@@ -578,13 +578,9 @@ int main(int argc, char** argv){
 	json_logid1 = spawn_json_log(1);
 	json_logid2 = spawn_json_log(2);
 	api_handleid = spawn_api_handle();
-	//traceid = spawn_trace();
 	
-	//create thread to talk to trace
-//	pthread_create(&trace_com, NULL, _trace_update, NULL);
 
 	//start loop
-//	while(1){
 	do{
 		if(debug){
 			//inform user that control flow is at top of loop
@@ -730,7 +726,6 @@ int main(int argc, char** argv){
 		//inform user that loop has ended, aka end of transmit	
 		printf("Out of loop\n");
 	}
-//	}
 	usleep(1000); //sleep fpr a little while
 	write_to_raw_log(end,1);
 	write_to_raw_log(end,2);
@@ -756,11 +751,9 @@ int main(int argc, char** argv){
 	}
 	printf("Finished waiting\n");
 	printf("Joining threads...\n");
-//	pthread_join(trace_com, NULL);
 	printf("Threads joined\n");
 	printf("Removing FIFOs...\n");
 	remove_fifo();
-	//remove_fifo(2);
 	printf("Finished removing FIFOs\n");
 	printf("Exiting\n");
 	return 0;
