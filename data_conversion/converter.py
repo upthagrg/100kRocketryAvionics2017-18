@@ -4,6 +4,7 @@ from datetime import datetime, timedelta
 
 parser = argparse.ArgumentParser()
 parser.add_argument('--type', help='enter stage')
+parser.add_argument('--file', help='enter stage')
 args = parser.parse_args()
 
 ptime = 0.0
@@ -12,7 +13,7 @@ palt = 0.0
 flag = 0
 ctime = datetime.now()
 
-with open('test_data', 'r') as f:
+with open(args.file, 'r') as f:
     for line in f:
         if "GGA," in line[:7]:
             gga_data = line.split(",")
@@ -37,7 +38,7 @@ with open('test_data', 'r') as f:
                 data["velocity"] = str(calt / cdtime)
                 pdtime = (ntime - ptime).total_seconds()
             data["latitude"] = gga_data[2]
-            data["longitude"] = gga_data[4]
+            data["longitude"] = "-" + gga_data[4]
             data["altitude"] = gga_data[9]
             if ptime == 0.0:
                 ptime = datetime.strptime(
