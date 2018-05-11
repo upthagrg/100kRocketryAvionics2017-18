@@ -31,7 +31,7 @@ char latest_packet[256];
 pthread_mutex_t lock = PTHREAD_MUTEX_INITIALIZER;
 int run = 0;
 
-void remove_fifo(int);
+void remove_fifo();
 
 void get_data2(char* input, char* input2, int size){
 	memset(input, '\0', size);
@@ -50,8 +50,8 @@ int start_docker(){
 	switch(idret){
 		case -1: //error
 			printf("ERROR SPAWNING RAW LOG\n");
-			remove_fifo(1);
-			remove_fifo(2);
+			remove_fifo();
+			//remove_fifo(2);
 			exit(1);
 			break;
 		case 0:
@@ -72,8 +72,8 @@ int spawn_raw_log(int in){
 	switch(idret){
 		case -1: //error
 			printf("ERROR SPAWNING RAW LOG\n");
-			remove_fifo(1);
-			remove_fifo(2);
+			remove_fifo();
+			//remove_fifo(2);
 			exit(1);
 			break;
 		case 0: //child
@@ -88,8 +88,8 @@ int spawn_raw_log(int in){
 			}
 			else{
 				printf("Error, invalid pipe instance:1, input: %d\n",in);
-				remove_fifo(1);
-				remove_fifo(2);
+				remove_fifo();
+				//remove_fifo(2);
 				exit(8);
 			}
 			if(debug){
@@ -110,8 +110,8 @@ int spawn_raw_log(int in){
 			}
                         if(execret == -1){//exec error
                                 printf("ERROR LAUNCHING %s", "RAW LOGGER");
-				remove_fifo(1);
-				remove_fifo(2);
+				remove_fifo();
+				//remove_fifo(2);
                         	exit(3);
                         }
 			break;
@@ -142,8 +142,8 @@ int spawn_json_log(int in){
         switch(idret){
                 case -1: //error
                         printf("ERROR SPAWNING JSON LOG\n");
-			remove_fifo(1);
-			remove_fifo(2);
+			remove_fifo();
+			//remove_fifo(2);
                         exit(1);
                         break;
                 case 0: //child
@@ -174,8 +174,8 @@ int spawn_json_log(int in){
 			}
                         if(execret == -1){//exec error
                                 printf("ERROR LAUNCHING %s", "JSON LOGGER");
-				remove_fifo(1);
-				remove_fifo(2);
+				remove_fifo();
+				//remove_fifo(2);
                                 exit(3);
                         }
                         break;
@@ -207,8 +207,8 @@ int spawn_api_handle(){
         switch(idret){
                 case -1: //error
                         printf("ERROR SPAWNING RAW LOG\n");
-			remove_fifo(1);
-			remove_fifo(2);
+			remove_fifo();
+			//remove_fifo(2);
                         exit(1);
                         break;
                 case 0: //child
@@ -218,8 +218,8 @@ int spawn_api_handle(){
                         execret = execlp("python", "python", "./handle.py",(char*)NULL);
                         if(execret == -1){//exec error
                                 printf("ERROR LAUNCHING %s", "RAW LOGGER");
-				remove_fifo(1);
-				remove_fifo(2);
+				remove_fifo();
+				//remove_fifo(2);
                                 exit(3);
                         }
                         break;
@@ -240,7 +240,7 @@ int spawn_trace(){
 
 }
 
-void remove_fifo(int in){
+void remove_fifo(){
 	pid_t childid;
 	int child_exit = -5;
 	int ret;
@@ -253,14 +253,14 @@ void remove_fifo(int in){
 			fflush(stdout);
 			exit(2);
 		case 0: //child
-			switch(in){
-				case 1:
-					ret = execlp("rm", "rm", "./commfifo1", NULL); //remove fifo
-				case 2:
-					ret = execlp("rm", "rm", "./commfifo2", NULL); //remove fifo
-				default:
-					ret = -1;
-			}
+			//switch(in){
+			//	case 1:
+					ret = execlp("./rmallfifos", "./rmallfifos", NULL); //remove fifo
+			//	case 2:
+			//		ret = execlp("rm", "rm", "./commfifo2", NULL); //remove fifo
+			//	default:
+			//		ret = -1;
+			//}
 			if(ret == -1){
 				printf("ERROR LAUNCHING RM\n");
 				fflush(stdout);
@@ -288,8 +288,8 @@ void write_to_raw_log(char* input, int output){
 			}
 			else{
 				printf("Error, invalid pipe, instance:2 input: %d\n", output);
-				remove_fifo(1);
-				remove_fifo(2);
+				remove_fifo();
+				//remove_fifo(2);
 				exit(8);
 			}
 		tmp += wret; //shorten message accordingly 
@@ -314,8 +314,8 @@ void write_to_json_log(char* input, int output){
 			}
 			else{
 				printf("Error, invalid pipe instance:3, input: %d\n", output);
-				remove_fifo(1);
-				remove_fifo(2);
+				remove_fifo();
+				//remove_fifo(2);
 				exit(8);
 			}
 		tmp += wret; //shorten message accordingly 
@@ -346,8 +346,8 @@ void write_to_api(char* input, int output){
                         }
                         else{
                                 printf("Error, invalid pipe instance:3, input: %d\n", output);
-                                remove_fifo(1);
-                                remove_fifo(2);
+                                remove_fifo();
+                                //remove_fifo(2);
                                 exit(8);
                         }
                 tmp += wret; //shorten message accordingly 
@@ -759,8 +759,8 @@ int main(int argc, char** argv){
 //	pthread_join(trace_com, NULL);
 	printf("Threads joined\n");
 	printf("Removing FIFOs...\n");
-	remove_fifo(1);
-	remove_fifo(2);
+	remove_fifo();
+	//remove_fifo(2);
 	printf("Finished removing FIFOs\n");
 	printf("Exiting\n");
 	return 0;
