@@ -10,9 +10,6 @@ test:
 	gcc ./logging/logger.c  -std=c99 -lm -o ./logger -Wno-format-security
 	gcc ./logging/logtest1.c -std=c99 -lm -o ./test1
 	rm -f ./testlog.txt
-	./gen -test -to testlog.txt
-	./gen -test -pipe ./logger 
-	./test1
 	g++ -o ./3d_trace/trace_test1  ./3d_trace/trace_test1.cpp  -lGL  -lGLU  /usr/lib/x86_64-linux-gnu/libglut.so  -lm -I./3d_trace/include -Wno-write-strings
 	rm ./logger ./test1 ./log.txt ./testlog.txt ./gen ./3d_trace/trace_test1
 test2:
