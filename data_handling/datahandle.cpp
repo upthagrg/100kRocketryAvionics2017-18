@@ -219,7 +219,7 @@ int spawn_api_handle(){
         idret = fork();
         switch(idret){
                 case -1: //error
-                        printf("ERROR SPAWNING RAW LOG\n");
+                        printf("ERROR SPAWNING API HANDLE\n");
 			remove_fifo();
 			//remove_fifo(2);
                         exit(1);
@@ -230,7 +230,7 @@ int spawn_api_handle(){
                         //dup2(3, files1[0]); //remap pipe read to file 3
                         execret = execlp("python", "python", "./handle.py",(char*)NULL);
                         if(execret == -1){//exec error
-                                printf("ERROR LAUNCHING %s", "RAW LOGGER");
+                                printf("ERROR LAUNCHING API HANDLE");
 				remove_fifo();
 				//remove_fifo(2);
                                 exit(3);
@@ -736,7 +736,7 @@ int main(int argc, char** argv){
 			}
 		}
 		if(ended2){break;}//sanity check
-	}while((t_data.alt > salt));//sanity check
+	}while((!ended2));//sanity check
 	if(debug){
 		//inform user that loop has ended, aka end of transmit	
 		printf("Out of loop\n");
@@ -765,8 +765,8 @@ int main(int argc, char** argv){
 		waitpid(children[i], &child_exit, 0);
 	}
 	printf("Finished waiting\n");
-	printf("Joining threads...\n");
-	printf("Threads joined\n");
+	//printf("Joining threads...\n");
+	//printf("Threads joined\n");
 	printf("Removing FIFOs...\n");
 	remove_fifo();
 	printf("Finished removing FIFOs\n");
