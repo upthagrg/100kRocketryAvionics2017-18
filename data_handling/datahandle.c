@@ -11,7 +11,10 @@
 #include <fcntl.h>
 #include <sys/wait.h>
 #include <pthread.h>
+#include <fstream>
 #include "datagen.h"
+#include <iostream>
+#include <string>
 
 //communication globals
 int files1_1[2];
@@ -358,13 +361,49 @@ void write_to_api(char* input, int output){
         }
 }
 
+
+void read_b_data(std::string* out){
+	printf("in read_b_data\n");
+        std::ifstream fifo;
+	printf("opening booster data fifo...\n");
+	fifo.open("./b_data_fifo");
+	printf("done opening booster data fifo\n");
+	if(!fifo.is_open()){
+		printf("COULD OT OPEN BOOSTER FIFO\n");
+		exit(1);
+	}
+	printf("reading booster data from fifo\n");
+	std::getline(fifo, *out);
+	printf("data was: %s\n", out->c_str());
+	fifo.close();
+}
+void read_s_data(std::string* out){
+	printf("in read_s_data\n");
+        std::ifstream fifo;
+	printf("opening sustaine data fifo...\n");
+	fifo.open("./s_data_fifo");
+	printf("done opening sustainer data fifo\n");
+	if(!fifo.is_open()){
+		printf("COULD OT OPEN SUSTAINER FIFO\n");
+		exit(1);
+	}
+	printf("reading sustainer data from fifo\n");
+	std::getline(fifo, *out);
+	printf("data was: %s\n", out->c_str());
+	fifo.close();
+}
+
+
+
+
+
 void* _trace_update(){
 	while(run == 0){
 		continue;
 	}
 	while(run == 1){	
 		pthread_mutex_lock(&lock);
-		printf("TRACE THREAD HAS: %s\n", latest_packet);
+		//printf("TRACE THREAD HAS: %s\n", latest_packet);
 		fflush(stdout);
 		pthread_mutex_unlock(&lock);
 		usleep(1000000/1);	
@@ -379,8 +418,8 @@ int main(int argc, char** argv){
 	int fiforet; //fifo return
 	int execret; //exec return
 	int size = 256; 
-	char retrieved_data1[size]; //data string
-	char retrieved_data2[size]; //data string
+	char* retrieved_data1; //data string
+	char* retrieved_data2; //data string
         int i=0; //common iterator variable 
         char* buffsize = NULL;
         int ret; //return from exec
@@ -389,11 +428,21 @@ int main(int argc, char** argv){
 	int ended1 = 0;
 	int ended2 = 0;
 	int sim = 0;
+	int no_docker = 1;
+	int ufifo = 0;
+	struct telem_data t_data;
+	int times = 1;
+	bool bover = false;
+	bool sover = false;
+	std::string boosters;
+	std::string sustainers;
 	pthread_t trace_com;
         wind = -5;
         debug = 0; //default debug off
         name = NULL;
         srand(time(NULL)); //seed random
+	retrieved_data2 = (char*)malloc(size); //data string
+	retrieved_data1 = (char*)malloc(size); //data string
 	//lock = PTHREAD_MUTEX_INITIALIZER; //initialize lock
         for(i; i<argc; i++){
                 if(strcmp(argv[i], "-vel") == 0){ //get starting velocity
@@ -404,9 +453,16 @@ int main(int argc, char** argv){
                         alt = atof(argv[i+1]);
                         alt2 = atof(argv[i+1]);
                 }
+                else if(strcmp(argv[i], "-fifo") == 0){ //use a fifo
+                        ufifo = 1;
+			printf("ufifo == 1\n");
+                }
                 else if(strcmp(argv[i], "-lat") == 0){ //get starting latitude
                         lat = atof(argv[i+1]);
                         lat2 = atof(argv[i+1]);
+                }
+                else if(strcmp(argv[i], "-dock") == 0){ //start docker needed
+                        no_docker = 0;
                 }
                 else if(strcmp(argv[i], "-lon") == 0){ //get starting longitude
                         lon = atof(argv[i+1]);
@@ -439,10 +495,11 @@ int main(int argc, char** argv){
                 }
         }
 
-
-	printf("\n\nstarting docker...\n\n");
-	start_docker();
-	printf("\n\ndocker up\n\n");
+	if(!no_docker){
+		printf("\n\nstarting docker...\n\n");
+		start_docker();
+		printf("\n\ndocker up\n\n");
+	}
 	
 	salt = alt; //remember initial params
 	svel = vel;
@@ -493,6 +550,24 @@ int main(int argc, char** argv){
                 fflush(stdout);
                 exit(3);
         }
+	
+	if(ufifo == 1){
+		printf("MAKING FIFOS FOR DATA\n");
+		fiforet = mkfifo("./b_data_fifo", 0666);//make a FIFO
+	        if(fiforet == -1){
+	                printf("ERROR MAKING BOOSTER DATA FIFO\n");
+	                fflush(stdout);
+	                exit(3);
+	       	}
+	
+		fiforet = mkfifo("./s_data_fifo", 0666);//make a FIFO
+	        if(fiforet == -1){
+	                printf("ERROR MAKING SUSTAINER DATA FIFO\n");
+	                fflush(stdout);
+	                exit(3);
+	        }
+		printf("DONE MAKING FIFOS FOR DATA\n");
+	}
 
 
 
@@ -505,7 +580,7 @@ int main(int argc, char** argv){
 	//traceid = spawn_trace();
 	
 	//create thread to talk to trace
-	pthread_create(&trace_com, NULL, _trace_update, NULL);
+//	pthread_create(&trace_com, NULL, _trace_update, NULL);
 
 	//start loop
 //	while(1){
@@ -516,6 +591,31 @@ int main(int argc, char** argv){
 		}
 		if(sim){//if sim selected, use gendata
 			get_data2(retrieved_data1, retrieved_data2, size);//get data from hardware
+		}
+		else if(ufifo == 1){
+			//std::string boosters;
+		        //std::string sustainers;
+			fflush(stdout);
+			printf("main using fifos for data\n");
+			memset(retrieved_data1, '\0', 256);
+			memset(retrieved_data2, '\0', 256);
+			if(!ended1){
+				read_b_data(&boosters);
+				strcpy(retrieved_data1, boosters.c_str());
+				printf("retrieved_data1: %s\n", retrieved_data1);
+			}
+			if(!ended2){
+				read_s_data(&sustainers);
+				strcpy(retrieved_data2, sustainers.c_str());
+				printf("retrieved_data2: %s\n", retrieved_data2);
+				t_data = structure(&retrieved_data2);
+			}
+			printf("done getting data from fifos\n");
+			if(times == 1){
+				times = 2;
+				t_data.alt = 1.0;
+			}
+
 		}
 		else{
 			get_data2(retrieved_data1, retrieved_data2, size);//get data from hardware
@@ -554,6 +654,12 @@ int main(int argc, char** argv){
 			write_to_api(retrieved_data1, 1);
 			printf("finished writing to api1\n");
 		}
+		else if(retrieved_data1[strlen(retrieved_data1-3)] == '*'){
+				printf("writing EOT to api1\n");
+				write_to_api(end, 1);
+				printf("done\n");
+				ended1 = 1;
+		}
 		else{
 			if(ended1 == 0){
 				printf("writing EOT to api1\n");
@@ -567,6 +673,12 @@ int main(int argc, char** argv){
 			write_to_api(retrieved_data2, 2);
 			printf("finished writing to api2\n");
 		}
+		else if(retrieved_data2[strlen(retrieved_data2-3)] == '*'){
+				printf("writing EOT to api2\n");
+				write_to_api(end, 2);
+				printf("done\n");
+				ended2 = 1;
+		}
 		else{
 			if(ended2 == 0){
 				printf("writing EOT to api2\n");
@@ -575,9 +687,10 @@ int main(int argc, char** argv){
 				ended2 = 1;
 			}
 		}
+		if(ended2){break;}
 		//trace
-	//	printf("alt: %f, alt2: %f\n", alt, alt2);
-	}while(alt2 > salt);
+		printf("t_data.alt: %f, alt2: %f\n", t_data.alt, alt2);
+	}while((t_data.alt > salt));
 	if(debug){
 		//inform user that loop has ended, aka end of transmit	
 		printf("Out of loop\n");
@@ -589,9 +702,11 @@ int main(int argc, char** argv){
 	write_to_json_log(end,1);
 	write_to_json_log(end,2);
 	if(ended1 == 0){
+		printf("writing EOT to api1\n");
 		write_to_api(end, 1);
 	}
 	if(ended2 == 0){
+		printf("writing EOT to api2\n");
 		write_to_api(end, 2);
 	}
 

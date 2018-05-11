@@ -1,0 +1,97 @@
+ufifo == 1
+MAKING FIFOS FOR DATA
+DONE MAKING FIFOS FOR DATA
+
+
+LOGGER SPAWNED
+
+Opening file...
+Opened file
+Logging...
+logger recieved end of data transmit signal and is exiting
+Done logging
+
+
+LOGGER SPAWNED
+
+Opening file...
+Opened file
+Logging...
+logger recieved end of data transmit signal and is exiting
+Done logging
+
+
+LOGGER SPAWNED
+
+Opening file...
+Opened file
+Logging...
+logger recieved end of data transmit signal and is exiting
+Done logging
+
+
+LOGGER SPAWNED
+
+Opening file...
+Opened file
+Logging...
+logger recieved end of data transmit signal and is exiting
+Done logging
+start
+making request
+request finished
+5af4e54f406f33000c60a7b8
+end of print
+continueing
+Launch has started at: 2018-05-11 00:35:27
+starting
+opening commfifo1
+python reading commfifo1
+Python got from commfifo1:
+{"velocity":"100.000000", "latitude":"45.000000", "longitude":"45.000000", "altitude":"0.000000", "time":"0.000000", "type":"b"}
+opening commfifo2
+python reading commfifo2
+Python got from commfifo2:
+{"velocity":"500.000000", "latitude":"45.000000", "longitude":"45.000000", "altitude":"0.000000", "time":"0.000000", "type":"s"}
+{u'altitude': u'0.000000', u'longitude': u'45.000000', u'time': u'0.000000', u'latitude': u'45.000000', u'velocity': u'100.000000', u'type': u'b'}
+(5af4e55a406f33000c60a7b9)
+{u'altitude': u'0.000000', u'longitude': u'45.000000', u'time': u'0.000000', u'latitude': u'45.000000', u'velocity': u'500.000000', u'type': u's'}
+(5af4e55a406f33000c60a7ba)
+opening commfifo1
+python reading commfifo1
+Python got from commfifo1:
+**
+opening commfifo2
+python reading commfifo2
+Python got from commfifo2:
+**
+End of booster transmission
+End of sustainer transmission
+Launch has ended at: 2018-05-11 00:35:38
+main using fifos for data
+in read_b_data
+opening booster data fifo...
+done opening booster data fifo
+reading booster data from fifo
+data was: {"velocity":"100.000000", "latitude":"45.000000", "longitude":"45.000000", "altitude":"0.000000", "time":"0.000000", "type":"b"}&&
+in read_s_data
+opening sustaine data fifo...
+done opening sustainer data fifo
+reading sustainer data from fifo
+data was: {"velocity":"500.000000", "latitude":"45.000000", "longitude":"45.000000", "altitude":"0.000000", "time":"0.000000", "type":"s"}&&
+done getting data from fifos
+retrieved_data1: {"velocity":"100.000000", "latitude":"45.000000", "longitude":"45.000000", "altitude":"0.000000", "time":"0.000000", "type":"b"}&&
+retrieved_data2: {"velocity":"500.000000", "latitude":"45.000000", "longitude":"45.000000", "altitude":"0.000000", "time":"0.000000", "type":"s"}&&
+latest packet in main thread: {"velocity":"100.000000", "latitude":"45.000000", "longitude":"45.000000", "altitude":"0.000000", "time":"0.000000", "type":"b"}&&
+writing to api1: {"velocity":"100.000000", "latitude":"45.000000", "longitude":"45.000000", "altitude":"0.000000", "time":"0.000000", "type":"b"}&&
+finished writing to api1
+writing to api2: {"velocity":"500.000000", "latitude":"45.000000", "longitude":"45.000000", "altitude":"0.000000", "time":"0.000000", "type":"s"}&&
+finished writing to api2
+alt: 0.000000, alt2: 0.000000
+Waiting on children...
+Finished waiting
+Joining threads...
+Threads joined
+Removing FIFOs...
+Finished removing FIFOs
+Exiting

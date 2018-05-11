@@ -25,7 +25,7 @@
 #include <sys/wait.h>
 
 
-int debug;
+extern int debug;
 char* name;
 int myfile;
 int wind;

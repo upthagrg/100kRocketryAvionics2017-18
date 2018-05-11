@@ -15,14 +15,16 @@ while 1:
     if flag1 == True:
       print "opening commfifo1";
       with open('./commfifo1') as fifo1: # booster data
-	  print "reading commfifo1";
+	  print "python reading commfifo1";
           data1 = fifo1.read()
+	  print "Python got from commfifo1:";
 	  print(data1)
     if flag2 == True:
       print "opening commfifo2";
       with open('./commfifo2') as fifo2: # sustainer data
-	  print "reading commfifo2";
+	  print "python reading commfifo2";
           data2 = fifo2.read()
+	  print "Python got from commfifo2:";
 	  print(data2)
     if data1 == "**&&" or data1 == "**":
         print "End of booster transmission"
