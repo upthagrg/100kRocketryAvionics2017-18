@@ -17,8 +17,9 @@ def simcallback():
 	subprocess.call(['./datahandle', '-sim'])
 #define Tracking callback function
 def monitorccallback():
+	#only use if you know what you are doing
 	os.chdir('./data_handling')
-	subprocess.call(['./datahandle'])
+	subprocess.call(['./datahandle', '-dock', '-fifo'])
 #define Logging callback function
 def logscallback():
 	dirfile = open('/HART_DIR.txt', 'r')
