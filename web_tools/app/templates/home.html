@@ -75,8 +75,8 @@
 $.get( "http://0.0.0.0:5000/api/v1.0/launch", function( data ) { 
     var current_time = new Date;
     var parts = data['result'][0]["start_time"].split(' ');
-    var start_time = new Date(parts[0]+"T"+parts[1]+"Z"); console.log(start_time.toDateString());
-    var seconds = (current_time - start_time) / 1000
+    var start_time = new Date(parts[0]+"T"+parts[1]+"Z");
+    var seconds = Math.round((current_time - start_time) / 1000);
     $('.timer').timer({ seconds: seconds});
     
 })
