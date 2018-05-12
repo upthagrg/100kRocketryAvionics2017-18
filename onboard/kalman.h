@@ -4,10 +4,10 @@
 #include <stdint.h>
 #include "matrix.h"
 
-#define NUM_INPUTS 5
+#define NUM_INPUTS 6
 #define NUM_VARS 10
 
-enum sensor_var { LATITUDE, LONGITUDE, ALTITUDE, PRESSURE, ACCELERATION, YAW, PITCH, ROLL, SPEED, JERK };
+enum sensor_var { TIME, LATITUDE, LONGITUDE, ALTITUDE, PRESSURE, ACCELERATION, YAW, PITCH, ROLL, SPEED };
 
 struct filter {
 	Matrix state, measurement, prediction, prediction_model, observation_model, uncertainty, uncertainty_prediction, weights, process_covariance, observation_covariance;
@@ -39,5 +39,9 @@ int8_t kf_update_state(void);
 int8_t kf_update_uncertainty(void);
 
 float kf_get_value(enum sensor_var);
+
+#ifdef DEBUG
+void kf_print_state(void);
+#endif
 
 #endif

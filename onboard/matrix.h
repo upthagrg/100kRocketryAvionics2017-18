@@ -72,4 +72,8 @@ int8_t matrix_multiply(Matrix a, Matrix b, Matrix *out);
  */
 int8_t matrix_inverse(Matrix in, Matrix *out);
 
+#ifdef DEBUG
+void print_matrix(Matrix);
+#endif
+
 #endif

@@ -2,6 +2,9 @@
 #include "matrix.h"
 #include "kalman.h"
 #include "hwint.h"
+#ifdef DEBUG
+#include "debug.h"
+#endif
 
 struct filter kf;
 
@@ -10,13 +13,36 @@ int8_t kalman_filter(void)
 	float s_m [NUM_VARS]  [1];			/* state matrix */
 	float m_m [NUM_INPUTS][1];			/* measurement matrix */
 	float p_m [NUM_VARS]  [1];			/* prediction matrix */
-	float pm_m[NUM_VARS]  [NUM_VARS];	/* prediction model matrix */
-	float om_m[NUM_INPUTS][NUM_VARS];	/* observation model matrix */
 	float u_m [NUM_VARS]  [NUM_VARS];	/* uncertainty matrix */
 	float up_m[NUM_VARS]  [NUM_VARS];	/* uncertainty prediction matrix */
 	float w_m [NUM_VARS]  [NUM_INPUTS];	/* weights matrix */
 	float pc_m[NUM_VARS]  [NUM_VARS];	/* process covariance matrix */
 	float oc_m[NUM_INPUTS][NUM_INPUTS];	/* observation covariance matrix */
+
+	float pm_m[NUM_VARS][NUM_VARS] =	/* prediction model matrix */
+		/* Populate with values from simulation */
+		{
+			{1,0,0,0,0,0,0,0,0,0},
+			{0,1,0,0,0,0,0,0,0,0},
+			{0,0,1,0,0,0,0,0,0,0},
+			{0,0,0,1,0,0,0,0,0,0},
+			{0,0,0,0,1,0,0,0,0,0},
+			{0,0,0,0,0,1,0,0,0,0},
+			{0,0,0,0,0,0,1,0,0,0},
+			{0,0,0,0,0,0,0,1,0,0},
+			{0,0,0,0,0,0,0,0,1,0},
+			{0,0,0,0,0,0,0,0,0,1}
+		};
+	float om_m[NUM_INPUTS][NUM_VARS] =	/* observation model matrix */
+	/* Populate with values from simulation */
+		{
+			{1,0,0,0,0,0,0,0,0,0},
+			{0,1,0,0,0,0,0,0,0,0},
+			{0,0,1,0,0,0,0,0,0,0},
+			{0,0,0,1,0,0,0,0,0,0},
+			{0,0,0,0,1,0,0,0,0,0},
+			{0,0,0,0,0,1,0,0,0,0}
+		};
 
 	new_matrix(&kf.state,					NUM_VARS,   1,          s_m);
 	new_matrix(&kf.measurement,				NUM_INPUTS, 1,          m_m);
@@ -51,11 +77,16 @@ int8_t kf_init(void)
 {
 	kf_measure();
 
+	kfstate(TIME)			= kfmeasurement(TIME);
 	kfstate(LATITUDE)		= kfmeasurement(LATITUDE);
 	kfstate(LONGITUDE)		= kfmeasurement(LONGITUDE);
 	kfstate(ALTITUDE)		= kfmeasurement(ALTITUDE);
-	kfstate(SPEED)			= 0;
+	kfstate(PRESSURE)		= kfmeasurement(PRESSURE);
 	kfstate(ACCELERATION)	= 0;
+	kfstate(YAW)			= 0;
+	kfstate(PITCH)			= 0;
+	kfstate(ROLL)			= 0;
+	kfstate(SPEED)			= 0;
 
 	return 0;
 }
@@ -83,13 +114,23 @@ int8_t kf_predict_uncertainty(void)
 	matrix_transpose(kf.prediction_model, &trans);
 	matrix_multiply (kf.prediction_model, kf.uncertainty, &kf.uncertainty_prediction);
 	matrix_multiply (kf.uncertainty_prediction, trans, &kf.uncertainty_prediction);
-	matrix_add      (kf.uncertainty_prediction, kf.process_covariance, &kf.uncertainty_prediction); /* TODO: Calculate process_covariance */
+	matrix_add      (kf.uncertainty_prediction, kf.process_covariance, &kf.uncertainty_prediction);
 
 	return 0;
 }
 
 int8_t kf_measure(void)
 {
+#ifdef DEBUG
+	size_t buff_size = 64;
+	char *buff = NULL;
+	if (getline(&buff, &buff_size, debug_input) == -1) exit(0);
+	_hwsim_td = structure(&buff);
+	free(buff);
+	printf("{%f, %f, %f, %f}\n", _hwsim_td.time, _hwsim_td.lat, _hwsim_td.lon, _hwsim_td.alt);
+
+#endif
+	kfmeasurement(TIME)			= cpu_time();
 	kfmeasurement(LATITUDE)		= gps_latitude();
 	kfmeasurement(LONGITUDE)	= gps_longitude();
 	kfmeasurement(ALTITUDE)		= gps_altitude();
@@ -116,7 +157,7 @@ int8_t kf_calculate_weights(void)
 	matrix_transpose(kf.observation_model, &trans);
 	matrix_multiply (kf.uncertainty_prediction, trans, &result);
 	matrix_multiply (kf.observation_model, result, &temp);
-	matrix_add      (temp, kf.observation_covariance, &temp); /* TODO: Calculate observation_covariance */
+	matrix_add      (temp, kf.observation_covariance, &temp);
 	matrix_inverse  (temp, &temp);
 	matrix_multiply (result, temp, &kf.weights);
 
@@ -137,6 +178,9 @@ int8_t kf_update_state(void)
 	matrix_add     (kf.measurement, temp, &temp);
 	matrix_multiply(kf.weights, temp, &kf.state);
 	matrix_add     (kf.prediction, kf.state, &kf.state);
+#ifdef DEBUG
+	kf_print_state();
+#endif
 
 	return 0;
 }
@@ -166,3 +210,14 @@ float kf_get_value(enum sensor_var index)
 {
 	return kfstate(index);
 }
+
+#ifdef DEBUG
+void kf_print_state(void)
+{
+	printf("TIME:\t\t%f\n", kf_get_value(TIME));
+	printf("LATITUDE:\t%f\n", kf_get_value(LATITUDE));
+	printf("LONGITUDE:\t%f\n", kf_get_value(LONGITUDE));
+	printf("ALTITUDE:\t%f\n", kf_get_value(ALTITUDE));
+	printf("ACCELERATION:\t%f\n", kf_get_value(ACCELERATION));
+}
+#endif

@@ -4,20 +4,24 @@ CCFLAGS		= -ansi -pedantic -Werror=trigraphs -Wall -Wextra\
 			  -Wstrict-prototypes -Wmissing-prototypes -Wconversion\
 			  -Wno-vla #-Wtraditional
 DEBUGFLAGS	= -g -DDEBUG
-TARGET		= 
-HEADERS		= kalman.h matrix.h vector.h
-SRCS		= kalman.c matrix.c vector.c
+TARGET		= kalman
+HEADERS		= kalman.h matrix.h vector.h hwint.h debug.h
+SRCS		= kalman.c matrix.c vector.c main.c hwint.c
+DEBUGSRCS	= kalman.c matrix.c vector.c main.c hwsim.c debug.c conversion.c
 TESTS		= tests/*
 
-.PHONY: clean all debug tests
+.PHONY: clean all tests
 
 all: $(TARGET)
 
 $(TARGET): $(SRCS) $(HEADERS)
 	$(CC) $(CCFLAGS) $(SRCS) -o $@
 
+asm: $(SRCS) $(HEADERS)
+	$(CC) -S $(CCFLAGS) $(SRCS)
+
 debug: $(SRCS) $(HEADERS)
-	$(CC) $(DEBUGFLAGS) $(CCFLAGS) $(SRCS) -o $(TARGET)
+	$(CC) $(DEBUGFLAGS) $(DEBUGSRCS) -o $@
 
 tests: vector_test matrix_test
 
@@ -28,4 +32,4 @@ matrix_test: $(SRCS) $(HEADERS) $(TESTS)
 	$(CC) $(CCFLAGS) vector.c matrix.c tests/matrix_test.c -o $@
 
 clean:
-	rm -f $(TARGET) matrix_test vector_test
+	rm -f $(TARGET) debug matrix_test vector_test

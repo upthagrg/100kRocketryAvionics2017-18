@@ -2,6 +2,9 @@
 #include "assert.h"
 #include "vector.h"
 #include "matrix.h"
+#ifdef DEBUG
+#include "debug.h"
+#endif
 
 void new_matrix(Matrix *matrix, uint32_t rows, uint32_t cols,
                 float arr[rows][cols])
@@ -183,3 +186,18 @@ int8_t matrix_inverse(Matrix in, Matrix *out)
 
 	return 0;
 }
+
+#ifdef DEBUG
+void print_matrix(Matrix matrix)
+{
+	uint32_t i, j;
+
+	for (i = 0; i < matrix.rows; i++) {
+		putchar('|');
+		for (j = 0; j < matrix.cols; j++) {
+			printf(" %f", matrix_element(matrix, i, j));
+		}
+		puts(" |");
+	}
+}
+#endif
