@@ -1,5 +1,5 @@
 #!/usr/bin/python
-import sys, decimal
+import sys, decimal, json, requests
 import radio_interface as radio
 
 lat_data, lon_data, alt_data, spd_data = [], [], [], []
@@ -55,20 +55,54 @@ def get_interp_points(start, stop, step, degree):
 	return zip(xvals, lats, lons, alts, spds)
 
 
+def packet_to_json(packet, packet_type):
+	(time, lat, lon, alt, spd) = packet
+	return json.dumps(
+		{
+			"velocity":  spd,
+			"latitude":  lat,
+			"longitude": lon,
+			"altitude":  alt,
+			"time":		 time,
+			"type":		 packet_type,
+		})
+
+
 def main():
 	if len(sys.argv) < 5:
 		print "Usage:", sys.argv[0], "<start> <stop> <step> <degree>"
 		exit(0)
 	
+	start = float(sys.argv[1])
+	stop = float(sys.argv[2])
+	step = decimal.Decimal(sys.argv[3])
+	degree = int(sys.argv[4])
 	radio.seed_random()
+	loop_cnt = 0
 
 	while True:
-		(time, lat, lon, alt, spd) = radio.extract_packet()
+		packet = radio.extract_packet()
+		if packet == None:
+			break
+
+		(time, lat, lon, alt, spd, typ) = packet
 		lat_data.append((time, lat))
 		lon_data.append((time, lon))
 		alt_data.append((time, alt))
 		spd_data.append((time, spd))
-		print str.join(")\n", str(get_interp_points(float(sys.argv[1]), float(sys.argv[2]), decimal.Decimal(sys.argv[3]), int(sys.argv[4]))).strip("[]").split("),"))
+
+		if len(lat_data) >= 2:
+			last = lat_data[-2][0]
+		else:
+			last = start
+
+		for i in xrange(len(list(drange(last, time, step))) - 1):
+			points = get_interp_points(start, stop, step, degree)
+			requests.post('http://127.0.0.1:5000/api/v1.0/telemetry', json=json.loads(packet_to_json(points[loop_cnt], typ)))
+			loop_cnt += 1
+
+			for packet in points[loop_cnt+1:]:
+				requests.post('http://127.0.0.1:5000/api/v1.0/interp_telemetry', json=json.loads(packet_to_json(packet, typ)))
 
 
 if __name__ == "__main__":

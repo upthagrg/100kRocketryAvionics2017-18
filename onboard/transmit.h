@@ -9,6 +9,7 @@ typedef struct Packet {
 	float longitude;
 	float altitude;
 	float speed;
+	char type;
 	char term;
 } Packet;
 

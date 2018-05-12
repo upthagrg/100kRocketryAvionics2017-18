@@ -4,12 +4,16 @@
 #include "conversion.h"
 
 FILE *address;
-#define FIFO ""
+#define FIFO "out.txt"
 
 static PyObject * seed_random(PyObject *self, PyObject *args)
 {
 	srand((unsigned)time(NULL));
 	address = fopen(FIFO, "r");
+	if (address == NULL) {
+		fprintf(stderr, "Invalid filename: %s\n", FIFO);
+		exit(1);
+	}
 	return Py_BuildValue("");
 }
 
@@ -21,6 +25,7 @@ Packet * td_convert_packet(struct telem_data td)
 	packet->longitude = td.lon;
 	packet->altitude = td.alt;
 	packet->speed = td.vel;
+	packet->type = td.type;
 	return packet;
 }
 
@@ -29,7 +34,7 @@ Packet * retrieve_packet(void *address)
 	struct telem_data td;
 	size_t buff_size = 64;
 	char *buff = NULL;
-	if (getline(&buff, &buff_size, (FILE *)address) == -1) exit(0);
+	if (getline(&buff, &buff_size, (FILE *)address) == -1) return NULL;
 	td = structure(&buff);
 	free(buff);
 	
@@ -40,11 +45,11 @@ static PyObject * extract_packet(PyObject *self, PyObject *args)
 {
 	Packet *packet;
 
-	do {
-		packet = retrieve_packet(address);
-	} while (packet == NULL);
+	packet = retrieve_packet(address);
+
+	if (packet == NULL) return Py_BuildValue("");
 	
-	PyObject *ret = Py_BuildValue("(i,f,f,f,f)", packet->time, packet->latitude, packet->longitude, packet->altitude, packet->speed);
+	PyObject *ret = Py_BuildValue("(i,f,f,f,f,c)", packet->time, packet->latitude, packet->longitude, packet->altitude, packet->speed, packet->type);
 
 	free(packet);
 	return ret;
