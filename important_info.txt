@@ -1,0 +1,2 @@
+how to do tail on putty
+tail -f <putty log file name> > <fifo name>
