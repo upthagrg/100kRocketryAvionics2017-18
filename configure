@@ -104,6 +104,15 @@ echo "installing pyUSB"
 echo
 sudo pip install pyusb
 echo
+echo "Installing Putty"
+echo
+sudo apt-get install putty -y
+echo 
+echo "Adding Putty Session"
+echo 
+mkdir ~/.putty/sessions
+cp getgpsdata ~/.putty/sessions/
+echo
 echo "updating"
 echo
 #update and upgrade

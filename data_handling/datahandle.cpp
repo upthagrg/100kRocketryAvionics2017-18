@@ -1,3 +1,16 @@
+/********************************************************************
+*Title: datahandle.cpp
+*Author Glenn Upthagrove 
+*Date: 05/11/2018
+*Description: This is the hypervisor for data collection.
+*This creates most fo the communication pathways and 
+*spawns most of the required processes. It then links them 
+*together and allows data to pass to all the neccessary locations. 
+*Sadly the code has become very messy as the data link to the rocket 
+*was very rushed due to massive hardware delays. The code does work
+*But it is very difficult to read. This will be cleaned in the 
+*future. 
+********************************************************************/
 #define _XOPEN_SOURCE 500 //makes usleep work
 #include <conversion.h>
 #include <stdio.h>
@@ -206,7 +219,7 @@ int spawn_api_handle(){
         idret = fork();
         switch(idret){
                 case -1: //error
-                        printf("ERROR SPAWNING RAW LOG\n");
+                        printf("ERROR SPAWNING API HANDLE\n");
 			remove_fifo();
 			//remove_fifo(2);
                         exit(1);
@@ -217,7 +230,7 @@ int spawn_api_handle(){
                         //dup2(3, files1[0]); //remap pipe read to file 3
                         execret = execlp("python", "python", "./handle.py",(char*)NULL);
                         if(execret == -1){//exec error
-                                printf("ERROR LAUNCHING %s", "RAW LOGGER");
+                                printf("ERROR LAUNCHING API HANDLE");
 				remove_fifo();
 				//remove_fifo(2);
                                 exit(3);
@@ -430,7 +443,7 @@ int main(int argc, char** argv){
 	int ended2 = 0;
 	int sim = 0;
 	int no_docker = 1;
-	int ufifo = 0;
+	int ufile = 0;
 	struct telem_data t_data;
 	int times = 1;
 	bool bover = false;
@@ -455,8 +468,8 @@ int main(int argc, char** argv){
                         alt2 = atof(argv[i+1]);
                 }
                 else if(strcmp(argv[i], "-fifo") == 0){ //use a fifo
-                        ufifo = 1;
-			printf("ufifo == 1\n");
+                        ufile = 1;
+			printf("ufile == 1\n");
                 }
                 else if(strcmp(argv[i], "-lat") == 0){ //get starting latitude
                         lat = atof(argv[i+1]);
@@ -551,8 +564,11 @@ int main(int argc, char** argv){
                 fflush(stdout);
                 exit(3);
         }
-	
-	if(ufifo == 1){
+	//make communication fifos for data conversion to speak 
+	//to this process. FIFOs collect data from either the 
+	//data conversion process, which gathers it from Putty, 
+	//or data file can be pushed through the fifo
+	if(ufile == 1){
 		printf("MAKING FIFOS FOR DATA\n");
 		fiforet = mkfifo("./b_data_fifo", 0666);//make a FIFO
 	        if(fiforet == -1){
@@ -589,15 +605,14 @@ int main(int argc, char** argv){
 		if(sim){//if sim selected, use gendata
 			get_data2(retrieved_data1, retrieved_data2, size);//get data from hardware
 		}
-		else if(ufifo == 1){
-			//std::string boosters;
-		        //std::string sustainers;
-			fflush(stdout);
-			printf("main using fifos for data\n");
+		//using a file/fifo
+		else if(ufile == 1){
+			//fflush(stdout);
+			//printf("main using fifos for data\n");
 			memset(retrieved_data1, '\0', 256);
 			memset(retrieved_data2, '\0', 256);
-			fflush(stdout);
-			printf("ended1: %d\n", ended1);
+			//fflush(stdout);
+			//printf("ended1: %d\n", ended1);
 			if(!ended1){
 				read_b_data(&boosters);
 				if(boosters[0] == '*'){
@@ -608,23 +623,23 @@ int main(int argc, char** argv){
 					ended1 = 1;
 				}
 				strcpy(retrieved_data1, boosters.c_str());
-				printf("retrieved_data1: %s\n", retrieved_data1);
+				//printf("retrieved_data1: %s\n", retrieved_data1);
 			}
-			fflush(stdout);
-			printf("ended2: %d\n", ended2);
+			//fflush(stdout);
+			//printf("ended2: %d\n", ended2);
 			if(!ended2){
 				read_s_data(&sustainers);
 				if(sustainers[0] == '*'){
 					printf("writing EOT to api2\n");
 					write_to_api(end, 2);
 					printf("done\n");
-					printf("ended2 set to 2\n");
+					//printf("ended2 set to 2\n");
 					ended2 = 1;
 					break;
 				}
 				else{
 					strcpy(retrieved_data2, sustainers.c_str());
-					printf("retrieved_data2: %s\n", retrieved_data2);
+					//printf("retrieved_data2: %s\n", retrieved_data2);
 					t_data = structure(&retrieved_data2);
 				}
 			}
@@ -636,6 +651,8 @@ int main(int argc, char** argv){
 
 		}
 		else{
+			//default, this is still set to sim, as ufile has become main mode 
+			//for recieving data
 			get_data2(retrieved_data1, retrieved_data2, size);//get data from hardware
 		}
 		run = 1;
@@ -718,24 +735,22 @@ int main(int argc, char** argv){
 				ended2 = 1;
 			}
 		}
-		if(ended2){break;}
-		//trace
-		printf("t_data.alt: %f, alt2: %f\n", t_data.alt, alt2);
-	}while((t_data.alt > salt));
+		if(ended2){break;}//sanity check
+	}while((!ended2));//sanity check
 	if(debug){
 		//inform user that loop has ended, aka end of transmit	
 		printf("Out of loop\n");
 	}
-	usleep(1000); //sleep fpr a little while
+	usleep(1000); //sleep for a little while
 	write_to_raw_log(end,1);
 	write_to_raw_log(end,2);
 	write_to_json_log(end,1);
 	write_to_json_log(end,2);
-	if(ended1 == 0){
+	if(ended1 == 0){//sanity check, should not be needed
 		printf("writing EOT to api1\n");
 		write_to_api(end, 1);
 	}
-	if(ended2 == 0){
+	if(ended2 == 0){//sanity check, should not be nneded 
 		printf("writing EOT to api2\n");
 		write_to_api(end, 2);
 	}
@@ -750,8 +765,8 @@ int main(int argc, char** argv){
 		waitpid(children[i], &child_exit, 0);
 	}
 	printf("Finished waiting\n");
-	printf("Joining threads...\n");
-	printf("Threads joined\n");
+	//printf("Joining threads...\n");
+	//printf("Threads joined\n");
 	printf("Removing FIFOs...\n");
 	remove_fifo();
 	printf("Finished removing FIFOs\n");
