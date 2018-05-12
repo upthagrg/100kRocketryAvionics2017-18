@@ -37,8 +37,32 @@ with open(args.file, 'r') as f:
                 cdtime = cstime - pdtime
                 data["velocity"] = str(calt / cdtime)
                 pdtime = (ntime - ptime).total_seconds()
-            data["latitude"] = gga_data[2]
-            data["longitude"] = "-" + gga_data[4]
+            converted = float(gga_data[2])
+            converted2 = converted
+            if converted > 10000.0:
+               converted = converted % 10000.0
+            if converted > 1000.0:
+               converted = converted % 1000.0
+            if converted > 100.0:
+               converted = converted % 100.0
+            converted2 -= converted
+            converted2 /= 100.00
+            converted2 += converted/60.0
+            #data["latitude"] = gga_data[2]
+            data["latitude"] = "%.5f" % converted2
+            converted = float(gga_data[4])
+            converted2 = converted
+            if converted > 10000.0:
+               converted = converted % 10000.0
+            if converted > 1000.0:
+               converted = converted % 1000.0
+            if converted > 100.0:
+               converted = converted % 100.0
+            converted2 -= converted
+            converted2 /= 100.00
+            converted2 += converted/60.0
+            #data["longitude"] = "-" + gga_data[4]
+            data["longitude"] = "-" + '%.5f' % converted2
             data["altitude"] = gga_data[9]
             if ptime == 0.0:
                 ptime = datetime.strptime(
