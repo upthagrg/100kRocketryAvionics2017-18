@@ -37,9 +37,8 @@
         <div class="card">
             <span class="card-title">Stage 1</span>
             <div class="card-content">
-                <div id="secondTenthsExample" style="font-size:28px">
-                    <div class="values"></div>
-                </div>
+                <div class="timer" style="font-size:28px">
+               </div>
             </div>
         </div>
         <div class="card">
@@ -65,16 +64,24 @@
     <script src="/static/js/c3.js"></script>
     <script src="/static/js/flight_chart.js"></script>
     <script src="/static/js/main.js"></script>
-    <script src="/static/js/timer.min.js"></script>
+    <script src="/static/js/timer.jquery.js"></script>
     <script>
         start()
     </script>
     <script>
-   var timer = new Timer();
-    timer.start({ precision: 'secondTenths' });
-    timer.addEventListener('secondsUpdated', function (e) {
-        $('#secondTenthsExample .values').html("<span>T+ </span>"+timer.callbackTimer().toString(['hours', 'minutes', 'seconds', 'secondTenths']));
-    });                 
+
+
+
+$.get( "http://0.0.0.0:5000/api/v1.0/launch", function( data ) { 
+    var current_time = new Date;
+    var parts = data['result'][0]["start_time"].split(' ');
+    var start_time = new Date(parts[0]+"T"+parts[1]+"Z"); console.log(start_time.toDateString());
+    var seconds = (current_time - start_time) / 1000
+    $('.timer').timer({ seconds: seconds});
+    
+})
+
+    
     </script>
 
     {% endblock %}

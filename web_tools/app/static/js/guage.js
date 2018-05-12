@@ -295,6 +295,9 @@ function feetToMiles(value) {
 function feetToMeters(value) {
 	return value * 0.3048;
 }
+function metersToFeet(value) {
+	return value / 0.3048;
+}
 
 function metersToMiles(value) {
 	return value * 0.000621371;
