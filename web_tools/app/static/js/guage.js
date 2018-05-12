@@ -308,12 +308,13 @@ function updateGauges(type,data) {
 	if(type=="b") {
 	gauges["altitude_booster"].redraw(metersToMiles(data['result'][0].altitude));
 	gauges["speed_booster"].redraw(mpsToMph(Math.abs(data['result'][0].velocity)));
-	$('#booster_gps').html("<p>Lat: " + data['result'][0].latitude + " Lon: " + data['result'][0].longitude+"</p>");
+	$("#booster_gps").html("test");
+	$("#booster_gps").html("<p>Lat: " + data['result'][0].latitude + " Lon: " + data['result'][0].longitude+"</p>");
 
 	} else {
 	gauges["altitude_sustainer"].redraw(metersToMiles(data['result'][0].altitude));
 	gauges["speed_sustainer"].redraw(mpsToMph(Math.abs(data['result'][0].velocity)));
-	$('#sustainer_gps').html("<p>Lat: " + data['result'][0].latitude + " Lon: " + data['result'][0].longitude+"</p>");
+	$("#sustainer_gps").html("<p>Lat: " + data['result'][0].latitude + " Lon: " + data['result'][0].longitude+"</p>");
 	}
 }
 
