@@ -44,6 +44,12 @@ with open(args.file, 'r') as f:
                         calt = float(gga_data[9]) - float(palt)
                         ctime = ptime
                         palt = gga_data[9]
+                        for c in gga_data[1]:
+                         if c not in list_of_good_chars:
+                          print ("packet rejectd, corrupted data")
+                          bflag = 1
+                        if bflag == 1:
+                         continue
 
                         ntime = datetime.strptime(
                             str(ctime.year) + " " + str(ctime.month) + " " +
