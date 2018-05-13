@@ -7,22 +7,27 @@ parser.add_argument('--type', help='enter stage')
 parser.add_argument('--file', help='enter stage')
 args = parser.parse_args()
 
+list_of_good_chars = {'1','2','3','4','5','6','7','8','9','0','-','.'}
 ptime = 0.0
 pdtime = 0.0
 palt = 0.0
 flag = 0
 ctime = datetime.now()
+bflag = 0
 
 with open(args.file, 'r') as f:
     for line in f:
         if "GGA," in line:
+            bflag = 0
             gga_array = line.split("$")
             for item in gga_array:
                 if "GGA," in item:
                     gga_data = item.split(",")
                     if gga_data[1] == '' or gga_data[2] == '' or gga_data[4] == '' or gga_data[9] == '':
+                        print("packet rejected, missing data")
                         continue
                     if len(gga_data) != 15:
+                        print("packet rejected, missing data")
                         continue
                     data = {}
                     if flag == 0:
@@ -30,6 +35,12 @@ with open(args.file, 'r') as f:
                         palt = gga_data[9]
                         flag = 1
                     else:
+                        for c in gga_data[9]:
+                         if c not in list_of_good_chars:
+                          print ("packet rejectd, corrupted data")
+                          bflag = 1
+                        if bflag == 1:
+                         continue
                         calt = float(gga_data[9]) - float(palt)
                         ctime = ptime
                         palt = gga_data[9]
@@ -42,6 +53,12 @@ with open(args.file, 'r') as f:
                         cdtime = cstime - pdtime
                         data["velocity"] = str(calt / cdtime)
                         pdtime = (ntime - ptime).total_seconds()
+                    for c in gga_data[2]:
+                     if c not in list_of_good_chars:
+                      print ("packet rejectd, corrupted data")
+                      bflag = 1
+                    if bflag == 1:
+                     continue
                     converted = float(gga_data[2])
                     converted2 = converted
                     if converted > 10000.0:
@@ -55,6 +72,12 @@ with open(args.file, 'r') as f:
                     converted2 += converted/60.0
                     #data["latitude"] = gga_data[2]
                     data["latitude"] = "%.5f" % converted2
+                    for c in gga_data[4]:
+                     if c not in list_of_good_chars:
+                      print ("packet rejectd, corrupted data")
+                      bflag = 1
+                    if bflag == 1:
+                     continue
                     converted = float(gga_data[4])
                     converted2 = converted
                     if converted > 10000.0:
