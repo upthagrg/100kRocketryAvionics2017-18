@@ -24,10 +24,10 @@ with open(args.file, 'r') as f:
                 if "GGA," in item:
                     gga_data = item.split(",")
                     if gga_data[1] == '' or gga_data[2] == '' or gga_data[4] == '' or gga_data[9] == '':
-                        print("packet rejected, missing data")
+                        #print("packet rejected, missing data")
                         continue
                     if len(gga_data) != 15:
-                        print("packet rejected, missing data")
+                        #print("packet rejected, missing data")
                         continue
                     data = {}
                     if flag == 0:
@@ -37,7 +37,7 @@ with open(args.file, 'r') as f:
                     else:
                         for c in gga_data[9]:
                          if c not in list_of_good_chars:
-                          print ("packet rejectd, corrupted data")
+                          #print ("packet rejectd, corrupted data")
                           bflag = 1
                         if bflag == 1:
                          continue
@@ -46,7 +46,7 @@ with open(args.file, 'r') as f:
                         palt = gga_data[9]
                         for c in gga_data[1]:
                          if c not in list_of_good_chars:
-                          print ("packet rejectd, corrupted data")
+                          #print ("packet rejectd, corrupted data")
                           bflag = 1
                         if bflag == 1:
                          continue
@@ -61,7 +61,7 @@ with open(args.file, 'r') as f:
                         pdtime = (ntime - ptime).total_seconds()
                     for c in gga_data[2]:
                      if c not in list_of_good_chars:
-                      print ("packet rejectd, corrupted data")
+                      #print ("packet rejectd, corrupted data")
                       bflag = 1
                     if bflag == 1:
                      continue
@@ -80,7 +80,7 @@ with open(args.file, 'r') as f:
                     data["latitude"] = "%.5f" % converted2
                     for c in gga_data[4]:
                      if c not in list_of_good_chars:
-                      print ("packet rejectd, corrupted data")
+                      #print ("packet rejectd, corrupted data")
                       bflag = 1
                     if bflag == 1:
                      continue
