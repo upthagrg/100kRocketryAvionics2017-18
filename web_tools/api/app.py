@@ -122,6 +122,13 @@ def post_telemetry():
     return "(" + str(_id) + ")"
 
 
+@app.route('/api/v1.0/interp_telemetry', methods=['POST'])
+def interp_telemetry():
+    _telemetry = request.json
+    _id = db.interp_telemetry.insert_one(_telemetry).inserted_id
+    return "(" + str(_id) + ")"
+
+
 @app.route('/api/v1.0/cleardata', methods=['GET'])
 def remove_all_data():
     telemetry = db.telemetry
