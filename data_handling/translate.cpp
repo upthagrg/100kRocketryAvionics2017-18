@@ -1,7 +1,14 @@
 #include <stdio.h>
 #include <string.h>
 #include <stdint.h>
+#include <iostream>
+#include <fstream>
+#include <string>
+#include <cmath>
+#include <cstdlib>
+using namespace std;
 
+int shour, smin, ssec;
 int get_dec(char in){
 	if((int)in > 96){
 		in -= 32;
@@ -181,42 +188,97 @@ void convert_imu(char* packet){
 	memset(buff, '\0', 256);
 }
 
-void convert_gps(char* packet)
+void convert_gps(char* packet_in)
 {
-	packet = packet + 8;
+	char* packet = packet_in + 8;
 	uint16_t altitude  = convert_hex(packet + 12, 4);
-	int32_t latitude  = convert_hex(packet + 16, 8);
-	int32_t longitude = convert_hex(packet + 24, 8);
-	printf("altitude: %d\n",  altitude);
-	printf("latitude: %d\n",  latitude);
-	printf("longitude: %d\n", longitude);
+	uint32_t latitude  = convert_hex(packet + 16, 8);
+	uint32_t longitude = convert_hex(packet + 24, 8);
+	uint8_t hour, min, sec;
+	float lon;
+	float lat; 
+	int time; 
+	float timef;
+	float velf;
+	int vel; 
+
+	hour = convert_hex(packet+32+6,2);
+	min = convert_hex(packet+32+8,2);
+	sec = convert_hex(packet+32+10,2);
+
+	lon = static_cast<float>(longitude);
+	lat = static_cast<float>(latitude);
+
+	if(shour == 0 && smin == 0 && ssec == 0){
+		shour = hour;
+		smin = min;
+		ssec = sec;
+	}
+
+	time = ((hour-shour)*60*60) + ((min - smin)*60) + (sec - ssec);
+	timef = time;
+
+	vel = convert_hex(packet+42+12, 4);
+	velf = vel;
+
+	printf("altitude: %d Meters\n",  altitude);
+	printf("latitude int: %u\n",  latitude);
+	printf("longitude int: %u\n", longitude);
+	printf("latitude: %f\n",  lat/10000000.00);
+	printf("longitude: %f\n", lon/10000000.00);
+	printf("hour: %d\n", hour);
+	printf("min: %d\n", min);
+	printf("sec: %d\n", sec);
+	printf("velocity int: %d\n", vel);
+	printf("velocity: %f m/s\n", velf/100);
+	printf("time: %f\n", timef);
 }
 
-int main(){
-	char packet[256] = "TELEM 224f01080b05765e00701f1a1bbeb8d7b60b070605140c000600000000000000003fa988"; //this is an example GPS packet
+int main(int argc, char** argv){
+	//char packet[256] = "TELEM 224f01080b05765e00701f1a1bbeb8d7b60b070605140c000600000000000000003fa988"; //this is an example GPS packet
+	char* packet;
 	char sizebyte[3];
 	char buff[256];
 	int ret;
 	int size;
 	char typebyte[3];
-	printf("packet: %s\n", packet);
-	sizebyte[0] = packet[6];
-	sizebyte[1] = packet[7];
-	sizebyte[2] = '\0';
-	size = convert_hex(sizebyte, strlen(sizebyte));
-	printf("size: %d\n", size);
-	typebyte[0] = packet[16];
-	typebyte[1] = packet[17];
-	typebyte[2] = '\0';
-	printf("Type: 0x%s\n", typebyte);
-	if(strcmp(typebyte, "08") == 0){ //type designation of Telemega IMU packet
-		convert_imu(packet);
+	string packetin;
+	fstream file;
+	if(argc<3){
+		cout <<"usage: ./translate_telemega -file <file name>" <<endl;
+		return 1;
 	}
-	else if(strcmp(typebyte, "05") == 0){ //type designation of Telemega GPS packet
-		convert_gps(packet);
+	if(strcmp(argv[1], "-file") != 0){
+		cout <<"usage: ./translate_telemega -file <file name>" <<endl;
+		return 2;
 	}
-	else{
-		printf("recieved a packet with no valid conversion\n");
+	file.open(argv[2]);
+	shour = smin = ssec = 0;
+	packet = (char*)malloc(256);
+	while(getline(file, packetin)){
+		memset(packet, '\0', 256);
+		strcpy(packet, packetin.c_str());
+		printf("packet: %s\n", packet);
+		if(packet[0] == 'T' && packet[1] == 'E'){
+			sizebyte[0] = packet[6];
+			sizebyte[1] = packet[7];
+			sizebyte[2] = '\0';
+			size = convert_hex(sizebyte, strlen(sizebyte));
+			printf("size: %d\n", size);
+			typebyte[0] = packet[16];
+			typebyte[1] = packet[17];
+			typebyte[2] = '\0';
+			printf("Type: 0x%s\n", typebyte);
+		//	if(strcmp(typebyte, "08") == 0){ //type designation of Telemega IMU packet
+		//		convert_imu(packet);
+		//	}
+			if(strcmp(typebyte, "05") == 0){ //type designation of Telemega GPS packet
+				convert_gps(packet);
+			}
+			else{
+				printf("recieved a packet with no valid conversion\n");
+			}
+		}
 	}
 	return 0;
 }

@@ -1,0 +1,12 @@
+packet: TELEM 224f01080b05765e00701f1a1bbeb8d7b60b070605140c000600000000000000003fa988
+size: 34
+Type: 0x05
+altitude: 24064 Meters
+latitude int: 1881086491
+longitude int: 3199784886
+hour: 5
+min: 20
+sec: 12
+velocity int: 0
+velocity: 0.000000
+time: 0.000000
