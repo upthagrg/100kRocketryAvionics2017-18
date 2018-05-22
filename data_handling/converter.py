@@ -23,6 +23,9 @@ with open(args.file, 'r') as f:
             for item in gga_array:
                 if "GGA," in item:
                     gga_data = item.split(",")
+		    #print gga_data
+		    if "\n" not in gga_data[-1]:
+			continue
                     if gga_data[1] == '' or gga_data[2] == '' or gga_data[4] == '' or gga_data[9] == '':
                         #print("packet rejected, missing data")
                         continue
@@ -112,6 +115,7 @@ with open(args.file, 'r') as f:
                         data["time"] = (ntime - ptime).total_seconds()
                     data["type"] = args.type
                     json_data = json.dumps(data)
+                    time.sleep(1)
                     print json_data + "&&"
 print "**&&"
 
