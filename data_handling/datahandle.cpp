@@ -24,7 +24,7 @@
 #include <fcntl.h>
 #include <sys/wait.h>
 #include <pthread.h>
-#include <fstream>
+//#include <fstream>
 #include "datagen.h"
 #include <iostream>
 #include <string>
@@ -34,6 +34,10 @@ int files1_1[2];
 int files1_2[2];
 int files2_1[2];
 int files2_2[2];
+
+int b_pipe[2];
+int s_pipe[2];
+
 int fifo1;
 int fifo2;
 pid_t children[5];
@@ -75,7 +79,28 @@ int start_docker(){
 	}
 	return idret;
 }
+int spawn_translate_s(int in){
+	pid_t idret;
+	int execret = -5;
 
+	idret = fork();
+	switch(idret){
+		case -1:
+			remove_fifo();
+			exit(1);
+			break;
+		case 0:
+			close(s_pipe[1]);
+			dup2(s_pipe[0], 3);
+			execret = execlp("./tr_s", "./tr_s", "-file", "ins");
+			break;
+		default:
+                        close(s_pipe[0]);//close read
+                        children[childcnt] = idret; //store child pid
+                        childcnt++; //increment child count
+                        break;
+	}
+}
 int spawn_raw_log(int in){
 	pid_t idret; //id return
 	int execret = -5; //return from exec
@@ -373,7 +398,7 @@ void write_to_api(char* input, int output){
 		}
         }
 }
-
+/*
 
 void read_b_data(std::string* out){
 	printf("in read_b_data\n");
@@ -406,7 +431,7 @@ void read_s_data(std::string* out){
 	fifo.close();
 }
 
-
+*/
 
 
 
@@ -606,7 +631,7 @@ int main(int argc, char** argv){
 			get_data2(retrieved_data1, retrieved_data2, size);//get data from hardware
 		}
 		//using a file/fifo
-		else if(ufile == 1){
+/*		else if(ufile == 1){
 			//fflush(stdout);
 			//printf("main using fifos for data\n");
 			memset(retrieved_data1, '\0', 256);
@@ -650,7 +675,7 @@ int main(int argc, char** argv){
 			}
 
 		}
-		else{
+*/		else{
 			//default, this is still set to sim, as ufile has become main mode 
 			//for recieving data
 			get_data2(retrieved_data1, retrieved_data2, size);//get data from hardware
