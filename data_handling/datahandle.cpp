@@ -24,7 +24,7 @@
 #include <fcntl.h>
 #include <sys/wait.h>
 #include <pthread.h>
-//#include <fstream>
+#include <fstream>
 #include "datagen.h"
 #include <iostream>
 #include <string>
@@ -398,7 +398,7 @@ void write_to_api(char* input, int output){
 		}
         }
 }
-/*
+
 
 void read_b_data(std::string* out){
 	printf("in read_b_data\n");
@@ -431,7 +431,7 @@ void read_s_data(std::string* out){
 	fifo.close();
 }
 
-*/
+
 
 
 
