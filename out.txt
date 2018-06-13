@@ -1,0 +1,588 @@
+
+installing apt-file
+
+Reading package lists...
+Building dependency tree...
+Reading state information...
+file is already the newest version (1:5.25-2ubuntu1).
+The following packages were automatically installed and are no longer required:
+  grub-efi-amd64-bin libqpdf17 linux-headers-4.4.0-116
+  linux-headers-4.4.0-116-generic linux-headers-4.4.0-119
+  linux-headers-4.4.0-119-generic linux-headers-4.4.0-121
+  linux-headers-4.4.0-121-generic linux-image-4.4.0-116-generic
+  linux-image-4.4.0-119-generic linux-image-4.4.0-121-generic
+  linux-image-extra-4.4.0-116-generic linux-image-extra-4.4.0-119-generic
+  linux-image-extra-4.4.0-121-generic linux-signed-image-4.4.0-116-generic
+  linux-signed-image-4.4.0-119-generic linux-signed-image-4.4.0-121-generic
+  shim
+Use 'sudo apt autoremove' to remove them.
+0 upgraded, 0 newly installed, 0 to remove and 5 not upgraded.
+Reading package lists...
+Building dependency tree...
+Reading state information...
+apt-file is already the newest version (2.5.5ubuntu1).
+The following packages were automatically installed and are no longer required:
+  grub-efi-amd64-bin libqpdf17 linux-headers-4.4.0-116
+  linux-headers-4.4.0-116-generic linux-headers-4.4.0-119
+  linux-headers-4.4.0-119-generic linux-headers-4.4.0-121
+  linux-headers-4.4.0-121-generic linux-image-4.4.0-116-generic
+  linux-image-4.4.0-119-generic linux-image-4.4.0-121-generic
+  linux-image-extra-4.4.0-116-generic linux-image-extra-4.4.0-119-generic
+  linux-image-extra-4.4.0-121-generic linux-signed-image-4.4.0-116-generic
+  linux-signed-image-4.4.0-119-generic linux-signed-image-4.4.0-121-generic
+  shim
+Use 'sudo apt autoremove' to remove them.
+0 upgraded, 0 newly installed, 0 to remove and 5 not upgraded.
+
+updating apt-file
+
+
+installing docker
+
+Reading package lists...
+Building dependency tree...
+Reading state information...
+docker.io is already the newest version (1.13.1-0ubuntu1~16.04.2).
+The following packages were automatically installed and are no longer required:
+  grub-efi-amd64-bin libqpdf17 linux-headers-4.4.0-116
+  linux-headers-4.4.0-116-generic linux-headers-4.4.0-119
+  linux-headers-4.4.0-119-generic linux-headers-4.4.0-121
+  linux-headers-4.4.0-121-generic linux-image-4.4.0-116-generic
+  linux-image-4.4.0-119-generic linux-image-4.4.0-121-generic
+  linux-image-extra-4.4.0-116-generic linux-image-extra-4.4.0-119-generic
+  linux-image-extra-4.4.0-121-generic linux-signed-image-4.4.0-116-generic
+  linux-signed-image-4.4.0-119-generic linux-signed-image-4.4.0-121-generic
+  shim
+Use 'sudo apt autoremove' to remove them.
+0 upgraded, 0 newly installed, 0 to remove and 5 not upgraded.
+Reading package lists...
+Building dependency tree...
+Reading state information...
+docker-compose is already the newest version (1.8.0-2~16.04.1).
+The following packages were automatically installed and are no longer required:
+  grub-efi-amd64-bin libqpdf17 linux-headers-4.4.0-116
+  linux-headers-4.4.0-116-generic linux-headers-4.4.0-119
+  linux-headers-4.4.0-119-generic linux-headers-4.4.0-121
+  linux-headers-4.4.0-121-generic linux-image-4.4.0-116-generic
+  linux-image-4.4.0-119-generic linux-image-4.4.0-121-generic
+  linux-image-extra-4.4.0-116-generic linux-image-extra-4.4.0-119-generic
+  linux-image-extra-4.4.0-121-generic linux-signed-image-4.4.0-116-generic
+  linux-signed-image-4.4.0-119-generic linux-signed-image-4.4.0-121-generic
+  shim
+Use 'sudo apt autoremove' to remove them.
+0 upgraded, 0 newly installed, 0 to remove and 5 not upgraded.
+
+installing gcc
+
+Reading package lists...
+Building dependency tree...
+Reading state information...
+gcc is already the newest version (4:5.3.1-1ubuntu1).
+The following packages were automatically installed and are no longer required:
+  grub-efi-amd64-bin libqpdf17 linux-headers-4.4.0-116
+  linux-headers-4.4.0-116-generic linux-headers-4.4.0-119
+  linux-headers-4.4.0-119-generic linux-headers-4.4.0-121
+  linux-headers-4.4.0-121-generic linux-image-4.4.0-116-generic
+  linux-image-4.4.0-119-generic linux-image-4.4.0-121-generic
+  linux-image-extra-4.4.0-116-generic linux-image-extra-4.4.0-119-generic
+  linux-image-extra-4.4.0-121-generic linux-signed-image-4.4.0-116-generic
+  linux-signed-image-4.4.0-119-generic linux-signed-image-4.4.0-121-generic
+  shim
+Use 'sudo apt autoremove' to remove them.
+0 upgraded, 0 newly installed, 0 to remove and 5 not upgraded.
+
+installing g++
+
+Reading package lists...
+Building dependency tree...
+Reading state information...
+g++ is already the newest version (4:5.3.1-1ubuntu1).
+The following packages were automatically installed and are no longer required:
+  grub-efi-amd64-bin libqpdf17 linux-headers-4.4.0-116
+  linux-headers-4.4.0-116-generic linux-headers-4.4.0-119
+  linux-headers-4.4.0-119-generic linux-headers-4.4.0-121
+  linux-headers-4.4.0-121-generic linux-image-4.4.0-116-generic
+  linux-image-4.4.0-119-generic linux-image-4.4.0-121-generic
+  linux-image-extra-4.4.0-116-generic linux-image-extra-4.4.0-119-generic
+  linux-image-extra-4.4.0-121-generic linux-signed-image-4.4.0-116-generic
+  linux-signed-image-4.4.0-119-generic linux-signed-image-4.4.0-121-generic
+  shim
+Use 'sudo apt autoremove' to remove them.
+0 upgraded, 0 newly installed, 0 to remove and 5 not upgraded.
+
+installing make
+
+Reading package lists...
+Building dependency tree...
+Reading state information...
+make is already the newest version (4.1-6).
+The following packages were automatically installed and are no longer required:
+  grub-efi-amd64-bin libqpdf17 linux-headers-4.4.0-116
+  linux-headers-4.4.0-116-generic linux-headers-4.4.0-119
+  linux-headers-4.4.0-119-generic linux-headers-4.4.0-121
+  linux-headers-4.4.0-121-generic linux-image-4.4.0-116-generic
+  linux-image-4.4.0-119-generic linux-image-4.4.0-121-generic
+  linux-image-extra-4.4.0-116-generic linux-image-extra-4.4.0-119-generic
+  linux-image-extra-4.4.0-121-generic linux-signed-image-4.4.0-116-generic
+  linux-signed-image-4.4.0-119-generic linux-signed-image-4.4.0-121-generic
+  shim
+Use 'sudo apt autoremove' to remove them.
+0 upgraded, 0 newly installed, 0 to remove and 5 not upgraded.
+
+installing cmake
+
+Reading package lists...
+Building dependency tree...
+Reading state information...
+g++ is already the newest version (4:5.3.1-1ubuntu1).
+cmake is already the newest version (3.5.1-1ubuntu3).
+The following packages were automatically installed and are no longer required:
+  grub-efi-amd64-bin libqpdf17 linux-headers-4.4.0-116
+  linux-headers-4.4.0-116-generic linux-headers-4.4.0-119
+  linux-headers-4.4.0-119-generic linux-headers-4.4.0-121
+  linux-headers-4.4.0-121-generic linux-image-4.4.0-116-generic
+  linux-image-4.4.0-119-generic linux-image-4.4.0-121-generic
+  linux-image-extra-4.4.0-116-generic linux-image-extra-4.4.0-119-generic
+  linux-image-extra-4.4.0-121-generic linux-signed-image-4.4.0-116-generic
+  linux-signed-image-4.4.0-119-generic linux-signed-image-4.4.0-121-generic
+  shim
+Use 'sudo apt autoremove' to remove them.
+0 upgraded, 0 newly installed, 0 to remove and 5 not upgraded.
+
+updating
+
+Hit:1 http://repo.steampowered.com/steam precise InRelease
+Ign:2 http://dl.google.com/linux/chrome/deb stable InRelease
+Hit:3 http://dl.google.com/linux/chrome/deb stable Release
+Hit:5 http://us.archive.ubuntu.com/ubuntu xenial InRelease
+Hit:6 https://download.docker.com/linux/ubuntu xenial InRelease
+Hit:7 http://us.archive.ubuntu.com/ubuntu xenial-updates InRelease
+Hit:8 http://us.archive.ubuntu.com/ubuntu xenial-backports InRelease
+Ign:9 http://ppa.launchpad.net/kirillshkrogalev/ffmpeg-next/ubuntu xenial InRelease
+Hit:10 http://security.ubuntu.com/ubuntu xenial-security InRelease
+Hit:11 http://ppa.launchpad.net/obsproject/obs-studio/ubuntu xenial InRelease
+Hit:12 https://packagecloud.io/slacktechnologies/slack/debian jessie InRelease
+Ign:13 http://ppa.launchpad.net/kirillshkrogalev/ffmpeg-next/ubuntu xenial Release
+Ign:14 http://ppa.launchpad.net/kirillshkrogalev/ffmpeg-next/ubuntu xenial/main amd64 Packages
+Ign:15 http://ppa.launchpad.net/kirillshkrogalev/ffmpeg-next/ubuntu xenial/main i386 Packages
+Ign:16 http://ppa.launchpad.net/kirillshkrogalev/ffmpeg-next/ubuntu xenial/main all Packages
+Ign:17 http://ppa.launchpad.net/kirillshkrogalev/ffmpeg-next/ubuntu xenial/main Translation-en_US
+Ign:18 http://ppa.launchpad.net/kirillshkrogalev/ffmpeg-next/ubuntu xenial/main Translation-en
+Ign:19 http://ppa.launchpad.net/kirillshkrogalev/ffmpeg-next/ubuntu xenial/main amd64 DEP-11 Metadata
+Ign:20 http://ppa.launchpad.net/kirillshkrogalev/ffmpeg-next/ubuntu xenial/main DEP-11 64x64 Icons
+Ign:14 http://ppa.launchpad.net/kirillshkrogalev/ffmpeg-next/ubuntu xenial/main amd64 Packages
+Ign:15 http://ppa.launchpad.net/kirillshkrogalev/ffmpeg-next/ubuntu xenial/main i386 Packages
+Ign:16 http://ppa.launchpad.net/kirillshkrogalev/ffmpeg-next/ubuntu xenial/main all Packages
+Ign:17 http://ppa.launchpad.net/kirillshkrogalev/ffmpeg-next/ubuntu xenial/main Translation-en_US
+Ign:18 http://ppa.launchpad.net/kirillshkrogalev/ffmpeg-next/ubuntu xenial/main Translation-en
+Ign:19 http://ppa.launchpad.net/kirillshkrogalev/ffmpeg-next/ubuntu xenial/main amd64 DEP-11 Metadata
+Ign:20 http://ppa.launchpad.net/kirillshkrogalev/ffmpeg-next/ubuntu xenial/main DEP-11 64x64 Icons
+Ign:14 http://ppa.launchpad.net/kirillshkrogalev/ffmpeg-next/ubuntu xenial/main amd64 Packages
+Ign:15 http://ppa.launchpad.net/kirillshkrogalev/ffmpeg-next/ubuntu xenial/main i386 Packages
+Ign:16 http://ppa.launchpad.net/kirillshkrogalev/ffmpeg-next/ubuntu xenial/main all Packages
+Ign:17 http://ppa.launchpad.net/kirillshkrogalev/ffmpeg-next/ubuntu xenial/main Translation-en_US
+Ign:18 http://ppa.launchpad.net/kirillshkrogalev/ffmpeg-next/ubuntu xenial/main Translation-en
+Ign:19 http://ppa.launchpad.net/kirillshkrogalev/ffmpeg-next/ubuntu xenial/main amd64 DEP-11 Metadata
+Ign:20 http://ppa.launchpad.net/kirillshkrogalev/ffmpeg-next/ubuntu xenial/main DEP-11 64x64 Icons
+Ign:14 http://ppa.launchpad.net/kirillshkrogalev/ffmpeg-next/ubuntu xenial/main amd64 Packages
+Ign:15 http://ppa.launchpad.net/kirillshkrogalev/ffmpeg-next/ubuntu xenial/main i386 Packages
+Ign:16 http://ppa.launchpad.net/kirillshkrogalev/ffmpeg-next/ubuntu xenial/main all Packages
+Ign:17 http://ppa.launchpad.net/kirillshkrogalev/ffmpeg-next/ubuntu xenial/main Translation-en_US
+Ign:18 http://ppa.launchpad.net/kirillshkrogalev/ffmpeg-next/ubuntu xenial/main Translation-en
+Ign:19 http://ppa.launchpad.net/kirillshkrogalev/ffmpeg-next/ubuntu xenial/main amd64 DEP-11 Metadata
+Ign:20 http://ppa.launchpad.net/kirillshkrogalev/ffmpeg-next/ubuntu xenial/main DEP-11 64x64 Icons
+Ign:14 http://ppa.launchpad.net/kirillshkrogalev/ffmpeg-next/ubuntu xenial/main amd64 Packages
+Ign:15 http://ppa.launchpad.net/kirillshkrogalev/ffmpeg-next/ubuntu xenial/main i386 Packages
+Ign:16 http://ppa.launchpad.net/kirillshkrogalev/ffmpeg-next/ubuntu xenial/main all Packages
+Ign:17 http://ppa.launchpad.net/kirillshkrogalev/ffmpeg-next/ubuntu xenial/main Translation-en_US
+Ign:18 http://ppa.launchpad.net/kirillshkrogalev/ffmpeg-next/ubuntu xenial/main Translation-en
+Ign:19 http://ppa.launchpad.net/kirillshkrogalev/ffmpeg-next/ubuntu xenial/main amd64 DEP-11 Metadata
+Ign:20 http://ppa.launchpad.net/kirillshkrogalev/ffmpeg-next/ubuntu xenial/main DEP-11 64x64 Icons
+Err:14 http://ppa.launchpad.net/kirillshkrogalev/ffmpeg-next/ubuntu xenial/main amd64 Packages
+  404  Not Found
+Ign:15 http://ppa.launchpad.net/kirillshkrogalev/ffmpeg-next/ubuntu xenial/main i386 Packages
+Ign:16 http://ppa.launchpad.net/kirillshkrogalev/ffmpeg-next/ubuntu xenial/main all Packages
+Ign:17 http://ppa.launchpad.net/kirillshkrogalev/ffmpeg-next/ubuntu xenial/main Translation-en_US
+Ign:18 http://ppa.launchpad.net/kirillshkrogalev/ffmpeg-next/ubuntu xenial/main Translation-en
+Ign:19 http://ppa.launchpad.net/kirillshkrogalev/ffmpeg-next/ubuntu xenial/main amd64 DEP-11 Metadata
+Ign:20 http://ppa.launchpad.net/kirillshkrogalev/ffmpeg-next/ubuntu xenial/main DEP-11 64x64 Icons
+Reading package lists...
+
+upgrading
+
+Reading package lists...
+Building dependency tree...
+Reading state information...
+Calculating upgrade...
+The following packages were automatically installed and are no longer required:
+  grub-efi-amd64-bin libqpdf17 linux-headers-4.4.0-116
+  linux-headers-4.4.0-116-generic linux-headers-4.4.0-119
+  linux-headers-4.4.0-119-generic linux-headers-4.4.0-121
+  linux-headers-4.4.0-121-generic linux-image-4.4.0-116-generic
+  linux-image-4.4.0-119-generic linux-image-4.4.0-121-generic
+  linux-image-extra-4.4.0-116-generic linux-image-extra-4.4.0-119-generic
+  linux-image-extra-4.4.0-121-generic linux-signed-image-4.4.0-116-generic
+  linux-signed-image-4.4.0-119-generic linux-signed-image-4.4.0-121-generic
+  shim
+Use 'sudo apt autoremove' to remove them.
+The following packages have been kept back:
+  google-chrome-stable libinput10 libmm-glib0 libqmi-proxy modemmanager
+0 upgraded, 0 newly installed, 0 to remove and 5 not upgraded.
+
+installing mesa-utils
+
+Reading package lists...
+Building dependency tree...
+Reading state information...
+mesa-utils is already the newest version (8.3.0-1).
+The following packages were automatically installed and are no longer required:
+  grub-efi-amd64-bin libqpdf17 linux-headers-4.4.0-116
+  linux-headers-4.4.0-116-generic linux-headers-4.4.0-119
+  linux-headers-4.4.0-119-generic linux-headers-4.4.0-121
+  linux-headers-4.4.0-121-generic linux-image-4.4.0-116-generic
+  linux-image-4.4.0-119-generic linux-image-4.4.0-121-generic
+  linux-image-extra-4.4.0-116-generic linux-image-extra-4.4.0-119-generic
+  linux-image-extra-4.4.0-121-generic linux-signed-image-4.4.0-116-generic
+  linux-signed-image-4.4.0-119-generic linux-signed-image-4.4.0-121-generic
+  shim
+Use 'sudo apt autoremove' to remove them.
+0 upgraded, 0 newly installed, 0 to remove and 5 not upgraded.
+
+installing mesa-common-dev
+
+Reading package lists...
+Building dependency tree...
+Reading state information...
+mesa-common-dev is already the newest version (17.2.8-0ubuntu0~16.04.1).
+The following packages were automatically installed and are no longer required:
+  grub-efi-amd64-bin libqpdf17 linux-headers-4.4.0-116
+  linux-headers-4.4.0-116-generic linux-headers-4.4.0-119
+  linux-headers-4.4.0-119-generic linux-headers-4.4.0-121
+  linux-headers-4.4.0-121-generic linux-image-4.4.0-116-generic
+  linux-image-4.4.0-119-generic linux-image-4.4.0-121-generic
+  linux-image-extra-4.4.0-116-generic linux-image-extra-4.4.0-119-generic
+  linux-image-extra-4.4.0-121-generic linux-signed-image-4.4.0-116-generic
+  linux-signed-image-4.4.0-119-generic linux-signed-image-4.4.0-121-generic
+  shim
+Use 'sudo apt autoremove' to remove them.
+0 upgraded, 0 newly installed, 0 to remove and 5 not upgraded.
+
+installing freeglut
+
+Reading package lists...
+Building dependency tree...
+Reading state information...
+freeglut3 is already the newest version (2.8.1-2).
+The following packages were automatically installed and are no longer required:
+  grub-efi-amd64-bin libqpdf17 linux-headers-4.4.0-116
+  linux-headers-4.4.0-116-generic linux-headers-4.4.0-119
+  linux-headers-4.4.0-119-generic linux-headers-4.4.0-121
+  linux-headers-4.4.0-121-generic linux-image-4.4.0-116-generic
+  linux-image-4.4.0-119-generic linux-image-4.4.0-121-generic
+  linux-image-extra-4.4.0-116-generic linux-image-extra-4.4.0-119-generic
+  linux-image-extra-4.4.0-121-generic linux-signed-image-4.4.0-116-generic
+  linux-signed-image-4.4.0-119-generic linux-signed-image-4.4.0-121-generic
+  shim
+Use 'sudo apt autoremove' to remove them.
+0 upgraded, 0 newly installed, 0 to remove and 5 not upgraded.
+Reading package lists...
+Building dependency tree...
+Reading state information...
+freeglut3-dev is already the newest version (2.8.1-2).
+The following packages were automatically installed and are no longer required:
+  grub-efi-amd64-bin libqpdf17 linux-headers-4.4.0-116
+  linux-headers-4.4.0-116-generic linux-headers-4.4.0-119
+  linux-headers-4.4.0-119-generic linux-headers-4.4.0-121
+  linux-headers-4.4.0-121-generic linux-image-4.4.0-116-generic
+  linux-image-4.4.0-119-generic linux-image-4.4.0-121-generic
+  linux-image-extra-4.4.0-116-generic linux-image-extra-4.4.0-119-generic
+  linux-image-extra-4.4.0-121-generic linux-signed-image-4.4.0-116-generic
+  linux-signed-image-4.4.0-119-generic linux-signed-image-4.4.0-121-generic
+  shim
+Use 'sudo apt autoremove' to remove them.
+0 upgraded, 0 newly installed, 0 to remove and 5 not upgraded.
+Reading package lists...
+Building dependency tree...
+Reading state information...
+libglu1-mesa-dev is already the newest version (9.0.0-2.1).
+freeglut3-dev is already the newest version (2.8.1-2).
+The following packages were automatically installed and are no longer required:
+  grub-efi-amd64-bin libqpdf17 linux-headers-4.4.0-116
+  linux-headers-4.4.0-116-generic linux-headers-4.4.0-119
+  linux-headers-4.4.0-119-generic linux-headers-4.4.0-121
+  linux-headers-4.4.0-121-generic linux-image-4.4.0-116-generic
+  linux-image-4.4.0-119-generic linux-image-4.4.0-121-generic
+  linux-image-extra-4.4.0-116-generic linux-image-extra-4.4.0-119-generic
+  linux-image-extra-4.4.0-121-generic linux-signed-image-4.4.0-116-generic
+  linux-signed-image-4.4.0-119-generic linux-signed-image-4.4.0-121-generic
+  shim
+Use 'sudo apt autoremove' to remove them.
+0 upgraded, 0 newly installed, 0 to remove and 5 not upgraded.
+
+copying libglut.so to /usr/lib64
+
+
+installing binutils-gold
+
+Reading package lists...
+Building dependency tree...
+Reading state information...
+binutils is already the newest version (2.26.1-1ubuntu1~16.04.6).
+The following packages were automatically installed and are no longer required:
+  grub-efi-amd64-bin libqpdf17 linux-headers-4.4.0-116
+  linux-headers-4.4.0-116-generic linux-headers-4.4.0-119
+  linux-headers-4.4.0-119-generic linux-headers-4.4.0-121
+  linux-headers-4.4.0-121-generic linux-image-4.4.0-116-generic
+  linux-image-4.4.0-119-generic linux-image-4.4.0-121-generic
+  linux-image-extra-4.4.0-116-generic linux-image-extra-4.4.0-119-generic
+  linux-image-extra-4.4.0-121-generic linux-signed-image-4.4.0-116-generic
+  linux-signed-image-4.4.0-119-generic linux-signed-image-4.4.0-121-generic
+  shim
+Use 'sudo apt autoremove' to remove them.
+0 upgraded, 0 newly installed, 0 to remove and 5 not upgraded.
+
+installing libglew
+
+Reading package lists...
+Building dependency tree...
+Reading state information...
+libglew-dev is already the newest version (1.13.0-2).
+The following packages were automatically installed and are no longer required:
+  grub-efi-amd64-bin libqpdf17 linux-headers-4.4.0-116
+  linux-headers-4.4.0-116-generic linux-headers-4.4.0-119
+  linux-headers-4.4.0-119-generic linux-headers-4.4.0-121
+  linux-headers-4.4.0-121-generic linux-image-4.4.0-116-generic
+  linux-image-4.4.0-119-generic linux-image-4.4.0-121-generic
+  linux-image-extra-4.4.0-116-generic linux-image-extra-4.4.0-119-generic
+  linux-image-extra-4.4.0-121-generic linux-signed-image-4.4.0-116-generic
+  linux-signed-image-4.4.0-119-generic linux-signed-image-4.4.0-121-generic
+  shim
+Use 'sudo apt autoremove' to remove them.
+0 upgraded, 0 newly installed, 0 to remove and 5 not upgraded.
+
+installing build-esssential
+
+Reading package lists...
+Building dependency tree...
+Reading state information...
+build-essential is already the newest version (12.1ubuntu2).
+The following packages were automatically installed and are no longer required:
+  grub-efi-amd64-bin libqpdf17 linux-headers-4.4.0-116
+  linux-headers-4.4.0-116-generic linux-headers-4.4.0-119
+  linux-headers-4.4.0-119-generic linux-headers-4.4.0-121
+  linux-headers-4.4.0-121-generic linux-image-4.4.0-116-generic
+  linux-image-4.4.0-119-generic linux-image-4.4.0-121-generic
+  linux-image-extra-4.4.0-116-generic linux-image-extra-4.4.0-119-generic
+  linux-image-extra-4.4.0-121-generic linux-signed-image-4.4.0-116-generic
+  linux-signed-image-4.4.0-119-generic linux-signed-image-4.4.0-121-generic
+  shim
+Use 'sudo apt autoremove' to remove them.
+0 upgraded, 0 newly installed, 0 to remove and 5 not upgraded.
+
+installing libglew 1.5 dev
+
+Reading package lists...
+Building dependency tree...
+Reading state information...
+libglew-dev is already the newest version (1.13.0-2).
+libglm-dev is already the newest version (0.9.7.2-1).
+The following packages were automatically installed and are no longer required:
+  grub-efi-amd64-bin libqpdf17 linux-headers-4.4.0-116
+  linux-headers-4.4.0-116-generic linux-headers-4.4.0-119
+  linux-headers-4.4.0-119-generic linux-headers-4.4.0-121
+  linux-headers-4.4.0-121-generic linux-image-4.4.0-116-generic
+  linux-image-4.4.0-119-generic linux-image-4.4.0-121-generic
+  linux-image-extra-4.4.0-116-generic linux-image-extra-4.4.0-119-generic
+  linux-image-extra-4.4.0-121-generic linux-signed-image-4.4.0-116-generic
+  linux-signed-image-4.4.0-119-generic linux-signed-image-4.4.0-121-generic
+  shim
+Use 'sudo apt autoremove' to remove them.
+0 upgraded, 0 newly installed, 0 to remove and 5 not upgraded.
+
+installing python
+
+Reading package lists...
+Building dependency tree...
+Reading state information...
+python is already the newest version (2.7.12-1~16.04).
+The following packages were automatically installed and are no longer required:
+  grub-efi-amd64-bin libqpdf17 linux-headers-4.4.0-116
+  linux-headers-4.4.0-116-generic linux-headers-4.4.0-119
+  linux-headers-4.4.0-119-generic linux-headers-4.4.0-121
+  linux-headers-4.4.0-121-generic linux-image-4.4.0-116-generic
+  linux-image-4.4.0-119-generic linux-image-4.4.0-121-generic
+  linux-image-extra-4.4.0-116-generic linux-image-extra-4.4.0-119-generic
+  linux-image-extra-4.4.0-121-generic linux-signed-image-4.4.0-116-generic
+  linux-signed-image-4.4.0-119-generic linux-signed-image-4.4.0-121-generic
+  shim
+Use 'sudo apt autoremove' to remove them.
+0 upgraded, 0 newly installed, 0 to remove and 5 not upgraded.
+
+installing pip
+
+Reading package lists...
+Building dependency tree...
+Reading state information...
+build-essential is already the newest version (12.1ubuntu2).
+python-dev is already the newest version (2.7.12-1~16.04).
+python-pip is already the newest version (8.1.1-2ubuntu0.4).
+The following packages were automatically installed and are no longer required:
+  grub-efi-amd64-bin libqpdf17 linux-headers-4.4.0-116
+  linux-headers-4.4.0-116-generic linux-headers-4.4.0-119
+  linux-headers-4.4.0-119-generic linux-headers-4.4.0-121
+  linux-headers-4.4.0-121-generic linux-image-4.4.0-116-generic
+  linux-image-4.4.0-119-generic linux-image-4.4.0-121-generic
+  linux-image-extra-4.4.0-116-generic linux-image-extra-4.4.0-119-generic
+  linux-image-extra-4.4.0-121-generic linux-signed-image-4.4.0-116-generic
+  linux-signed-image-4.4.0-119-generic linux-signed-image-4.4.0-121-generic
+  shim
+Use 'sudo apt autoremove' to remove them.
+0 upgraded, 0 newly installed, 0 to remove and 5 not upgraded.
+Requirement already up-to-date: pip in /usr/local/lib/python2.7/dist-packages (10.0.1)
+Requirement already up-to-date: virtualenv in /usr/local/lib/python2.7/dist-packages (16.0.0)
+
+installing Pillow module for python
+
+Requirement already satisfied: Pillow in /home/glenn/.local/lib/python2.7/site-packages (5.0.0)
+
+installing requests module for python
+
+Requirement already satisfied: requests in /usr/local/lib/python2.7/dist-packages (2.18.4)
+Requirement already satisfied: certifi>=2017.4.17 in /usr/local/lib/python2.7/dist-packages (from requests) (2018.1.18)
+Requirement already satisfied: chardet<3.1.0,>=3.0.2 in /usr/local/lib/python2.7/dist-packages (from requests) (3.0.4)
+Requirement already satisfied: idna<2.7,>=2.5 in /usr/local/lib/python2.7/dist-packages (from requests) (2.6)
+Requirement already satisfied: urllib3<1.23,>=1.21.1 in /usr/local/lib/python2.7/dist-packages (from requests) (1.22)
+
+installing pyUSB
+
+Requirement already satisfied: pyusb in /usr/local/lib/python2.7/dist-packages (1.0.2)
+
+Installing Putty
+
+Reading package lists...
+Building dependency tree...
+Reading state information...
+putty is already the newest version (0.67-2).
+The following packages were automatically installed and are no longer required:
+  grub-efi-amd64-bin libqpdf17 linux-headers-4.4.0-116
+  linux-headers-4.4.0-116-generic linux-headers-4.4.0-119
+  linux-headers-4.4.0-119-generic linux-headers-4.4.0-121
+  linux-headers-4.4.0-121-generic linux-image-4.4.0-116-generic
+  linux-image-4.4.0-119-generic linux-image-4.4.0-121-generic
+  linux-image-extra-4.4.0-116-generic linux-image-extra-4.4.0-119-generic
+  linux-image-extra-4.4.0-121-generic linux-signed-image-4.4.0-116-generic
+  linux-signed-image-4.4.0-119-generic linux-signed-image-4.4.0-121-generic
+  shim
+Use 'sudo apt autoremove' to remove them.
+0 upgraded, 0 newly installed, 0 to remove and 5 not upgraded.
+
+Adding Putty Session
+
+
+updating
+
+Ign:1 http://dl.google.com/linux/chrome/deb stable InRelease
+Hit:2 http://repo.steampowered.com/steam precise InRelease
+Hit:3 http://dl.google.com/linux/chrome/deb stable Release
+Hit:4 https://download.docker.com/linux/ubuntu xenial InRelease
+Hit:6 http://us.archive.ubuntu.com/ubuntu xenial InRelease
+Hit:7 http://us.archive.ubuntu.com/ubuntu xenial-updates InRelease
+Ign:8 http://ppa.launchpad.net/kirillshkrogalev/ffmpeg-next/ubuntu xenial InRelease
+Hit:9 http://security.ubuntu.com/ubuntu xenial-security InRelease
+Hit:10 http://us.archive.ubuntu.com/ubuntu xenial-backports InRelease
+Hit:11 https://packagecloud.io/slacktechnologies/slack/debian jessie InRelease
+Hit:12 http://ppa.launchpad.net/obsproject/obs-studio/ubuntu xenial InRelease
+Ign:13 http://ppa.launchpad.net/kirillshkrogalev/ffmpeg-next/ubuntu xenial Release
+Ign:14 http://ppa.launchpad.net/kirillshkrogalev/ffmpeg-next/ubuntu xenial/main amd64 Packages
+Ign:15 http://ppa.launchpad.net/kirillshkrogalev/ffmpeg-next/ubuntu xenial/main i386 Packages
+Ign:16 http://ppa.launchpad.net/kirillshkrogalev/ffmpeg-next/ubuntu xenial/main all Packages
+Ign:17 http://ppa.launchpad.net/kirillshkrogalev/ffmpeg-next/ubuntu xenial/main Translation-en_US
+Ign:18 http://ppa.launchpad.net/kirillshkrogalev/ffmpeg-next/ubuntu xenial/main Translation-en
+Ign:19 http://ppa.launchpad.net/kirillshkrogalev/ffmpeg-next/ubuntu xenial/main amd64 DEP-11 Metadata
+Ign:20 http://ppa.launchpad.net/kirillshkrogalev/ffmpeg-next/ubuntu xenial/main DEP-11 64x64 Icons
+Ign:14 http://ppa.launchpad.net/kirillshkrogalev/ffmpeg-next/ubuntu xenial/main amd64 Packages
+Ign:15 http://ppa.launchpad.net/kirillshkrogalev/ffmpeg-next/ubuntu xenial/main i386 Packages
+Ign:16 http://ppa.launchpad.net/kirillshkrogalev/ffmpeg-next/ubuntu xenial/main all Packages
+Ign:17 http://ppa.launchpad.net/kirillshkrogalev/ffmpeg-next/ubuntu xenial/main Translation-en_US
+Ign:18 http://ppa.launchpad.net/kirillshkrogalev/ffmpeg-next/ubuntu xenial/main Translation-en
+Ign:19 http://ppa.launchpad.net/kirillshkrogalev/ffmpeg-next/ubuntu xenial/main amd64 DEP-11 Metadata
+Ign:20 http://ppa.launchpad.net/kirillshkrogalev/ffmpeg-next/ubuntu xenial/main DEP-11 64x64 Icons
+Ign:14 http://ppa.launchpad.net/kirillshkrogalev/ffmpeg-next/ubuntu xenial/main amd64 Packages
+Ign:15 http://ppa.launchpad.net/kirillshkrogalev/ffmpeg-next/ubuntu xenial/main i386 Packages
+Ign:16 http://ppa.launchpad.net/kirillshkrogalev/ffmpeg-next/ubuntu xenial/main all Packages
+Ign:17 http://ppa.launchpad.net/kirillshkrogalev/ffmpeg-next/ubuntu xenial/main Translation-en_US
+Ign:18 http://ppa.launchpad.net/kirillshkrogalev/ffmpeg-next/ubuntu xenial/main Translation-en
+Ign:19 http://ppa.launchpad.net/kirillshkrogalev/ffmpeg-next/ubuntu xenial/main amd64 DEP-11 Metadata
+Ign:20 http://ppa.launchpad.net/kirillshkrogalev/ffmpeg-next/ubuntu xenial/main DEP-11 64x64 Icons
+Ign:14 http://ppa.launchpad.net/kirillshkrogalev/ffmpeg-next/ubuntu xenial/main amd64 Packages
+Ign:15 http://ppa.launchpad.net/kirillshkrogalev/ffmpeg-next/ubuntu xenial/main i386 Packages
+Ign:16 http://ppa.launchpad.net/kirillshkrogalev/ffmpeg-next/ubuntu xenial/main all Packages
+Ign:17 http://ppa.launchpad.net/kirillshkrogalev/ffmpeg-next/ubuntu xenial/main Translation-en_US
+Ign:18 http://ppa.launchpad.net/kirillshkrogalev/ffmpeg-next/ubuntu xenial/main Translation-en
+Ign:19 http://ppa.launchpad.net/kirillshkrogalev/ffmpeg-next/ubuntu xenial/main amd64 DEP-11 Metadata
+Ign:20 http://ppa.launchpad.net/kirillshkrogalev/ffmpeg-next/ubuntu xenial/main DEP-11 64x64 Icons
+Ign:14 http://ppa.launchpad.net/kirillshkrogalev/ffmpeg-next/ubuntu xenial/main amd64 Packages
+Ign:15 http://ppa.launchpad.net/kirillshkrogalev/ffmpeg-next/ubuntu xenial/main i386 Packages
+Ign:16 http://ppa.launchpad.net/kirillshkrogalev/ffmpeg-next/ubuntu xenial/main all Packages
+Ign:17 http://ppa.launchpad.net/kirillshkrogalev/ffmpeg-next/ubuntu xenial/main Translation-en_US
+Ign:18 http://ppa.launchpad.net/kirillshkrogalev/ffmpeg-next/ubuntu xenial/main Translation-en
+Ign:19 http://ppa.launchpad.net/kirillshkrogalev/ffmpeg-next/ubuntu xenial/main amd64 DEP-11 Metadata
+Ign:20 http://ppa.launchpad.net/kirillshkrogalev/ffmpeg-next/ubuntu xenial/main DEP-11 64x64 Icons
+Err:14 http://ppa.launchpad.net/kirillshkrogalev/ffmpeg-next/ubuntu xenial/main amd64 Packages
+  404  Not Found
+Ign:15 http://ppa.launchpad.net/kirillshkrogalev/ffmpeg-next/ubuntu xenial/main i386 Packages
+Ign:16 http://ppa.launchpad.net/kirillshkrogalev/ffmpeg-next/ubuntu xenial/main all Packages
+Ign:17 http://ppa.launchpad.net/kirillshkrogalev/ffmpeg-next/ubuntu xenial/main Translation-en_US
+Ign:18 http://ppa.launchpad.net/kirillshkrogalev/ffmpeg-next/ubuntu xenial/main Translation-en
+Ign:19 http://ppa.launchpad.net/kirillshkrogalev/ffmpeg-next/ubuntu xenial/main amd64 DEP-11 Metadata
+Ign:20 http://ppa.launchpad.net/kirillshkrogalev/ffmpeg-next/ubuntu xenial/main DEP-11 64x64 Icons
+Reading package lists...
+
+upgrading
+
+Reading package lists...
+Building dependency tree...
+Reading state information...
+Calculating upgrade...
+The following packages were automatically installed and are no longer required:
+  grub-efi-amd64-bin libqpdf17 linux-headers-4.4.0-116
+  linux-headers-4.4.0-116-generic linux-headers-4.4.0-119
+  linux-headers-4.4.0-119-generic linux-headers-4.4.0-121
+  linux-headers-4.4.0-121-generic linux-image-4.4.0-116-generic
+  linux-image-4.4.0-119-generic linux-image-4.4.0-121-generic
+  linux-image-extra-4.4.0-116-generic linux-image-extra-4.4.0-119-generic
+  linux-image-extra-4.4.0-121-generic linux-signed-image-4.4.0-116-generic
+  linux-signed-image-4.4.0-119-generic linux-signed-image-4.4.0-121-generic
+  shim
+Use 'sudo apt autoremove' to remove them.
+The following packages have been kept back:
+  google-chrome-stable libinput10 libmm-glib0 libqmi-proxy modemmanager
+0 upgraded, 0 newly installed, 0 to remove and 5 not upgraded.
+
+Done
+
+
+Making programs
+
+g++ -o trace  trace.cpp -lpthread  -lGL /usr/lib/x86_64-linux-gnu/libGL.so  -lGLU  /usr/lib64/libglut.so  -lm -I./include -Wno-write-strings
+gcc ../data_generator/datagen.c -std=c99 -lm -o ./gen -I../conversion
+gcc logger.c  -std=c99 -lm -o logger -Wno-format-security
+gcc ../data_generator/datagen.c -std=c99 -lm -o ./gen -I../conversion
+gcc logger.c  -std=c99 -lm -o logger -Wno-format-security
+gcc datagen.c -std=c99 -lm -o gen -I../conversion
+gcc conversion.c -std=c99 -lm -o convert
+
+done
+
+
+making desktop icon
+
+
+Done
+
+
+Creating Directory File
+
+
+Done
+
