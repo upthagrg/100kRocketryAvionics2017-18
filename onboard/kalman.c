@@ -10,6 +10,15 @@ struct filter kf;
 
 int8_t kalman_filter(void)
 {
+	kf_init();
+
+	do kf_main_loop(); while (1);
+
+	return 0;
+}
+
+int8_t kf_init(void)
+{
 	float s_m [NUM_VARS]  [1];			/* state matrix */
 	float m_m [NUM_INPUTS][1];			/* measurement matrix */
 	float p_m [NUM_VARS]  [1];			/* prediction matrix */
@@ -54,10 +63,20 @@ int8_t kalman_filter(void)
 	new_matrix(&kf.weights,					NUM_VARS,   NUM_INPUTS, w_m);
 	new_matrix(&kf.process_covariance,		NUM_VARS,   NUM_VARS,   pc_m);
 	new_matrix(&kf.observation_covariance,	NUM_INPUTS, NUM_INPUTS, oc_m);
-	
-	kf_init();
 
-	do kf_main_loop(); while (1);
+	kf_initial_state();
+
+	return 0;
+}
+
+int8_t kf_initial_state(void)
+{
+	uint32_t i = 0;
+
+	kf_measure();
+
+	for (; i < NUM_INPUTS; i++) kfstate(i) = kfmeasurement(i);
+	for (; i < NUM_VARS;   i++) kfstate(i) = 0;
 
 	return 0;
 }
@@ -73,20 +92,23 @@ int8_t kf_main_loop(void)
 	return 0;
 }
 
-int8_t kf_init(void)
+int8_t kf_measure(void)
 {
-	kf_measure();
+#ifdef DEBUG
+	size_t buff_size = 64;
+	char *buff = NULL;
+	if (getline(&buff, &buff_size, debug_input) == -1) exit(0);
+	_hwsim_td = structure(&buff);
+	free(buff);
+	printf("{%f, %f, %f, %f}\n", _hwsim_td.time, _hwsim_td.lat, _hwsim_td.lon, _hwsim_td.alt);
 
-	kfstate(TIME)			= kfmeasurement(TIME);
-	kfstate(LATITUDE)		= kfmeasurement(LATITUDE);
-	kfstate(LONGITUDE)		= kfmeasurement(LONGITUDE);
-	kfstate(ALTITUDE)		= kfmeasurement(ALTITUDE);
-	kfstate(PRESSURE)		= kfmeasurement(PRESSURE);
-	kfstate(ACCELERATION)	= 0;
-	kfstate(YAW)			= 0;
-	kfstate(PITCH)			= 0;
-	kfstate(ROLL)			= 0;
-	kfstate(SPEED)			= 0;
+#endif
+	kfmeasurement(TIME)			= cpu_time();
+	kfmeasurement(LATITUDE)		= gps_latitude();
+	kfmeasurement(LONGITUDE)	= gps_longitude();
+	kfmeasurement(ALTITUDE)		= gps_altitude();
+	kfmeasurement(PRESSURE)		= baro_pressure();
+	kfmeasurement(ACCELERATION)	= accel_acceleration();
 
 	return 0;
 }
@@ -115,27 +137,6 @@ int8_t kf_predict_uncertainty(void)
 	matrix_multiply (kf.prediction_model, kf.uncertainty, &kf.uncertainty_prediction);
 	matrix_multiply (kf.uncertainty_prediction, trans, &kf.uncertainty_prediction);
 	matrix_add      (kf.uncertainty_prediction, kf.process_covariance, &kf.uncertainty_prediction);
-
-	return 0;
-}
-
-int8_t kf_measure(void)
-{
-#ifdef DEBUG
-	size_t buff_size = 64;
-	char *buff = NULL;
-	if (getline(&buff, &buff_size, debug_input) == -1) exit(0);
-	_hwsim_td = structure(&buff);
-	free(buff);
-	printf("{%f, %f, %f, %f}\n", _hwsim_td.time, _hwsim_td.lat, _hwsim_td.lon, _hwsim_td.alt);
-
-#endif
-	kfmeasurement(TIME)			= cpu_time();
-	kfmeasurement(LATITUDE)		= gps_latitude();
-	kfmeasurement(LONGITUDE)	= gps_longitude();
-	kfmeasurement(ALTITUDE)		= gps_altitude();
-	kfmeasurement(PRESSURE)		= baro_pressure();
-	kfmeasurement(ACCELERATION)	= accel_acceleration();
 
 	return 0;
 }
